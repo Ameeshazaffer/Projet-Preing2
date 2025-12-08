@@ -197,13 +197,13 @@ pAVL rechercheAVL(pAVL a, char* id){
 		return rechercheAVL(a->fg, id);
 	}else if(strcmp(a->usine->id,id) > 0){
 		return rechercheAVL(a->fd, u, h);
-	}else id(strcmp(a->usine->id,id)== 0){
+	}else id(strcmp(a->usine->id,id) == 0){
 		return a;
 	}
 }
 
 
-pArbre equilibrerAVL(pArbre a){
+pArbre equilibrerAVL(pAVL a){
 	if(a->eq >= 2){
 		if(a->fd->eq >= 0){
 			return rotationGauche(a));
@@ -219,3 +219,13 @@ pArbre equilibrerAVL(pArbre a){
 	}
 	return a;
 }
+
+void parcoursinverse(pAVL a, File* f){
+	if(a == NULL || f == NULL){
+		return;
+	}	
+	parcoursinverse(a->fd,f);
+	fprintf(f, "%c", a->usine->id);
+	parcoursinverse(a->fg,f);
+}
+
