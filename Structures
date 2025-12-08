@@ -1,0 +1,28 @@
+// Histogramme 
+
+typedef struct{
+  int id; // identifiant de l'usine
+  int capacite_max; // capacite maximal de traitement de l'usine 
+  int volume_initial;  // volume total capté par l'usine
+  int volume_reel; // volume total traité par l'usine apres fuites
+}Usine;
+
+typedef struct avl{
+  Usine usine;
+  int id;
+  struct avl* fg;
+  struct avl* fd;
+}AVL;
+
+typedef struct arbre{
+  arbre* parent;
+  Liste* enfants;
+}Arbre;
+
+
+typedef struct liste{
+  arbre* actuel;
+  struct liste* suivant;
+}Liste;
+
+
