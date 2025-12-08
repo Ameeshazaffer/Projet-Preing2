@@ -1,0 +1,264 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef AVL *pAVL;
+
+pAVL creerAVL(Usine usine){
+	pAVL noeud;
+	noeud = malloc(sizeof(AVL));
+	noeud->element = r;
+	noeud->fg = NULL;
+	noeud->fd = NULL;
+	noeud->equilibre = 0;
+	return noeud;
+}
+
+int estVide(pArbre a){
+	return (a==NULL);
+}
+
+	if(estVide(a)){
+		return 0;
+	}
+	else if(estVide(a->fg)){
+		return 0;
+	}
+	else{
+		return 1;
+	}
+}
+
+int existeFilsDroit(pArbre a){
+	if(estVide(a)){
+		return 0;
+	}
+	else if(estVide(a->fd)){
+		return 0;
+	}
+	else{
+		return 1;
+	}
+}
+
+int ajouterFilsGauche(pArbre a, int e){
+	if(estVide(a)){
+		return 0;
+	}
+	else if(!existeFilsGauche(a)){
+		a->fg = creerArbre(e);
+		return 1;
+	}
+	else{
+		return 0;
+	}	
+}
+
+int ajouterFilsDroit(pArbre a, int e){
+	if(estVide(a)){
+		return 0;
+	}
+	else if(!existeFilsDroit(a)){
+		a->fd = creerArbre(e);
+		return 1;
+	}
+	else{
+		return 0;
+	}	
+}
+
+
+int min(int a, int b) {
+    if(a < b){
+        return a;
+    } 
+    else{
+        return b;
+    }    
+}
+
+int max(int a, int b) {
+    if (a > b){
+        return a;
+    }    
+    else{
+        return b;
+    }    
+}
+
+
+int min3(int a, int b, int c) {
+    int m = a;
+    if (b < m)
+        m = b;
+    if (c < m)
+        m = c;
+    return m;
+}
+
+int max3(int a, int b, int c) {
+    int m = a;
+    if (b > m)
+        m = b;
+    if (c > m)
+        m = c;
+    return m;
+}
+
+
+pArbre rotationDroite(pArbre a){
+	pArbre pivot;
+	int eq_a, eq_p;
+	
+	pivot = a->fg;
+	a->fg = pivot->fd;
+	pivot->fd = a;
+	
+	eq_a = a->equilibre;
+	eq_p = pivot->equilibre;
+	
+	a->equilibre = eq_a - min(eq_p, 0) +1;
+	pivot->equilibre = max(eq_a+2, eq_a+eq_p+2, eq_p+1);
+	a = pivot; 
+	
+	return a;
+}
+
+
+pArbre rotationGauche(pArbre a){
+	pArbre pivot;
+	int eq_a, eq_p;
+	
+	pivot = a->fd;
+	a->fd = pivot->fg;
+	pivot->fg = a;
+	
+	eq_a = a->equilibre;
+	eq_p = pivot->equilibre;
+	
+	a->equilibre = eq_a - max(eq_p, 0) -1;
+	pivot->equilibre = min(eq_a-2, eq_a+eq_p-2, eq_p-1);
+	a = pivot; 
+	
+	return a;
+}
+
+pArbre doubleRotationGauche(pArbre a){
+	a->fd = rotationDroite(a->fd));
+	return rotationGauche(a);
+}
+
+pArbre doubleRotationDroite(pArbre a){
+	a->fg = rotationDroite(a->fg));
+	return rotationDroite(a);
+}
+
+pArbre insertionAVL(pArbre a, int e, int *h){
+	if(a==NULL){
+		*h = 1;
+		return creerArbre(e);
+	}
+	else if(e < a->element){
+		a->fg = insertionAVL(a->fg, e, h);
+		*h = -*h;
+	}
+	else if(e > a->element){
+		a->fd = insertionAVL(a->fd, e, h);
+	}
+	else{
+		*h = 0;
+		return a;
+	}
+	if(*h != 0){
+		a->equilibre = a->equilibre + *h;
+		if(a->equilibre == 0){
+			*h = 0;
+		}
+		else{
+			*h = 1;
+		}
+	}
+	return a;
+}
+
+pArbre suppMinAVL(pArbre a, int *h, int *pe){
+	pArbre tmp; 
+	if(a->fg == NULL){
+		*pe = a->element;
+		*h = -1;
+		a = a->fd;
+		free(tmp);
+		return a;
+	}
+	else{
+		a->fg = suppMinAVL(a->fg, h, pe);
+		*h = -*h;
+	}
+	
+	if(*h != 0){
+		a->equilibre = a->equilibre + *h;
+		if(a->equilibre == 0){
+			*h = -1;
+		}
+		else{
+			*h = 0;
+		}
+	}
+	return a;
+}
+
+pArbre suppressionAVL(pArbre a, int e, int *h){
+	pArbre tmp;
+	
+	if(a==NULL){
+		*h = 0;
+		return a;
+	}
+	else if(e > a->element){
+		a->fd = suppressionAVL(a->fd, e);
+	}
+	else if(e < a->element){
+		a->fg = suppressionAVL(a->fg, e);
+		*h = -*h;
+	}
+	else if(existeFilsDroit(a)){
+		a->fd = suppMinAVL(a->fd, h, &(a->element));
+	}
+	else{
+		tmp = a;
+		a = a->fg;
+		free(tmp);
+		*h = -1;
+		return a;
+	}
+	
+	if(*h != 0){
+		a->equilibre = a-> equilibre + *h;
+		if(a->equilibre == 0){
+			*h = -1;
+		}
+		else{
+			*h = 0;
+		}
+	}
+	return a;
+}
+
+pArbre equilibrerAVL(pArbre a){
+	if(a->equilibre >= 2){
+		if(a->fd->equilibre >= 0){
+			return rotationGauche(a));
+		}
+		else{
+			return doubleRotationGauche(a));
+		}
+	}
+	else if(a->equilibre <= -2){
+		if(a->fg->equilibre <= 0){
+			return rotationDroite(a);
+		}
+		else{
+			return doubleRotationDroite(a);
+		}
+	}
+	return a;
+}
