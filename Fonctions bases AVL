@@ -1,0 +1,207 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef AVL *pAVL;
+typedef Usine *pUsine;
+
+
+typedef struct{
+  char *id; // identifiant de l'usine
+  float capacite_max; // capacite maximal de traitement de l'usine 
+  float volume_initial;  // volume total capté par l'usine
+  float volume_reel; // volume total traité par l'usine apres fuites
+}Usine;
+
+typedef struct avl{
+  Usine usine;
+  int eq;
+  struct avl* fg;
+  struct avl* fd;
+}AVL;
+
+pUsine creerUsine(char id; int c_max; int v_max; int v_reel){
+  pUsine u = malloc(sizeof(Usine));
+  if(u == NULL){
+    printf("Erreur d'allocation de la memoire. \n");  
+    exit(1);
+  }
+  strcpy(usine->id,id);
+  usine->capacite_max = c_max;
+  usine->volume_initial =  v_max;
+  usine->volume_reel = v_reel;
+  return u;
+}
+
+pAVL creerAVL(Usine u){
+	pAVL n;
+	n = malloc(sizeof(AVL));
+  if(n == NULL){
+    printf("Erreur d'allocation de la memoire. \n");  
+    exit(1);
+  }
+	n->usine = u;
+	n->fg = NULL;
+	n->fd = NULL;
+	n->eq = 0;
+	return n;
+}
+
+int estVide(pAVL a){
+	return (a==NULL);
+  if(estVide(a)){
+    return 0;
+	}else if(estVide(a->fg)){
+		return 0;
+	}else{
+    return 1;
+  }
+}
+
+
+int existeFilsDroit(pAVL* a){
+	if(estVide(a)){
+		return 0;
+	}else if(estVide(a->fd)){
+    return 0;
+	}else{
+    return 1;
+  }
+}
+
+int existeFilsGauche(pAVL* a){
+	if(estVide(a)){
+		return 0;
+	}else if(estVide(a->fg)){
+    return 0;
+	}else{
+    return 1;
+  }
+}
+
+int ajouterFilsGauche(pAVL a, pUsine u){
+  if(estVide(a)){
+    return 0;
+	}else if(!existeFilsGauche(a)){
+    a->fg = creerAVL(u);
+    return 1;
+	}else{
+    return 0;
+  }	
+}
+
+int ajouterFilsDroit(pAVL a, pUsine u){
+  if(estVide(a)){
+    return 0;
+	}else if(!existeFilsDroit(a)){
+    a->fd = creerAVL(u);
+    return 1;
+	}else{
+    return 0;
+  }	
+}
+
+int min(int a, int b) {
+    if(a < b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int max(int a, int b) {
+    if(a > b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int min3(int a, int b, int c) {
+  return min(min(a,b),c);
+}
+
+int max3(int a, int b, int c) {
+  return max(max(a,b),c);
+}
+
+pAVL rotationDroite(pAVL a){
+	pAVL pivot;
+	int eq_a, eq_p;
+	pivot = a->fg;
+	a->fg = pivot->fd;
+	pivot->fd = a;
+	eq_a = a->eq;
+	eq_p = pivot->eq;
+	a->eq = eq_a - min(eq_p, 0) + 1;
+	pivot->eq = max3(eq_a+2, eq_a+eq_p+2, eq_p+1);
+	a = pivot; 
+	return a;
+}
+
+pAVL rotationGauche(pAVL a){
+	pAVL pivot;
+	int eq_a, eq_p;
+	pivot = a->fd;
+	a->fd = pivot->fg;
+	pivot->fg = a;
+	eq_a = a->eq;
+	eq_p = pivot->eq;
+	a->eq = eq_a - max(eq_p, 0) - 1;
+	pivot->eq = min3(eq_a-2, eq_a+eq_p-2, eq_p-1);
+	a = pivot; 
+	return a;
+}
+
+pArbre doubleRotationGauche(pArbre a){
+	a->fd = rotationDroite(a->fd));
+	return rotationGauche(a);
+}
+
+
+pArbre doubleRotationDroite(pArbre a){
+	a->fg = rotationDroite(a->fg));
+	return rotationDroite(a);
+}
+
+
+pAVL insertionAVL(pAVL a, pUsine u, int *h, ){
+	if(a == NULL){
+		*h = 1;
+		return creerAVL(u);
+	}else if(strcmp(a->usine->id,u->id) < 0){
+		a->fg = insertionAVL(a->fg, u, h);
+		*h = -*h;
+	}else if(strcmp(a->usine->id,u->id) > 0){
+		a->fd = insertionAVL(a->fd, u, h);
+	}else{
+		*h = 0;
+		return a;
+	}
+	if(*h != 0){
+		a->eq = a->eq + *h;
+		if(a->eq == 0){
+			*h = 0;
+		}else{
+			*h = 1;
+		}
+	}
+	return a;
+}
+
+
+pArbre equilibrerAVL(pArbre a){
+	if(a->eq >= 2){
+		if(a->fd->eq >= 0){
+			return rotationGauche(a));
+		}else{
+			return doubleRotationGauche(a));
+		}
+	}else if(a->eq <= -2){
+		if(a->fg->eq <= 0){
+			return rotationDroite(a);
+		}else{
+			return doubleRotationDroite(a);
+		}
+	}
+	return a;
+}
