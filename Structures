@@ -9,7 +9,7 @@ typedef struct{
 
 typedef struct avl{
   Usine usine;
-  int id;
+  int eq;
   struct avl* fg;
   struct avl* fd;
 }AVL;
