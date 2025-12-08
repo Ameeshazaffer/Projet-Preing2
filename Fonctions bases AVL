@@ -189,6 +189,20 @@ pAVL insertionAVL(pAVL a, pUsine u, int *h, ){
 }
 
 
+
+pAVL rechercheAVL(pAVL a, char* id){
+	if(a == NULL){
+		return NULL;
+	}else if(strcmp(a->usine->id,id) < 0){
+		return rechercheAVL(a->fg, id);
+	}else if(strcmp(a->usine->id,id) > 0){
+		return rechercheAVL(a->fd, u, h);
+	}else id(strcmp(a->usine->id,id)== 0){
+		return a;
+	}
+}
+
+
 pArbre equilibrerAVL(pArbre a){
 	if(a->eq >= 2){
 		if(a->fd->eq >= 0){
