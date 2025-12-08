@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+
+typedef struct chainon{
+	int value;
+	struct chainon* next;
+}Chainon;
+
+Chainon* creationChainon(int a){
+	Chainon *c = malloc(sizeof(Chainon));
+	if(c=NULL){
+		exit(1);
+	}
+	c->value = a;
+	c->next = NULL;
+	return c;
+}	
+
+Chainon* insertDebut(Chainon* pliste, int a){
+	Chainon *nouveau = creationChainon(int a);
+	nouveau->next = pliste;
+	return nouveau;
+}
+
+
+Chainon* insertFin(Chainon *pliste, int a){
+	Chainon *nouveau = creationChainon(int a);
+	Chainon *parcours = pliste;
+	while(parcours->next != NULL){
+		parcours = parcours->next;
+	}
+	parcours->next = nouveau;
+	return pliste;
+}
+
+void afficheListe(Chainon* pliste){
+	Chainon *parcours = pliste;
+	while(parcours->next != NULL){
+		printf("%d ->",parcours->value);
+		parcours = parcours->next;
+  }   
+}  
