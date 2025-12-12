@@ -190,23 +190,52 @@ void parcoursInfixe(pArbre* a){
 
 // parcours Prefixe
 
+void traiter(pArbre* a){
+	if(estVide(a)){	
+		printf("vide\n");
+	}
+	else{
+	printf("%d\n", a->valeur);
+	}
+}
 
-
-
-
-// parcours Postfixe 
-
-
-
-
+void parcoursPrefixe(pArbre* a){
+	if ( a!=NULL){
+		traiter (a);
+		parcoursPrefixe(a->fg);
+		parcoursPrefixe(a->fd);
+	}
+}
 
 
 // parcours Largeur 
 
+void parcoursLargeur(pArbre* a){
+	pArbre* noeud; 
+	File* f; 
+	if(!estVide(a)){
+		creerFile(f); 
+		enfiler(f, a);
+		while(fileVide(f)){
+			noeud=defiler(f);
+			traiter(noeud);
+			if(existeFilsGauche(noeud)){
+				enfiler(f, noeud->fg);
+			}
+			if(existeFilsDroit(noeud)){
+				enfiler(f, noeud->fd);
+			}
+		}
+	}
+}
 
+typedef struct{
+	Chainon* tete;
+	Chainon* queue;
+}
 
-
-// recherche élément
-
+int creerFile(f) ? 
+enfiler(f, a) ? 
+defiler(f) ? 
 
 
