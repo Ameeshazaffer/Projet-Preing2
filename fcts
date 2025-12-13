@@ -263,7 +263,7 @@ pArbre equilibrerAVL(pArbre a){
 	return a;
 }
 
-// arbre fonctions de base 
+
 
 
 
