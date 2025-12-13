@@ -229,13 +229,5 @@ void parcoursLargeur(pArbre* a){
 	}
 }
 
-typedef struct{
-	Chainon* tete;
-	Chainon* queue;
-}
-
-int creerFile(f) ?? 
-enfiler(f, a) ??
-defiler(f) ??
 
 
