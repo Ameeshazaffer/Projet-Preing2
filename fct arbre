@@ -219,14 +219,14 @@ void parcoursLargeur(pArbre* a){
 
 
                                                                                  // fonctions pour construire et utiliser l'arbre //
-pas de différenciation avec fils gauche / fils droit = car arbre classique 
+
 
 // création //
 // création de l'arbre
 // arbre vide ? 
 
 // construction et répartition des enfants // 
-// créer enfant 
+// créer liste de l'enfant
 // ajouter un enfant 
 // calcul du nombre d'enfants 
 // est une feuille ? 
