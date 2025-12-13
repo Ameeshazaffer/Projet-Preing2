@@ -1,4 +1,4 @@
-// fonctions de base pour arbre
+// fonctions pour construction et utilisation de l'arbre
 
 typedeg struct Chainon{
   int valeur; 
