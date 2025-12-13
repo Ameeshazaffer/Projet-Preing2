@@ -1,4 +1,4 @@
-// fonctions pour construction et utilisation de l'arbre
+// fonctions vu en cours pour arbre
 
 typedeg struct Chainon{
   int valeur; 
@@ -10,8 +10,7 @@ typedef struct{
   Arbre* fg, fd;
 } Arbre; 
 
-// construction de l'arbre 
-
+// création de l'arbre
 pArbre creerArbre(int e){
 	pArbre noeud=malloc(sizeof(Arbre));
 	if(noeud==NULL){
@@ -23,15 +22,12 @@ pArbre creerArbre(int e){
 	return noeud;
 }
 
-
-// arbre vide 
+// arbre vide ? 
 int estVide(pArbre* a){
     return (a==NULL);
   }
 
-// arbre avec feuille
-
-
+// est une feuille ? 
 int estFeuille(pArbre* a){
   if(a==NULL){
     exit(EXIT_FAILURE);
@@ -43,8 +39,6 @@ int estFeuille(pArbre* a){
     return 0; 
   }
 }
-
-
 
 // vérifie si filsgauche/filsdroit existe 
 
@@ -98,9 +92,6 @@ int filsGauche( pArbre* a ){
   }
 
 }
-
-.getunir = fichiers pas à mettre sur le dépot 
-
 
 // modifier élément
 
@@ -174,8 +165,6 @@ void supprimerFilsGauche(pArbre* a){
     free(a->fg); 
   }
 }
-  
-  
 
 // parcours Infixe
 
@@ -186,7 +175,6 @@ void parcoursInfixe(pArbre* a){
     parcoursInfixe(a->fd);
   }
 }
-
 
 // parcours Prefixe
 
@@ -206,7 +194,6 @@ void parcoursPrefixe(pArbre* a){
 		parcoursPrefixe(a->fd);
 	}
 }
-
 
 // parcours Largeur 
 
@@ -230,4 +217,27 @@ void parcoursLargeur(pArbre* a){
 }
 
 
+
+                                                                                 // fonctions pour construire et utiliser l'arbre //
+pas de différenciation avec fils gauche / fils droit = car arbre classique 
+
+// création //
+// création de l'arbre
+// arbre vide ? 
+
+// construction et répartition des enfants // 
+// créer enfant 
+// ajouter un enfant 
+// calcul du nombre d'enfants 
+// est une feuille ? 
+
+// rechercher l'arbre // 
+// affiche arbre
+
+// calcul fuites //
+// fonction qui calcule
+
+// libérer mémoire //
+// libérer liste d'enfants
+// libérer arbre
 
