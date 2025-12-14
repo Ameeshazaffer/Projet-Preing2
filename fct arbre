@@ -1,4 +1,4 @@
-// fonctions vu en cours pour arbre
+// fonctions vu en cours pour arbre //
 
 typedeg struct Chainon{
   int valeur; 
@@ -223,19 +223,27 @@ void parcoursLargeur(pArbre* a){
 
 // création //
 // création de l'arbre
+pour créer les différents noeuds du réseau : usine, stockage, junction, raccordements, usagers
 // arbre vide ? 
+éviter erreur de segmentation
 
 // construction et répartition des enfants // 
 // créer liste de l'enfant
-// ajouter un enfant 
+créer un maillon de la liste d'enfants
+// ajouter un enfant
+relier le parent à l'enfant où on met le pourcentage de fuite 
 // calcul du nombre d'enfants 
+pour la répartition équitable dans les enfants
 // est une feuille ? 
+savoir si on est tout en bas
 
 // rechercher l'arbre // 
 // affiche arbre
+pour regarder si pas d'erreurs
 
 // calcul fuites //
 // fonction qui calcule
+pour calculer la somme des fuites
 
 // libérer mémoire //
 // libérer liste d'enfants
