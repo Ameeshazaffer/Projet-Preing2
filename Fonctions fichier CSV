@@ -1,0 +1,28 @@
+
+typedef struct{
+    char* amont;
+    char* source;
+    char* aval;
+    float volume;
+    float coeff;
+}LigneCSV;
+
+
+void ligneUsine(const LigneCSV* ligne, pAVL* a){
+    pUsine u = creerUsine(ligne->source,ligne->volume,0.0,0.0);
+    int h = 0;
+    *a = insertionAVL(*a,u,&h);
+}
+
+
+int typeLigne(const LigneCSV* ligne){
+    if(strcmp(ligne->amont, "-") == 0 && strcmp(ligne->source, "-") != 0 && strcmp(ligne->aval, "-") == 0 && ligne->volume > 0 && ligne->coeff == 0){
+        return 1;
+    }
+
+    if(strcmp(ligne->amont, "-") == 0 && strcmp(ligne->source, "-") != 0 && strcmp(ligne->aval, "-") != 0 && ligne->volume > 0 && ligne->coeff > 0){ 
+            return 2;
+    }
+
+    return 0;
+}
