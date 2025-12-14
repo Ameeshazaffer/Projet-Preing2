@@ -15,6 +15,16 @@ void ligneUsine(const LigneCSV* ligne, pAVL* a){
 }
 
 
+void ligneSourceUsine(const LigneCSV* ligne, pAVL a){
+    pAVL noeud = rechercheAVL(a, ligne->aval);
+    if(noeud == NULL){
+        return; 
+    }
+    noeud->usine.volume_initial += ligne->volume;
+    noeud->usine.volume_reel += ligne->volume * ligne->coeff;
+}
+
+
 int typeLigne(const LigneCSV* ligne){
     if(strcmp(ligne->amont, "-") == 0 && strcmp(ligne->source, "-") != 0 && strcmp(ligne->aval, "-") == 0 && ligne->volume > 0 && ligne->coeff == 0){
         return 1;
