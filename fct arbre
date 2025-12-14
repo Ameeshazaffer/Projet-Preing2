@@ -1,3 +1,53 @@
+        // fonctions pour construire et utiliser l'arbre //
+
+
+// structures 
+
+typedef struct{
+	char id; // identifiants du distributeurs d'eau  
+	Liste* enfant; // les tronçons de ce noeud 
+}Arbre;
+
+typedef struct Arbre* pArbre; 
+
+typedef struct Liste{
+	Arbre* enfants; // en aval
+	float fuites; // pourcentage de fuites 
+	struct Liste* suivant; // 
+}Liste; 
+
+typedef struct Liste* pListe; 
+
+
+// fonction qui crée arbre 
+
+pArbre creerArbre(char e){
+	pArbre noeud=malloc(sizeof(Arbre));
+	if(noeud==NULL){
+		exit(EXIT_FAILURE);
+	}
+	noeud->id=e;
+	noeud->enfant=NULL;
+	return noeud;
+}
+
+// fonction qui crée une liste d'enfant
+
+
+
+// fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud )
+
+
+
+
+// fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes ) 
+
+
+
+// fonction qui libère la mémoire 
+
+
+
 // fonctions vu en cours pour arbre //
 
 typedef struct Chainon{
@@ -214,41 +264,6 @@ void parcoursLargeur(pArbre* a){
 			}
 		}
 	}
-}
-
-
-
-                                                                                 // fonctions pour construire et utiliser l'arbre //
-
-
-// structures 
-
-typedef struct{
-	char id; // identifiants du distributeurs d'eau  
-	Liste* enfant; // les tronçons de ce noeud 
-}Arbre;
-
-typedef struct Arbre* pArbre; 
-
-typedef struct Liste{
-	Arbre* enfants; // en aval
-	float fuites; // pourcentage de fuites 
-	struct Liste* suivant; // 
-}Liste; 
-
-typedef struct Liste* pListe; 
-
-
-// fonction qui crée arbre 
-
-pArbre creerArbre(char e){
-	pArbre noeud=malloc(sizeof(Arbre));
-	if(noeud==NULL){
-		exit(EXIT_FAILURE);
-	}
-	noeud->id=e;
-	noeud->enfant=NULL;
-	return noeud;
 }
 
 
