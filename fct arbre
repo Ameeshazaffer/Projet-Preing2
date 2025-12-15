@@ -1,4 +1,4 @@
-                              // toutes les fonctions pour afficher la pertes d'eau d'une usine //
+                                                                      // toutes les fonctions pour afficher la pertes d'eau d'une usine //
 
 
 // structures 
@@ -74,14 +74,17 @@ recherche AVL(avl, id_usines){
 
 int compter_enfants(){
 
-
+count ++
 }
 
 float calcul_pertes(adresse du noeud){
 	int volume=noeud->volume_initial;
 	parcourir le noeud : si enfant, continuer à chaque fois : 
 	calculer fuites noeud = volume; 
+	fonction count tout les enfants du noeud = nombre_enfants;
 	repartir volume/nombre_enfants;
+	attention a faire a chaque le calcul de tout les enfants, pui ensuite leurs enfants ainsin de suite et pas son enfant, ensuite l'enfant de l'enfant ...)
+	et donc comment parcourir l'arbre comme ça ( en largeur ? )
 	si pas enfant calculer les fuites du noeud ou enfants actuelle
 	volume_initial-volume = volume_pertes;
 	return volume_pertes;
@@ -109,224 +112,5 @@ main :
 
 
 
-
-
-// fonctions vu en cours pour arbre //
-
-typedef struct Chainon{
-  int valeur; 
-  struct Chainon* next;
-}Chainon; 
-
-typedef struct{
-  int valeur; 
-  Arbre* fg, fd;
-} Arbre; 
-
-// création de l'arbre
-pArbre creerArbre(int e){
-	pArbre noeud=malloc(sizeof(Arbre));
-	if(noeud==NULL){
-		exit(EXIT_FAILURE);
-	}
-	noeud->valeur=e;
-	noeud->fd=NULL;
-	noeud->fg=NULL;
-	return noeud;
-}
-
-// arbre vide ? 
-int estVide(pArbre* a){
-    return (a==NULL);
-  }
-
-// est une feuille ? 
-int estFeuille(pArbre* a){
-  if(a==NULL){
-    exit(EXIT_FAILURE);
-  }
-  if(a->fd==NULL && a->fg==NULL){
-    return 1;
-  }
-  else{
-    return 0; 
-  }
-}
-
-// vérifie si filsgauche/filsdroit existe 
-
-int existeFilsDroit(pArbre* a){
-  if( a==NULL ){
-    exit(EXIT_FAILURE);
-  }
-  else if (a->fd==NULL){
-    return 0; 
-  }
-  else{
-  return 1; 
-  }
-}
-
-int existeFilsGauche(pArbre* a){
-  if( a==NULL ){
-    exit(EXIT_FAILURE);
-  }
-  else if (a->fg==NULL){
-    return 0; 
-  }
-  else{
-  return 1; 
-  }
-}
-
-// retourne adresse du filsdroit/fisgauche
-
-int filsDroit( pArbre* a ){
-  if( a==NULL ){
-    exit(EXIT_FAILURE);
-  }
-  else if(existeFilsDroit(a)){
-    return a->fd; 
-  }
-  else{
-    return NULL;
-  }
-
-}
-int filsGauche( pArbre* a ){
-  if( a==NULL ){
-    exit(EXIT_FAILURE);
-  }
-  else if(existeFilsGauche(a)){
-    return a->fg; 
-  }
-  else{
-    return NULL;
-  }
-
-}
-
-// modifier élément
-
-void modifier element( Parbre* a, int element){
-  if (a == NULL){
-    exit(EXIT_FAILURE);
-  }
-  else{
-  a->value=element; 
-  }
-}
-
-
-// ajouter fis gauche/fils droit
-
-int ajouterFilsDroit( pArbre* a, int e){
-  if(a==NULL){
-    return 0; 
-  }
-  else if(!existeFilsDroit(a)){
-    a->fd=creerArbre(e);
-    return 1;
-  }
-  else{
-    return 0; 
-  }
-}
-
-int ajouterFilsGauche( pArbre* a, int e){
-  if(a==NULL){
-    return 0; 
-  }
-  else if(!existeFilsGauche(a)){
-    a->fg=creerArbre(e);
-    return 1;
-  }
-  else{
-    return 0; 
-  }
-}
-
-
-// supprimer un noeud 
-
-void supprimerFilsDroit(pArbre* a){
-  if(a==NULL){
-    exit(EXIT_FAILURE);
-  }
-  else if(existeFilsDroit(a)){
-    if(existeFilsGauche(a->fd)){
-      supprimerFilsGauche(a->fd);
-    }
-    if(existeFilsDroit(a->fd)){
-      supprimerFilsDroit(a->fd);
-    }
-    free(a->fd); 
-  }
-}
-
-void supprimerFilsGauche(pArbre* a){
-  if(a==NULL){
-    exit(EXIT_FAILURE);
-  }
-  else if(existeFilsGauche(a)){
-    if(existeFilsGauche(a->fg)){
-      supprimerFilsGauche(a->fg);
-    }
-    if(existeFilsDroit(a->fg)){
-      supprimerFilsDroit(a->fg);
-    }
-    free(a->fg); 
-  }
-}
-
-// parcours Infixe
-
-void parcoursInfixe(pArbre* a){
-  if(a !=NULL){
-    parcoursInfixe(a->fg);
-    traiter(a->valeur);
-    parcoursInfixe(a->fd);
-  }
-}
-
-// parcours Prefixe
-
-void traiter(pArbre* a){
-	if(estVide(a)){	
-		printf("vide\n");
-	}
-	else{
-	printf("%d\n", a->valeur);
-	}
-}
-
-void parcoursPrefixe(pArbre* a){
-	if ( a!=NULL){
-		traiter (a);
-		parcoursPrefixe(a->fg);
-		parcoursPrefixe(a->fd);
-	}
-}
-
-// parcours Largeur 
-
-void parcoursLargeur(pArbre* a){
-	pArbre* noeud; 
-	File* f; 
-	if(!estVide(a)){
-		creerFile(f); 
-		enfiler(f, a);
-		while(fileVide(f)){
-			noeud=defiler(f);
-			traiter(noeud);
-			if(existeFilsGauche(noeud)){
-				enfiler(f, noeud->fg);
-			}
-			if(existeFilsDroit(noeud)){
-				enfiler(f, noeud->fd);
-			}
-		}
-	}
-}
 
 
