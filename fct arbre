@@ -5,7 +5,6 @@
 
 typedef struct{
 	char* id; // identifiants du distributeurs d'eau
-	float volume_initial;
 	Liste* liste;
 }Arbre;
 
@@ -77,7 +76,16 @@ main :
 - ajouter enfant
 - recherche avl 
 - si null - retourner -1
-- calcul_pertes_eau(adresse du noeud, noeud->volume_initial )
+- calcul_pertes_eau(adresse du noeud)
+
+
+
+
+
+
+
+
+
 
 
 
