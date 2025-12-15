@@ -45,7 +45,7 @@ pListe creerenfant(pArbre e, float fuite){
 
 
 
-// fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud )
+// fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud ) = regarder partie avl et lecture du fichier déjà fait 
 
 pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
 	-  parcourir une ligne du ficheir csv 
