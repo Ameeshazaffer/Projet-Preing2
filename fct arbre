@@ -96,9 +96,6 @@ float calcul_pertes(adresse du noeud){
 
 
 
-
-
-
 main : 
 - ajouter enfant
 - recherche avl 
