@@ -1,10 +1,11 @@
-        // fonctions pour construire et utiliser l'arbre //
+                              // toutes les fonctions pour afficher la pertes d'eau d'une usine //
 
 
 // structures 
 
 typedef struct{
 	char* id; // identifiants du distributeurs d'eau
+	int volume_initial;
 	Liste* liste;
 }Arbre;
 
@@ -63,9 +64,28 @@ pArbre ajouterenfants(Parbre, ){
 
 // fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes ) 
 
+
 recherche AVL(avl, id_usines){
 	- retourne adresse du neoud où se trouve l'usine 
 }
+
+
+int compter_enfants(){
+
+
+}
+
+float calcul_pertes(adresse du noeud){
+	int volume=noeud->volume_initial;
+	parcourir le noeud : si enfant, continuer à chaque fois : 
+	calculer fuites noeud = volume; 
+	repartir volume/nombre_enfants;
+	si pas enfant calculer les fuites du noeud ou enfants actuelle
+	volume_initial-volume = volume_pertes;
+	return volume_pertes;
+
+}
+
 
 
 
