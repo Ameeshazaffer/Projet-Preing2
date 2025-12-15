@@ -38,13 +38,22 @@ pListe creerenfant(pArbre e, float fuite){
 		printf("Erreur allocation mémoire arbre");
 		exit(EXIT_FAILURE);
 	}
-	e->fuite=fuites;
+	e->fuite=fuites; 
+
+
 	
 
 
 // fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud )
 
+pArbre ajouterenfants(pArbre a  ){
+	
 
+
+
+
+
+}
 
 
 // fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes ) 
