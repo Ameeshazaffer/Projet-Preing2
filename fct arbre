@@ -5,15 +5,15 @@
 
 typedef struct{
 	char id; // identifiants du distributeurs d'eau  
-	Liste* enfant; // les tronçons de ce noeud 
+	Liste* enfants; // les tronçons de ce noeud 
 }Arbre;
 
 typedef struct Arbre* pArbre; 
 
 typedef struct Liste{
-	Arbre* enfants; // en aval
+	Arbre* enfant; // en aval
 	float fuites; // pourcentage de fuites 
-	struct Liste* suivant; // 
+	struct Liste* suivant; //
 }Liste; 
 
 typedef struct Liste* pListe; 
@@ -32,7 +32,14 @@ pArbre creerArbre(char e){
 }
 
 // fonction qui crée une liste d'enfant
-
+pListe creerenfant(pArbre e, float fuite){
+	pArbre e= mallocsizeof(Arbre);
+	if(e==NULL){
+		printf("Erreur allocation mémoire arbre");
+		exit(EXIT_FAILURE);
+	}
+	e->fuite=fuites;
+	
 
 
 // fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud )
