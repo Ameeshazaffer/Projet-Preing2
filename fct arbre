@@ -4,15 +4,16 @@
 // structures 
 
 typedef struct{
-	char id; // identifiants du distributeurs d'eau  
-	Liste* enfants; // les tronçons de ce noeud 
+	char* id; // identifiants du distributeurs d'eau
+	float volume_initial;
+	Liste* liste;
 }Arbre;
 
 typedef struct Arbre* pArbre; 
 
 typedef struct Liste{
 	Arbre* enfant; // en aval
-	float fuites; // pourcentage de fuites 
+	float fuites_pourcentage; // pourcentage de fuites 
 	struct Liste* suivant; //
 }Liste; 
 
@@ -39,15 +40,20 @@ pListe creerenfant(pArbre e, float fuite){
 		printf("Erreur allocation mémoire arbre");
 		exit(EXIT_FAILURE);
 	}
-	e->fuite=fuites; 
+	e->fuite_pourcentage=fuites; 
 }
 
 
 
 // fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud )
 
-pArbre ajouterenfants(arbre, ){	                                                                                                                                                                                                                                                                    
-	 
+pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
+	-  parcourir une ligne du ficheir csv 
+	- lire parent, enfant, fuites
+	- verifier si noeud parent existe ( si non créer ), ajouter dans avl ( avl pas pour construuire arbre ?
+	- verifier si noeud enfant existe ( si non créer ) mais de base y pas encore nan + ajouter dans l'avl
+	- ajouter l'enfant dans la liste chainées du parents et mettre % fuites
+	- recommencer pour la ligne suivante ... 
 
 
 
@@ -58,9 +64,20 @@ pArbre ajouterenfants(arbre, ){
 
 // fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes ) 
 
+recherche AVL(avl, id_usines){
+	- retourne adresse du neoud où se trouve l'usine 
+}
 
 
 
+
+
+
+main : 
+- ajouter enfant
+- recherche avl 
+- si null - retourner -1
+- calcul_pertes_eau(adresse du noeud, noeud->volume_initial )
 
 
 
