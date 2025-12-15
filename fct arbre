@@ -67,6 +67,8 @@ pArbre ajouterenfants(Parbre, ){
 
 recherche AVL(avl, id_usines){
 	- retourne adresse du neoud où se trouve l'usine 
+	- retourne null si pas trouvé
+	- si identifiant pas d'une usine ? ( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé ) 
 }
 
 
@@ -95,7 +97,7 @@ float calcul_pertes(adresse du noeud){
 main : 
 - ajouter enfant
 - recherche avl 
-- si null - retourner -1
+- si null donc pas trouver - retourner -1
 - calcul_pertes_eau(adresse du noeud)
 
 
