@@ -1,7 +1,7 @@
                                                                       // toutes les fonctions pour afficher la perte d'eau d'une usine //
 
 
-// structures 
+// structures à revoir pour que toutes les données du fichiers inclus dedans en tt cas ce que l'on a besoin pour calculer la perte de volumes d'eau par usine
 
 typedef struct{
 	char* id; // identifiants du distributeurs d'eau
