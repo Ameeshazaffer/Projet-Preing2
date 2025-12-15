@@ -57,10 +57,6 @@ pArbre ajouterenfants(Parbre, ){
 	- ajouter l'enfant dans la liste chainées du parents et mettre % fuites
 	- recommencer pour la ligne suivante ... 
 
-
-
-
-
 }
 
 
