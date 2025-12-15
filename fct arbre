@@ -32,6 +32,7 @@ pArbre creerArbre(char e){
 }
 
 // fonction qui crée une liste d'enfant
+
 pListe creerenfant(pArbre e, float fuite){
 	pArbre e= mallocsizeof(Arbre);
 	if(e==NULL){
@@ -39,15 +40,14 @@ pListe creerenfant(pArbre e, float fuite){
 		exit(EXIT_FAILURE);
 	}
 	e->fuite=fuites; 
+}
 
-
-	
 
 
 // fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud )
 
-pArbre ajouterenfants(pArbre a  ){
-	
+pArbre ajouterenfants(arbre, ){	                                                                                                                                                                                                                                                                    
+	 
 
 
 
@@ -60,7 +60,7 @@ pArbre ajouterenfants(pArbre a  ){
 
 
 
-// fonction qui libère la mémoire 
+
 
 
 
