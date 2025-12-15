@@ -1,4 +1,4 @@
-                                                                      // toutes les fonctions pour afficher la pertes d'eau d'une usine //
+                                                                      // toutes les fonctions pour afficher la perte d'eau d'une usine //
 
 
 // structures 
@@ -103,7 +103,16 @@ main :
 - calcul_pertes_eau(adresse du noeud)
 
 
-
+notes : 
+- 
+-
+-
+-
+-
+-
+-
+-
+-
 
 
 
