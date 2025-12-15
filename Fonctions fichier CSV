@@ -36,3 +36,25 @@ int typeLigne(const LigneCSV* ligne){
 
     return 0;
 }
+
+void decoupage(FILE* fichierCSV){
+    fichierCSV = fopen("?", "r+");
+    if (fichierCSV == NULL){
+        printf("Ouverture du fichier impossible");
+        exit(1);
+    }
+    while(
+
+
+
+
+fclose(fichierCSV);
+    
+
+
+
+}
+
+
+
+
