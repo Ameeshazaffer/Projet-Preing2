@@ -6,13 +6,13 @@
 typedef struct{
 	char* id; // identifiants du distributeurs d'eau
 	int volume_initial;
-	Liste* liste;
-}Arbre;
+	Liste* enfants;
+}Noeud;
 
-typedef struct Arbre* pArbre; 
+typedef struct Noeud* pArbre; 
 
-typedef struct Liste{
-	Arbre* enfant; // en aval
+typedef struct {
+	Noeud* enfant; // en aval
 	float fuites_pourcentage; // pourcentage de fuites 
 	struct Liste* suivant; //
 }Liste; 
@@ -50,8 +50,10 @@ pListe creerenfant(pArbre e, float fuite){
 pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
 	-  parcourir une ligne du ficheir csv 
 	- lire parent, enfant, fuites
-	- verifier si noeud parent existe ( si non créer ), ajouter dans avl ( avl pas pour construuire arbre ?
+	- verifier si noeud parent existe ( si non créer ), ajouter dans avl
 	- verifier si noeud enfant existe ( si non créer ) mais de base y pas encore nan + ajouter dans l'avl
+	- regarder en fonctions des lignes car pas les même en fonctions des distributions d'eau
+	- regarder ducoup les structures aussi pour voir si ça coordonne
 	- ajouter l'enfant dans la liste chainées du parents et mettre % fuites
 	- recommencer pour la ligne suivante ... 
 
