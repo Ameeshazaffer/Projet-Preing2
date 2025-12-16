@@ -31,6 +31,15 @@ typedef struct avl{
 typedef AVL_sup *pAVL_sup;
 
 
+typedef struct {
+    char usine[50];
+    char amont[50];
+    char aval[50];
+    float volume;
+    float coeff;
+} LigneCSV;
+
+
 
 
                                                    // fonction qui crée arbre classique //
@@ -167,14 +176,6 @@ pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
 	}
 }
 		
-
-typedef struct {
-    char usine[50];
-    char amont[50];
-    char aval[50];
-    float volume;
-    float coeff;
-} LigneCSV;
 
 // fonction qui traite une ligne
 
