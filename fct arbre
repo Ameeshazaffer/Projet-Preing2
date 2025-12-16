@@ -169,8 +169,8 @@ pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
 		
 
 typedef struct {
+    char usine[50];
     char amont[50];
-    char source[50];
     char aval[50];
     float volume;
     float coeff;
@@ -182,7 +182,7 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 // source -> usine 
 	
-	if(strcmp(l->amont, "-")==0 && strcmp(l->source,"-")!=0 && strcmp(l->aval, "-")==!0 && ( l->volume>0 )){
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")!=0 && ( l->volume>0 )){
 		pNoeud usine=obtenirnoeud(a, l->aval);
 
 		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
@@ -191,38 +191,31 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 // usine 
 
-	if(strcmp(l->amont, "-")==0 && strcmp(l->aval,"-")==0 ){
-		pNoeud usine=obtenirnoeud(a, l->aval){
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")==0 && ( l->volume>0 )){
+		pNoeud usine=obtenirnoeud(a, l->amont){
 
-		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
 
 
 // usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
 
-	if(strcmp(l->source,"-")!=0 && strcmp(l->aval, "-")==!0 && ( l->volume=0 )){
-		pNoeud noeud_amont=obtenirnoeud(a, id_amont)
-		pNoeud noeud_amont=obtenirnoeud(a, id_aval)
+	if((strcmp(l->amont, "-")!=0 && ( l->aval!=0 )&& (volume==0){
+		pNoeud noeud_amont=obtenirnoeud(a, l->amont)
+		pNoeud noeud_aval=obtenirnoeud(a, l->aval)
 
-		if (noeud_amont == NULL || noeud_aval == NULL ){
-			return NULL; 
-		}
-	
-		ajouterenfant(noeud_amont, noeud_aval, fuites)
+		ajouterenfant(noeud_amont, noeud_aval, l->coeff)
 }
 
-- faire attention lors de lecture car en fonction des distributeurs d'eau, ligne pas même syntaxe
-- garder aussi l'usine parce que répéter à chaque fois 
 
 int lireLigne(FILE* f, LigneCSV* l){
-	return fscanf(f, "%49[^;];%49[^;];%49[^;];%f;%f\n",l->amont, l->source, l->aval, &l->volume, &l->coeff)==5; 
+	return fscanf(f, "%49[^;];%49[^;];%49[^;];%f;%f\n",l->usine, l->amont, l->aval, &l->volume, &l->coeff)==5; 
 }
 
 
 // construire arbre 
-void construire_arbre(FILE* f, pAVL_sup* a, pNoeud* noeud){
+void construire_arbre(FILE* f, pAVL_sup* a){
 	LigneCSV l;
 	while(lireLigne(f, &l)){
-		traiter_une_ligne(ligne, a);
+		traiter_une_ligne(&l, a);
 	}
 }
 
