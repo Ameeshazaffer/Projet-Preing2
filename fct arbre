@@ -33,7 +33,6 @@ typedef AVL_sup *pAVL_sup;
 
 
 
-
                                                    // fonction qui crée arbre classique //
 
 pNoeud creerNoeud(const char* identifiant){
@@ -177,16 +176,25 @@ typedef struct {
     float coeff;
 } LigneCSV;
 
-// traiter une ligne
+// fonction qui traite une ligne
+
 void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 // source -> usine 
 	
-	if(strcmp(l->amont, "-")==0&&
+	if(strcmp(l->amont, "-")==0 && strcmp(l->source,"-")!=0 && strcmp(l->usine, "-")==!0 && ( l->volume>0 )){
+		pNoeud usine=obtenirnoeud(a, l->aval);
+
+		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
+		usine->volume_initial += volume_après_fuites; // car plusieurs sources peuvent rentrer dans une usine 
 
 
 // usine 
 
+	if(strcmp(l->amont, "-")==0 && strcmp(l->source,"-")!=0 && strcmp(l->usine, "-")==!0 && ( l->volume>0 )){
+		pNoeud usine=obtenirnoeud(a, l->aval);
+
+		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
 
 
 // usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
@@ -204,7 +212,7 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 - garder aussi l'usine parce que répéter à chaque fois 
 
 int lireLigne(FILE* f, LigneCSV* l){
-	retrun fscanf(f, "%49[^;];%49[^;];%49[^;];%f;%f\n",l->amont, l->source, l->aval, &l->volume, &l->coeff)==5; 
+	return fscanf(f, "%49[^;];%49[^;];%49[^;];%f;%f\n",l->amont, l->source, l->aval, &l->volume, &l->coeff)==5; 
 }
 
 
@@ -335,7 +343,7 @@ raccordement/usager :
 
 SCHEMA GLOBALE DU CODE : 
 lire une ligne du fichier : 
-- traiter la ligne 
+- traiter la ligne en fonction de la ligne si c'est pour source->usine, usine, usine->stockage ... 
 - retrouver l'adresse du noeud avec l'avl 
 - ajouter l'enfant dans l'arbre 
 ainsi de suite jusqu'à que fichier est NULL 
