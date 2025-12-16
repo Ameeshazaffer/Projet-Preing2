@@ -20,18 +20,6 @@ typedef struct {
 typedef struct Liste* pListe; 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
                                                    // fonction qui crée arbre classique //
 
 pNoeud creerNoeud(const char* identifiant){
@@ -50,19 +38,39 @@ pNoeud creerNoeud(const char* identifiant){
 	return noeud;
 }
 
+
 // fonction qui crée une liste d'enfant
 
 pListe creerenfant(pNoeud aval, float fuite){
-	pArbre a= mallocsizeof(Arbre);
-	if(e==NULL){
-		printf("Erreur allocation mémoire arbre");
-		exit(EXIT_FAILURE);
+	pListe a= malloc(sizeof(Liste));
+	if(a==NULL){
+		return NULL;
 	}
 	a->enfant=aval;
 	a->fuites_pourcentages=fuite;
 	a->suivant=NULL;
-	
+	return a;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
