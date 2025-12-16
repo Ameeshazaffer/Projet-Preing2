@@ -137,7 +137,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
         *h = -*h;
     }
 	else if(strcmp(u->id, a->usine.id) > 0){
-        a->fd = insertionAVL(a->fd, id, n, h);
+        a->fd = insertionAVL_sup(a->fd, id, n, h);
     }
 	else{
         *h = 0;
