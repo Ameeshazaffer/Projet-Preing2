@@ -24,7 +24,7 @@ présent dans le fichier :
 source/usine : 
 - identifiant source 
 - identifiant usine
-- qunatité annuelle capté 
+- quantité annuelle capté 
 - pourcentage de fuites
 
 usine : 
@@ -90,6 +90,7 @@ recherche AVL(avl, id_usines){
 pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
 	-  parcourir une ligne du ficheir csv 
 	- lire parent, enfant, fuites
+	- pour ajouter dans l'avl commencer à partir de l'usine, ne pas mettre la source dedans et calculer la fuites entre source/usine et mettre dans le neoud de volume_intial   
 	- verifier si noeud parent existe avec avl rechercher avl qui donne l'adresse du noeud
 ( si non : valeur 0 : créer ), ajouter dans avl
 	- verifier si noeud enfant existe
@@ -116,7 +117,6 @@ count ++
 
 float calcul_pertes(adresse du noeud){
 	int volume = noeud->volume_initial;
-	commencer à partir de l'usine de traitement donc calculer la fuites de l'usine et commencer la somme à partir de là 
 	parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
 	int volume_début, volume fin ( volume début volume d'un des noeuds dans la boucle )
 	calculer fuites noeud = volume_fin; 
