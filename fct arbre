@@ -1,7 +1,7 @@
                                                                       // toutes les fonctions pour afficher la perte d'eau d'une usine //
 
 
-// structures à revoir pour que toutes les données du fichiers inclus dedans en tt cas ce que l'on a besoin pour calculer la perte de volumes d'eau par usine
+// structures
 
 typedef struct{
 	char* id; // identifiants du distributeurs d'eau
@@ -18,6 +18,44 @@ typedef struct {
 }Liste; 
 
 typedef struct Liste* pListe; 
+
+
+
+
+
+
+// fonction qui crée arbre 
+- regarder le truc de noeud du graphe = usine et autres lignes = arrêtes
+
+pArbre creerArbre(char e){
+	pArbre noeud=malloc(sizeof(Arbre));
+	if(noeud==NULL){
+		exit(EXIT_FAILURE);
+	}
+	noeud->id=e;
+	noeud->enfant=NULL;
+	return noeud;
+}
+
+// fonction qui crée une liste d'enfant
+
+pListe creerenfant(pArbre e, float fuite){
+	pArbre e= mallocsizeof(Arbre);
+	if(e==NULL){
+		printf("Erreur allocation mémoire arbre");
+		exit(EXIT_FAILURE);
+	}
+	e->fuite_pourcentage=fuites; 
+}
+
+
+
+// fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud ) = regarder partie avl et lecture du fichier déjà fait 
+
+recherche AVL(avl, id_usines){
+	- retourne adresse du neoud où se trouve le noeud
+	- retourne 0 si pas trouvé 
+}
 
 présent dans le fichier : 
 
@@ -53,39 +91,6 @@ raccordement/usager :
 - identifiant usager 
 - pourcentage de fuites 
 - identifiant de l'usine 
-
-// fonction qui crée arbre 
-- regarder le truc de noeud du graphe = usine et autres lignes = arrêtes
-
-pArbre creerArbre(char e){
-	pArbre noeud=malloc(sizeof(Arbre));
-	if(noeud==NULL){
-		exit(EXIT_FAILURE);
-	}
-	noeud->id=e;
-	noeud->enfant=NULL;
-	return noeud;
-}
-
-// fonction qui crée une liste d'enfant
-
-pListe creerenfant(pArbre e, float fuite){
-	pArbre e= mallocsizeof(Arbre);
-	if(e==NULL){
-		printf("Erreur allocation mémoire arbre");
-		exit(EXIT_FAILURE);
-	}
-	e->fuite_pourcentage=fuites; 
-}
-
-
-
-// fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud ) = regarder partie avl et lecture du fichier déjà fait 
-
-recherche AVL(avl, id_usines){
-	- retourne adresse du neoud où se trouve le noeud
-	- retourne 0 si pas trouvé 
-}
 
 pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
 	-  parcourir une ligne du ficheir csv 
@@ -144,8 +149,9 @@ void tranforme_données_fichiers(){
 main : 
 - ajouter enfant
 - si volume de pertes d'eau demandé par shell : 
+- la fonction doit prendre en paramètre l'identifiant de l'usine 
 - si identifiant pas trouver - retourner -1 sinon retourne adresse du noeud 
-- continuer suelement si fonction recherche_identifiant retourne pas -1
+- continuer seulement si fonction recherche_identifiant retourne pas -1
 - calcul_pertes_eau(adresse du noeud)
 - mettre les données dans un fichier
 
