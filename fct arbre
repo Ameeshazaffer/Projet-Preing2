@@ -172,26 +172,33 @@ pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
 
 
 // traiter une ligne
-void traiter_une_ligne(){
-	const char* id_amont = 
-	const char* id_aval =
-	fuites =
+void traiter_une_ligne(char* ligne, ){
+	char* id_amont = 
+	char* id_aval =
+	char* fuites = 
+	sscanf(fuite_str, "%f%%", &fuite); // pour enlever le pourcentage 
+
 	pNoeud noeud_amont=obtneirnoeud(a, id_amont)
 	pNoeud noeud_amont=obtenirnoeud(a, id_aval)
+
 	if (noeud_amont == NULL || noeud_aval == NULL ){
 		return NULL; 
 	}
-		
-	ajouterenfant(noeud_amont, noeud_aval, fuites)
 	
+	ajouterenfant(noeud_amont, noeud_aval, fuites)
+}
 
 - faire attention lors de lecture car en fonction des distributeurs d'eau, ligne pas même syntaxe
 
 
 
 // construire arbre 
-lire ligne par ligne 
-et donc appeler la fonction traiterligne 
+pNoeud construire_arbre(FILE* f, pAVL_sup* a){
+	char ligne[300];
+	while(fgets(ligne, sizeof(ligne), f)!=NULL)
+		traiter_une_ligne(ligne, a);
+	}
+}
 
 
 
