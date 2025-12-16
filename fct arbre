@@ -403,6 +403,8 @@ count ++
 
 
 float calcul_pertes(adresse du noeud){
+	va parcourir l’ensemble des tronçons situés en aval,
+	jusqu’aux usagers finaux, et faire la somme des pertes rencontrées dans chaque tronçon
 	int volume = noeud->volume_initial;
 	parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
 	int volume_début, volume fin ( volume début volume d'un des noeuds dans la boucle )
@@ -416,7 +418,6 @@ float calcul_pertes(adresse du noeud){
 	et donc comment parcourir l'arbre comme ça ( en largeur ? )
 	si pas enfant calculer les fuites du noeud ou enfants actuelle
 	return volume_pertes; ( en millions de m^3 = peut être à convertir )
-	appeler la fonction données fichiers 
 	affiche le résultat
 
 }
