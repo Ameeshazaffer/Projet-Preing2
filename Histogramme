@@ -5,8 +5,8 @@
 typedef struct{
     char* id;                 
     float capacite_max;       
-    float volume_initial;    
-    float volume_reel;       
+    float volume_total_capte;    
+    float volume_total_traite;       
 }Usine;
 
 typedef struct avl{
@@ -34,8 +34,8 @@ pUsine creerUsine(char* id, float c_max, float v_initial, float v_reel){
     }
     strcpy(u->id, id);
     u->capacite_max = c_max;
-    u->volume_initial = v_initial;
-    u->volume_reel = v_reel;
+    u->volume_total_capte = v_initial;
+    u->volume_total_traite = v_reel;
     return u;
 }
 
@@ -48,8 +48,8 @@ pAVL creerAVL(pUsine u){
     n->usine.id = malloc(strlen(u->id) + 1);
     strcpy(n->usine.id, u->id);
     n->usine.capacite_max = u->capacite_max;
-    n->usine.volume_initial = u->volume_initial;
-    n->usine.volume_reel = u->volume_reel;
+    n->usine.volume_total_capte = u->volume_initial;
+    n->usine.volume_total_traite = u->volume_reel;
     n->eq = 0;
     n->fg = NULL;
     n->fd = NULL;
@@ -218,9 +218,9 @@ void ligneSourceUsine(const LigneCSV* ligne, pAVL a){
     if(n == NULL){
         return; 
     }
-    n->usine.volume_initial += ligne->volume;
+    n->usine.volume_total_capte += ligne->volume;
     float p = 1.0f - (ligne->fuites / 100.0f);
-    n->usine.volume_reel += ligne->volume * p;
+    n->usine.volume_total_traite += ligne->volume * p;
 }
 
 
@@ -272,3 +272,47 @@ void decouperLigne(FILE* fichierCSV, pAVL* a){
         }
     }
 }
+
+void traiterFichierCSV(FILE* f, pAVL a, int choix){
+    if(a == NULL || f == NULL){
+            return;
+    }
+    if(choix == 1){
+        fprintf(fichier,"%s;%f\n", a->usine.id,a->usine.capacite_max);
+    }else if(choix = 2){
+         fprintf(fichier,"%s;%f\n", a->usine.id,a->usine.volume_total_capte);
+    }else{
+        fprintf(fichier,"%s;%f\n", a->usine.id,a->usine.volume_total_traite);
+    }
+}
+
+void creationFichierCSV(FILE* f, pAVL a, int choix){
+    if(a == NULL || f == NULL){
+            return;
+    }
+    creationFichierCSV(a->fd,a,choix);
+    traiterFichierCSV(f, a, choix);
+    creationFichierCSV(a->fg,a,choix);
+}
+
+void creationHistogramme(pAVL a , int choix){
+    if(a == NULL){
+        return;
+    }
+    FILE *f = NULL;
+    if(choix == 1){
+        f = fopen(
+
+
+
+    fclose(f);
+}
+
+
+
+int main(){
+
+return 0;
+}
+
+
