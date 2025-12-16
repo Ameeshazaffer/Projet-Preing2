@@ -34,15 +34,19 @@ typedef struct Liste* pListe;
 
                                                    // fonction qui crée arbre classique //
 
-pNoeud creerNoeud(char identifiant){
-	pArbre noeud=malloc(sizeof(Arbre));
+pNoeud creerNoeud(const char* identifiant){
+	pNoeud noeud=malloc(sizeof(Noeud));
 	if(noeud==NULL){
-		printf("Erreur allocation mémoire arbre");
-		exit(EXIT_FAILURE);
+		return NULL;
 	}
-	noeud->id=e ( ? ) ;
-	noeud->volume_initial;
-	noeud->enfant=NULL; (initialiser la liste d'enfant à NULL)
+	noeud->id=malloc(strlen(identifiant)+1); // faire de la mémoire pour la chaîne de carcatère de l'identifiant
+	if(noeud->id==NULL){
+		free(noeud); // libérer mémoire allouée du noeud 
+		return NULL;
+	}
+	strcpy(noeud->id, identifiant);
+	noeud->volume_initial=0;
+	noeud->enfants=NULL; (initialiser la liste d'enfant à NULL)
 	return noeud;
 }
 
