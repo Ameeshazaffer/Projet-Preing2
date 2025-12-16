@@ -195,6 +195,7 @@ void tranforme_données_fichiers(){
 }
 
 
+// fonctions libère arbre 
 
 
 
