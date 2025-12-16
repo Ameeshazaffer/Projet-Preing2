@@ -182,7 +182,7 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 // source -> usine 
 	
-	if(strcmp(l->amont, "-")==0 && strcmp(l->source,"-")!=0 && strcmp(l->usine, "-")==!0 && ( l->volume>0 )){
+	if(strcmp(l->amont, "-")==0 && strcmp(l->source,"-")!=0 && strcmp(l->aval, "-")==!0 && ( l->volume>0 )){
 		pNoeud usine=obtenirnoeud(a, l->aval);
 
 		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
@@ -191,21 +191,23 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 // usine 
 
-	if(strcmp(l->amont, "-")==0 && strcmp(l->source,"-")!=0 && strcmp(l->usine, "-")==!0 && ( l->volume>0 )){
-		pNoeud usine=obtenirnoeud(a, l->aval);
+	if(strcmp(l->amont, "-")==0 && strcmp(l->aval,"-")==0 ){
+		pNoeud usine=obtenirnoeud(a, l->aval){
 
 		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
 
 
 // usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
-	pNoeud noeud_amont=obtneirnoeud(a, id_amont)
-	pNoeud noeud_amont=obtenirnoeud(a, id_aval)
 
-	if (noeud_amont == NULL || noeud_aval == NULL ){
-		return NULL; 
-	}
+	if(strcmp(l->source,"-")!=0 && strcmp(l->aval, "-")==!0 && ( l->volume=0 )){
+		pNoeud noeud_amont=obtenirnoeud(a, id_amont)
+		pNoeud noeud_amont=obtenirnoeud(a, id_aval)
+
+		if (noeud_amont == NULL || noeud_aval == NULL ){
+			return NULL; 
+		}
 	
-	ajouterenfant(noeud_amont, noeud_aval, fuites)
+		ajouterenfant(noeud_amont, noeud_aval, fuites)
 }
 
 - faire attention lors de lecture car en fonction des distributeurs d'eau, ligne pas même syntaxe
