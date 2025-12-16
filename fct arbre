@@ -47,11 +47,18 @@ pListe creerenfant(pArbre e, float fuite){
 
 // fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud ) = regarder partie avl et lecture du fichier déjà fait 
 
+recherche AVL(avl, id_usines){
+	- retourne adresse du neoud où se trouve le noeud
+	- retourne 0 si pas trouvé 
+}
+
 pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
 	-  parcourir une ligne du ficheir csv 
 	- lire parent, enfant, fuites
-	- verifier si noeud parent existe ( si non créer ), ajouter dans avl
-	- verifier si noeud enfant existe ( si non créer ) mais de base y pas encore nan + ajouter dans l'avl
+	- verifier si noeud parent existe avec avl rechercher avl qui donne l'adresse du noeud
+( si non : valeur 0 : créer ), ajouter dans avl
+	- verifier si noeud enfant existe
+( si non créer ) mais de base y pas encore nan + ajouter dans l'avl
 	- regarder en fonctions des lignes car pas les même en fonctions des distributions d'eau
 	- regarder ducoup les structures aussi pour voir si ça coordonne
 	- ajouter l'enfant dans la liste chainées du parents et mettre % fuites
@@ -59,15 +66,12 @@ pArbre ajouterenfants(Parbre, ){
 
 }
 
-
+vérification_ identifiant(){
+si identifiant pas trouver - retourner -1
+si identifiant pas d'une usine ? ( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé )
+}
 // fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes ) 
 
-
-recherche AVL(avl, id_usines){
-	- retourne adresse du neoud où se trouve l'usine 
-	- retourne null si pas trouvé
-	- si identifiant pas d'une usine ? ( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé ) 
-}
 
 
 int compter_enfants(){
@@ -103,16 +107,16 @@ void tranforme_données_fichiers(){
 
 main : 
 - ajouter enfant
-- recherche avl 
-- si null donc pas trouver - retourner -1
+- si volume de pertes d'eau demandé par shell : 
+- si identifiant pas trouver - retourner -1 sinon retourne adresse du noeud 
+- continuer suelement si fonction recherche_identifiant retourne pas -1
 - calcul_pertes_eau(adresse du noeud)
 - mettre les données dans un fichier
 
 
 notes : 
 - fichier des historiques des volumes en .dat
--
--
+- 
 -
 -
 -
