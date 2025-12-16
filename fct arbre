@@ -1,7 +1,7 @@
                                                                       // toutes les fonctions pour afficher la perte d'eau d'une usine //
 
 
-                                                                                     // structures //
+                                                                                           // structures //
 
 typedef struct{
 	char* id; // identifiants du distributeurs d'eau
@@ -42,7 +42,13 @@ typedef struct {
 
 
 
-                                                   // fonction qui crée arbre classique //
+
+
+
+
+
+
+                                                                                        // partie 1 : fonctions qui crées arbre classique //
 
 pNoeud creerNoeud(const char* identifiant){
 	pNoeud noeud=malloc(sizeof(Noeud));
@@ -294,75 +300,7 @@ void construire_arbre(FILE* f, pAVL_sup* a){
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// les lignes du fichier
 
 présent dans le fichier : 
 
@@ -410,7 +348,7 @@ raccordement/usager :
 
 
 
-SCHEMA GLOBALE DU CODE : 
+SCHEMA GLOBALE DU CODE POUR CONSTRUCTION DE L'ARBRE : 
 lire une ligne du fichier : 
 - traiter la ligne en fonction de la ligne si c'est pour source->usine, usine, usine->stockage ... 
 - retrouver l'adresse du noeud avec l'avl 
@@ -448,17 +386,21 @@ ainsi de suite jusqu'à que fichier est NULL
 
 
 
-          // fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
+                            // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
 
 
 vérification_ identifiant(){
-si identifiant pas trouver - retourner -1
-si identifiant pas d'une usine ? ( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé )
+	si identifiant pas trouver - retourner -1
+	si identifiant pas d'une usine ?( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé )
+	si identifiant trouver ok continuer 
 }
+
+
 int compter_enfants(){
 
 count ++
 }
+
 
 float calcul_pertes(adresse du noeud){
 	int volume = noeud->volume_initial;
@@ -486,6 +428,17 @@ void tranforme_données_fichiers(){
 	sinon créer un fichier et rajouter la ligne
 	fichier des historiques des volumes en .dat
 }
+
+
+int calcul_final_pertes( identifiant de l'usine){
+
+verifier si identifiant bon 
+faire les calculs 
+rentrer l'identifiant de l'usine et la valeur du volume totale perdue par l'usine dans un fichier.dat 
+retourner la valeur du volume totales perdues par l'usine 
+
+}
+
 
 
 // fonctions libère arbre 
@@ -542,13 +495,7 @@ int main (){
 }
 
 	
-- ajouter enfant
-- si volume de pertes d'eau demandé par shell : 
-- la fonction doit prendre en paramètre l'identifiant de l'usine 
-- si identifiant pas trouver - retourner -1 sinon retourne adresse du noeud 
-- continuer seulement si fonction recherche_identifiant retourne pas -1
-- calcul_pertes_eau(adresse du noeud)
-- mettre les données dans un fichier
+
 
 
 notes : 
