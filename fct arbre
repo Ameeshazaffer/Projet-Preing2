@@ -22,7 +22,7 @@ typedef struct Liste* pListe;
 
 typedef struct avl{
 	char* id;
-    pNoeud Noeud;
+    pNoeud noeud;
     int eq;                   
     struct avl *fg;
     struct avl *fd;
@@ -53,7 +53,7 @@ pNoeud creerNoeud(const char* identifiant){
 }
 
 
-// fonction qui crée une liste d'enfant
+// fonction qui crée un enfant de la liste 
 
 pListe creerenfant(pNoeud aval, float fuite){
 	pListe a= malloc(sizeof(Liste));
@@ -81,7 +81,7 @@ void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
 
 // créer un AVL supplémentaire
 
-pAVL creerAVL_sup(const char* id){
+pAVL_sup creerAVL_sup(const char* id){
     pAVL_sup n = malloc(sizeof(AVL_sup));
     if (n == NULL) {
         return NULL;
@@ -102,21 +102,19 @@ pAVL creerAVL_sup(const char* id){
 
 // rechercher noeud avec avl - retourne null ou adresse neoud 
 
-a mettre en fonction de neoud
 
-pAVL rechercheAVL(pAVL a, char* id){
+pNoeud rechercheAVL(pAVL_sup a, char* id){
     if (a == NULL){
         return NULL;
     }
-    if(strcmp(id, a->usine.id) == 0){
-        return a;
-    }else if(strcmp(id, a->usine.id) < 0){
+    if(strcmp(id, a->id) == 0){
+        return a->noeud;
+    }else if(strcmp(id, a->id) < 0){
         return rechercheAVL(a->fg, id);
     }else{
         return rechercheAVL(a->fd, id);
     }
 }
-si pas trouver retriune null ou sinon retrouner adresse du noeud 
 
 // insérer noeud dans avl 
 
