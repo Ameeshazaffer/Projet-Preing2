@@ -173,11 +173,13 @@ pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
 
 // traiter une ligne
 void traiter_une_ligne(){
-	 stocker id amont 
+	stocker id amont 
 	stocker id aval
 	stcoker fuites 
-	noeud_amont=obtenirnoeud(id_amont)
-	noeud_amont=obtenirnoeud(id_aval)
+	pNoeud noeud_amont=obtenirnoeud(a, id_amont)
+	pNoeud noeud_amont=obtenirnoeud(a, id_aval)
+	if (noeud_amont == NULL || noeud_aval == NULL ){
+		
 	ajouterenfant(neoud_amont, fuites)
 	
 - prend id amont ( ex : usine ) 
