@@ -104,7 +104,7 @@ raccordement/usager :
 pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
 	-  parcourir une ligne du ficheir csv 
 	- lire parent, enfant, fuites
-	- pour ajouter dans l'avl commencer à partir de l'usine, ne pas mettre la source dedans et calculer la fuites entre source/usine et mettre dans le neoud de volume_intial   
+	- pour ajouter dans l'avl   
 	- verifier si noeud parent existe avec avl rechercher avl qui donne l'adresse du noeud
 ( si non : valeur 0 : créer ), ajouter dans avl
 	- verifier si noeud enfant existe
@@ -133,6 +133,7 @@ float calcul_pertes(adresse du noeud){
 	int volume = noeud->volume_initial;
 	parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
 	int volume_début, volume fin ( volume début volume d'un des noeuds dans la boucle )
+	commencer la somme des fuites après avoir calculer la fuites de sources à usine de traitement 
 	calculer fuites noeud = volume_fin; 
 	à chaque fois : volume - volume_fin = +volume_pertes; ( pour le noeud de l'usine au début ? )
 	à chaque fois : volume_début - volume_fin = volume_pertes; ( pour le reste ) 
