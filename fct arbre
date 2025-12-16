@@ -1,7 +1,7 @@
                                                                       // toutes les fonctions pour afficher la perte d'eau d'une usine //
 
 
-// structures
+                                                                                     // structures //
 
 typedef struct{
 	char* id; // identifiants du distributeurs d'eau
@@ -32,7 +32,7 @@ typedef struct Liste* pListe;
 
 
 
-// fonction qui crée arbre 
+                                                   // fonction qui crée arbre classique //
 
 - regarder le truc de noeud du graphe = usine et autres lignes = arrêtes
 
@@ -120,7 +120,32 @@ vérification_ identifiant(){
 si identifiant pas trouver - retourner -1
 si identifiant pas d'une usine ? ( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé )
 }
-// fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes ) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          // fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
 
 
 
@@ -154,6 +179,30 @@ void tranforme_données_fichiers(){
 	sinon créer un fichier et rajouter la ligne 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       // ce qu'il faut mettre dans le programme principal //
 
 
 main : 
