@@ -77,7 +77,7 @@ count ++
 
 float calcul_pertes(adresse du noeud){
 	int volume = noeud->volume_initial;
-	parcourir le noeud : si enfant, continuer à chaque fois : 
+	parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
 	int volume_début, volume fin ( volume début volume d'un des noeuds dans la boucle )
 	calculer fuites noeud = volume_fin; 
 	à chaque fois : volume - volume_fin = +volume_pertes; ( pour le noeud de l'usine au début ? )
@@ -88,13 +88,15 @@ float calcul_pertes(adresse du noeud){
 	et donc comment parcourir l'arbre comme ça ( en largeur ? )
 	si pas enfant calculer les fuites du noeud ou enfants actuelle
 	return volume_pertes; ( en millions de m^3 = peut être à convertir )
+	affiche le résultat
 
 }
 
 void tranforme_données_fichiers(){
 
-	- regarder syntaxe du fichier leaks
-
+	mettre à chaque fois que un volume de perte totale d'une usine est calculé : 
+	si fichier existe, rajouter une nouvelle ligne
+	sinon créer un fichier et rajouter la ligne 
 }
 
 
@@ -108,7 +110,7 @@ main :
 
 
 notes : 
-- 
+- fichier des historiques des volumes en .dat
 -
 -
 -
