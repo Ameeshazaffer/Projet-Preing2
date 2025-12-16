@@ -173,19 +173,18 @@ pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
 
 // traiter une ligne
 void traiter_une_ligne(){
-	stocker id amont 
-	stocker id aval
-	stcoker fuites 
-	pNoeud noeud_amont=obtenirnoeud(a, id_amont)
+	const char* id_amont = 
+	const char* id_aval =
+	fuites =
+	pNoeud noeud_amont=obtneirnoeud(a, id_amont)
 	pNoeud noeud_amont=obtenirnoeud(a, id_aval)
 	if (noeud_amont == NULL || noeud_aval == NULL ){
+		return NULL; 
+	}
 		
-	ajouterenfant(neoud_amont, fuites)
+	ajouterenfant(noeud_amont, noeud_aval, fuites)
 	
-- prend id amont ( ex : usine ) 
-- prend id aval ( ex : espace de stockage )
-- on obtient le noeud qui correspond a id amont 
-- ajoute enfant a id amont qui est id aval ( mettre fuites aussi ) 
+
 - faire attention lors de lecture car en fonction des distributeurs d'eau, ligne pas même syntaxe
 
 
