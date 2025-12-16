@@ -75,11 +75,21 @@ pListe creerenfant(pNoeud aval, float fuite){
 
 
 // fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud ) = regarder partie avl et lecture du fichier déjà fait 
+- structrues avl 
 
-recherche AVL(avl, id_usines){
+- recherche AVL(avl, id_usines){
 	- retourne adresse du neoud où se trouve le noeud
 	- retourne 0 si pas trouvé 
 }
+
+- obtenir l'adresse du noeud ( cherche le noeud, ( le cré si y a aps, enrengistre dans l'avl et ) et retroune adresse )
+	pour ajouter dans l'avl   
+	- verifier si noeud parent existe avec avl rechercher avl qui donne l'adresse du noeud
+( si non : valeur 0 : créer ), ajouter dans avl
+	- verifier si noeud enfant existe
+( si non créer ) mais de base y pas encore nan + ajouter dans l'avl
+ lire parent, enfant, fuites
+	- regarder en fonctions des lignes car pas les même en fonctions des distributions d'eau
 
 présent dans le fichier : 
 
@@ -118,18 +128,49 @@ raccordement/usager :
 
 pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
 	-  parcourir une ligne du ficheir csv 
-	- lire parent, enfant, fuites
-	- pour ajouter dans l'avl   
-	- verifier si noeud parent existe avec avl rechercher avl qui donne l'adresse du noeud
-( si non : valeur 0 : créer ), ajouter dans avl
-	- verifier si noeud enfant existe
-( si non créer ) mais de base y pas encore nan + ajouter dans l'avl
-	- regarder en fonctions des lignes car pas les même en fonctions des distributions d'eau
-	- regarder ducoup les structures aussi pour voir si ça coordonne
-	- ajouter l'enfant dans la liste chainées du parents et mettre % fuites
+	- creer un enfant
+	- compléter l'enfant 
 	- recommencer pour la ligne suivante ... 
 
 }
+- parcourir une ligne du fichier à chaque fois 
+verifie si ligne utile pour rendement 
+trouver l'adresse du noeud 
+trouver l'enfant 
+on ajoute dans la liste des enfants : enfant et pourcentage de fuites 
+
+
+- construire l'arbre 
+lire le fichier ligne par ligne 
+elle fait traiter la ligne a chaque fois 
+
+
+
+SCHEMA GLOBALE DU CODE : 
+
+fonction construire arbre  : lit ligne par ligne le fichier 
+fonction traiter ligne : prend identifiant amont et avl et fait obtenirnoeud(amont), obtenir(aval), ajouterenfant(amont->avl)
+fonction obtenirnoeud(id amont et pareil pour id aval) - rechecrhe avl si trouvé : retroune adresse noeud 
+											si pas trouvé créer neoud, insere dans avl, retourner neoud 
+fonction ajouter enfant - créer enfant et ajouter dans parent->enfant 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 vérification_ identifiant(){
 si identifiant pas trouver - retourner -1
