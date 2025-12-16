@@ -189,6 +189,7 @@ void traiter_une_ligne(char* ligne, ){
 }
 
 - faire attention lors de lecture car en fonction des distributeurs d'eau, ligne pas même syntaxe
+- garder aussi l'usine parce que répéter à chaque fois 
 
 
 
@@ -274,37 +275,46 @@ pNoeud construire_arbre(FILE* f, pAVL_sup* a){
 présent dans le fichier : 
 
 source/usine : 
-- identifiant source 
-- identifiant usine
-- quantité annuelle capté 
-- pourcentage de fuites
+1er colonne :
+2ème colonne : identifiant source 
+3ème colonne : identifiant usine
+4ème colonne : quantité annuelle capté 
+5ème colonne : pourcentage de fuites
 
 usine : 
-- identifiant usine 
-- capacité maximale de traitement
+1er colonne :  
+2ème colonne : identifiant usine
+3ème colonne : 
+4ème colonne : capacité maximale de traitement
+5ème colonne : 
 
 usine/stockage : 
-- identifiant usine 
-- identifiant stockage
-- pourcentage de fuites 
+1er colonne : 
+2ème colonne : identifiant usine
+3ème colonne : identifiant espace de stockage
+4ème colonne : 
+5ème colonne : pourcentage de fuites
 
 stockage/jonction : 
-- identifiant espace de stockage
-- identifiant jonction 
-- identifiant usine qui a traité l'eau 
-- pourcentage de fuites 
+1er colonne : identifiant usine
+2ème colonne : identifiant espace de stockage
+3ème colonne : identifiant jonction
+4ème colonne : 
+5ème colonne : pourcentage de fuites
 
 jonction/raccordement :
-- identifiant jonction 
-- identifiant raccordement 
-- identifiant usine qui a traité l'eau 
-- pourcentage de fuites 
+1er colonne : identifiant usine
+2ème colonne : identifiant jonction
+3ème colonne : identifiant raccordement
+4ème colonne : 
+5ème colonne : pourcentage de fuites
 
 raccordement/usager : 
-- identifiant raccordement
-- identifiant usager 
-- pourcentage de fuites 
-- identifiant de l'usine 
+1er colonne : identifiant usine
+2ème colonne : identifiant raccordement
+3ème colonne : identifiant usager
+4ème colonne : 
+5ème colonne : pourcentage de fuites
 
 
 
