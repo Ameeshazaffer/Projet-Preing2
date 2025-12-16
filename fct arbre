@@ -19,8 +19,43 @@ typedef struct {
 
 typedef struct Liste* pListe; 
 
+présent dans le fichier : 
+
+source/usine : 
+- identifiant source 
+- identifiant usine
+- qunatité annuelle capté 
+- pourcentage de fuites
+
+usine : 
+- identifiant usine 
+- capacité maximale de traitement
+
+usine/stockage : 
+- identifiant usine 
+- identifiant stockage
+- pourcentage de fuites 
+
+stockage/jonction : 
+- identifiant espace de stockage
+- identifiant jonction 
+- identifiant usine qui a traité l'eau 
+- pourcentage de fuites 
+
+jonction/raccordement :
+- identifiant jonction 
+- identifiant raccordement 
+- identifiant usine qui a traité l'eau 
+- pourcentage de fuites 
+
+raccordement/usager : 
+- identifiant raccordement
+- identifiant usager 
+- pourcentage de fuites 
+- identifiant de l'usine 
 
 // fonction qui crée arbre 
+- regarder le truc de noeud du graphe = usine et autres lignes = arrêtes
 
 pArbre creerArbre(char e){
 	pArbre noeud=malloc(sizeof(Arbre));
@@ -81,6 +116,7 @@ count ++
 
 float calcul_pertes(adresse du noeud){
 	int volume = noeud->volume_initial;
+	commencer à partir de l'usine de traitement donc calculer la fuites de l'usine et commencer la somme à partir de là 
 	parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
 	int volume_début, volume fin ( volume début volume d'un des noeuds dans la boucle )
 	calculer fuites noeud = volume_fin; 
