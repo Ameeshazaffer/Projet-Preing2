@@ -226,7 +226,8 @@ void ligneSourceUsine(const LigneCSV* ligne, pAVL a){
 
 
 int typeLigne(const char *usine,const char *amont,const char *aval, const char *volume, const char *fuites){
-    if (strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") == 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") == 0) { return 1;
+    if (strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") == 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") == 0) { 
+        return 1;
     }
     if(strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") != 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") != 0) {
         return 2;
@@ -235,22 +236,39 @@ int typeLigne(const char *usine,const char *amont,const char *aval, const char *
     return 0;
 }
 
-int decouperLigne(FILE* fichierCSV){
-char usine[64];
-char amont[64];
-char aval[64];
-char volume[64];
-char fuites[64];
-char ligne[512];
 
-
-while(fgets(ligne,sizeof(ligne),fichierCSV) != NULL){
- 
-
-
-
-
-
+float conversion(const char *chaine){
+    if (strcmp(chaine, "-") == 0){
+        return 0.0f;
+    }else {
+        return atof(chaine);
+    }
 }
 
+
+void decouperLigne(FILE* fichierCSV, pAVL* a){
+    char usine[64];
+    char amont[64];
+    char aval[64];
+    char volume[64];
+    char fuites[64];
+    char ligne[512];
+
+    while (fgets(ligne, sizeof(ligne), fichierCSV) != NULL){
+        if (sscanf(ligne,"%63[^;];%63[^;];%63[^;];%63[^;];%63[^\n]", usine, amont, aval, volume, fuites) != 5){
+            continue; 
+        }
+        int type = typeLigne(usine, amont, aval, volume, fuites);
+        LigneCSV l;
+        strcpy(l.usine, usine);
+        strcpy(l.amont, amont);
+        strcpy(l.aval, aval);
+        l.volume = conversion(volume);
+        l.fuites = conversion(fuites);
+        if (type == 1){
+            ligneUsine(&l, a);
+        }else if (type == 2){
+            ligneSourceUsine(&l, *a);
+        }
+    }
 }
