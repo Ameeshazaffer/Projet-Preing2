@@ -78,6 +78,15 @@ pListe creerenfant(pNoeud aval, float fuite){
 
 - structrues avl 
 
+typedef struct avl{
+	char* id;
+    pNoeud Noeud;
+    int eq;                   
+    struct avl *fg;
+    struct avl *fd;
+}AVL_sup;
+
+typedef AVL_sup *pAVL_sup;
 
 - recherche AVL(avl, id_usines){
 	- retourne adresse du neoud où se trouve le noeud
