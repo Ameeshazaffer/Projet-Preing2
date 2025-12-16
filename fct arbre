@@ -20,6 +20,20 @@ typedef struct {
 typedef struct Liste* pListe; 
 
 
+typedef struct avl{
+	char* id;
+    pNoeud Noeud;
+    int eq;                   
+    struct avl *fg;
+    struct avl *fd;
+}AVL_sup;
+
+typedef AVL_sup *pAVL_sup;
+
+
+
+
+
                                                    // fonction qui crée arbre classique //
 
 pNoeud creerNoeud(const char* identifiant){
@@ -65,11 +79,34 @@ void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
 	parent->enfants=a;
 }
 
+// créer un AVL supplémentaire
+
+pAVL creerAVL_sup(const char* id){
+    pAVL_sup n = malloc(sizeof(AVL_sup));
+    if (n == NULL) {
+        return NULL;
+    }
+    n->id = malloc(strlen(id) + 1);
+	if (n->id==NULL){
+		free(n);
+		return NULL);
+	}
+    strcpy(n->id, id);
+	n->noeud= noeud;
+    n->eq = 0;
+    n->fg = NULL;
+    n->fd = NULL;
+    return n;
+}
+
 
 // rechercher noeud avec avl - retourne null ou adresse neoud 
 
 
 // insérer noeud dans avl 
+
+
+
 
 
 // regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
@@ -186,17 +223,7 @@ void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
 
 // fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud ) = regarder partie avl et lecture du fichier déjà fait 
 
-- structrues avl 
 
-typedef struct avl{
-	char* id;
-    pNoeud Noeud;
-    int eq;                   
-    struct avl *fg;
-    struct avl *fd;
-}AVL_sup;
-
-typedef AVL_sup *pAVL_sup;
 
 - recherche AVL(avl, id_usines){
 	- retourne adresse du neoud où se trouve le noeud
