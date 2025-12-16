@@ -68,7 +68,7 @@ pListe creerenfant(pNoeud aval, float fuite){
 
 
 
-// ajouter l'enfant dans la liste chaînée
+// ajouter l'enfant
 
 void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
 	pListe a=creerenfant(enfant, fuites);
@@ -163,7 +163,7 @@ pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
 			return NULL;
 		}
 		int h=0; 
-		*sup=insertionAVL_sup(a, id, n, h)
+		*a=insertionAVL_sup(a, id, n, h) // on met pointeur pour que ça modifie dans tout le programme 
 		return n;
 	}
 }
@@ -171,18 +171,26 @@ pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
 
 
 
-// traiter une ligne 
-	- obtenirneoud
-	 lire parent, enfant, fuites
-	- regarder en fonctions des lignes car pas les même en fonctions des distributions d'eau
-	ajouterenfant(pNoeud parent, pNoeud enfant, float fuites)
- 
+// traiter une ligne
+void traiter_une_ligne(){
+	 stocker id amont 
+	stocker id aval
+	stcoker fuites 
+	noeud_amont=obtenirnoeud(id_amont)
+	noeud_amont=obtenirnoeud(id_aval)
+	ajouterenfant(neoud_amont, fuites)
+	
+- prend id amont ( ex : usine ) 
+- prend id aval ( ex : espace de stockage )
+- on obtient le noeud qui correspond a id amont 
+- ajoute enfant a id amont qui est id aval ( mettre fuites aussi ) 
+- faire attention lors de lecture car en fonction des distributeurs d'eau, ligne pas même syntaxe
 
 
 
 // construire arbre 
-lire fichier, pour chaque ligne 
-	traiterligne 
+lire ligne par ligne 
+et donc appeler la fonction traiterligne 
 
 
 
