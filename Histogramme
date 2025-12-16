@@ -1,0 +1,59 @@
+typedef struct{
+    char usine[64];
+    char amont[64];
+    char aval[64];
+    float volume;
+    float fuites;
+}LigneCSV;
+
+
+void ligneUsine(const LigneCSV* ligne, pAVL* a){
+    if(rechercheAVL(*a, ligne->amont) == NULL){
+        pUsine u = creerUsine(ligne->amont, ligne->volume, 0.0, 0.0);
+        int h = 0;
+        *a = insertionAVL(*a, u, &h);
+    }
+}
+
+
+void ligneSourceUsine(const LigneCSV* ligne, pAVL a){
+    pAVL n = rechercheAVL(a, ligne->aval);
+    if(n == NULL){
+        return; 
+    }
+    n->usine.volume_initial += ligne->volume;
+    float p = 1.0f - (ligne->fuites / 100.0f);
+    n->usine.volume_reel += ligne->volume * p;
+}
+
+
+
+int typeLigne(const char *usine,const char *amont,const char *aval, const char *volume, const char *fuites){
+    if (strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") == 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") == 0) { return 1;
+    }
+    if(strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") != 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") != 0) {
+        return 2;
+    }
+
+    return 0;
+}
+
+int decouperLigne(FILE* fichierCSV){
+char usine[64];
+char amont[64];
+char aval[64];
+char volume[64];
+char fuites[64];
+char ligne[512];
+
+
+while(fgets(ligne,sizeof(ligne),fichierCSV) != NULL){
+ 
+
+
+
+
+
+}
+
+}
