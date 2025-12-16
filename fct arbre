@@ -102,142 +102,157 @@ pAVL creerAVL_sup(const char* id){
 
 // rechercher noeud avec avl - retourne null ou adresse neoud 
 
+a mettre en fonction de neoud
+
+pAVL rechercheAVL(pAVL a, char* id){
+    if (a == NULL){
+        return NULL;
+    }
+    if(strcmp(id, a->usine.id) == 0){
+        return a;
+    }else if(strcmp(id, a->usine.id) < 0){
+        return rechercheAVL(a->fg, id);
+    }else{
+        return rechercheAVL(a->fd, id);
+    }
+}
+si pas trouver retriune null ou sinon retrouner adresse du noeud 
 
 // insérer noeud dans avl 
 
-
-
-
-
-// regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
-
-
-
-// traiter une ligne 
-
-
-
-
-
-// construire arbre 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ajouter l'enfant dans la liste chaînée
-
-
-
-
-
-
-
-
-
-
-
-
-// rechercher noeud avec avl - retourne null ou adresse neoud 
-
-
-// insérer noeud dans avl 
-
-
-// regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
-
-
-
-// traiter une ligne 
-
-
-
-
-
-// construire arbre 
-
-
-
-// fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud ) = regarder partie avl et lecture du fichier déjà fait 
-
-
-
-- recherche AVL(avl, id_usines){
-	- retourne adresse du neoud où se trouve le noeud
-	- retourne 0 si pas trouvé 
+a mettre en fonction de neoud 
+
+pAVL insertionAVL(pAVL a, pUsine u, int* h){
+    if (a == NULL) {
+        *h = 1;
+        return creerAVL(u);
+    }
+    
+    if (strcmp(u->id,a->usine.id) < 0){
+        a->fg = insertionAVL(a->fg, u, h);
+        *h = -*h;
+    }else if(strcmp(u->id, a->usine.id) > 0){
+        a->fd = insertionAVL(a->fd, u, h);
+    }else{
+        *h = 0;
+        return a; 
+    }
+
+    if(*h != 0){
+        a->eq += *h;
+        if(a->eq == 0){
+            *h = 0;
+        }else{
+            *h = 1;
+        }
+    }
+
+    return equilibrerAVL(a);
 }
 
-- obtenir l'adresse du noeud ( cherche le noeud, ( le cré si y a aps, enrengistre dans l'avl et ) et retroune adresse )
-	pour ajouter dans l'avl   
-	- verifier si noeud parent existe avec avl rechercher avl qui donne l'adresse du noeud
-( si non : valeur 0 : créer ), ajouter dans avl
-	- verifier si noeud enfant existe
-( si non créer ) mais de base y pas encore nan + ajouter dans l'avl
- lire parent, enfant, fuites
+
+
+// regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
+
+int obtenirnoeud(){
+	a = rechercheAVL(pAVL a, char* id)
+	if ( a!=NULL ){
+		return a; 
+	}
+	else{
+		creerNoeud
+		insertionAVL(pAVL a, pUsine u, int* h)
+		a=rechercheAVL(pAVL a, char* id)
+	}
+	return a;
+}
+		
+
+
+
+// traiter une ligne 
+	- obtenirneoud
+	 lire parent, enfant, fuites
 	- regarder en fonctions des lignes car pas les même en fonctions des distributions d'eau
+	ajouterenfant(pNoeud parent, pNoeud enfant, float fuites)
+ 
+
+
+
+// construire arbre 
+lire fichier, pour chaque ligne 
+	traiterligne 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 présent dans le fichier : 
 
@@ -274,24 +289,6 @@ raccordement/usager :
 - pourcentage de fuites 
 - identifiant de l'usine 
 
-pArbre ajouterenfants(Parbre, ){	                                                                                                                                                                                                                                                                    
-	-  parcourir une ligne du ficheir csv 
-	- creer un enfant
-	- compléter l'enfant 
-	- recommencer pour la ligne suivante ... 
-
-}
-- parcourir une ligne du fichier à chaque fois 
-verifie si ligne utile pour rendement 
-trouver l'adresse du noeud 
-trouver l'enfant 
-on ajoute dans la liste des enfants : enfant et pourcentage de fuites 
-
-
-- construire l'arbre 
-lire le fichier ligne par ligne 
-elle fait traiter la ligne a chaque fois 
-
 
 
 SCHEMA GLOBALE DU CODE : 
@@ -307,16 +304,6 @@ ainsi de suite jusqu'à que fichier est NULL
 
 
 
-
-
-
-
-
-
-vérification_ identifiant(){
-si identifiant pas trouver - retourner -1
-si identifiant pas d'une usine ? ( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé )
-}
 
 
 
@@ -345,7 +332,10 @@ si identifiant pas d'une usine ? ( on met retourner 0), ( ou on fait quand même
           // fonction qui calcul la perte ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
 
 
-
+vérification_ identifiant(){
+si identifiant pas trouver - retourner -1
+si identifiant pas d'une usine ? ( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé )
+}
 int compter_enfants(){
 
 count ++
@@ -374,7 +364,8 @@ void tranforme_données_fichiers(){
 
 	mettre à chaque fois que un volume de perte totale d'une usine est calculé : 
 	si fichier existe, rajouter une nouvelle ligne
-	sinon créer un fichier et rajouter la ligne 
+	sinon créer un fichier et rajouter la ligne
+	fichier des historiques des volumes en .dat
 }
 
 
@@ -415,7 +406,6 @@ main :
 
 
 notes : 
-- fichier des historiques des volumes en .dat
 - 
 -
 -
