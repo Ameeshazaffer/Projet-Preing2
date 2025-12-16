@@ -54,6 +54,26 @@ pListe creerenfant(pNoeud aval, float fuite){
 
 
 
+// ajouter l'enfant dans la liste chaînée
+
+
+// rechercher noeud avec avl - retourne null ou adresse neoud 
+
+
+// insérer noeud dans avl 
+
+
+// regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
+
+
+
+// traiter une ligne 
+
+
+
+
+
+// construire arbre 
 
 
 
@@ -71,6 +91,87 @@ pListe creerenfant(pNoeud aval, float fuite){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// ajouter l'enfant dans la liste chaînée
+
+
+
+
+
+
+
+
+
+
+
+
+// rechercher noeud avec avl - retourne null ou adresse neoud 
+
+
+// insérer noeud dans avl 
+
+
+// regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
+
+
+
+// traiter une ligne 
+
+
+
+
+
+// construire arbre 
 
 
 
@@ -158,18 +259,11 @@ elle fait traiter la ligne a chaque fois
 
 
 SCHEMA GLOBALE DU CODE : 
-
-fonction construire arbre  : lit ligne par ligne le fichier 
-fonction traiter ligne : prend identifiant amont et avl et fait obtenirnoeud(amont), obtenir(aval), ajouterenfant(amont->avl)
-fonction obtenirnoeud(id amont et pareil pour id aval) - rechecrhe avl si trouvé : retroune adresse noeud 
-											si pas trouvé créer neoud, insere dans avl, retourner neoud 
-fonction ajouter enfant - créer enfant et ajouter dans parent->enfant 
-
-
-
-
-
-
+lire une ligne du fichier : 
+- traiter la ligne 
+- retrouver l'adresse du noeud avec l'avl 
+- ajouter l'enfant dans l'arbre 
+ainsi de suite jusqu'à que fichier est NULL 
 
 
 
@@ -249,7 +343,7 @@ void tranforme_données_fichiers(){
 
 
 // fonctions libère arbre 
-
+- librer liste, arbre, avl 
 
 
 
