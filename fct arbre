@@ -56,6 +56,15 @@ pListe creerenfant(pNoeud aval, float fuite){
 
 // ajouter l'enfant dans la liste chaînée
 
+void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
+	pListe a=creerenfant(enfant, fuites);
+	if (a == NULL){
+		return NULL;
+	}
+	a->suivant=parent->enfants; 
+	parent->enfants=a;
+}
+
 
 // rechercher noeud avec avl - retourne null ou adresse neoud 
 
