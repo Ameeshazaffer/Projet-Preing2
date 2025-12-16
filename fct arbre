@@ -441,7 +441,34 @@ void tranforme_données_fichiers(){
                                                        // ce qu'il faut mettre dans le programme principal //
 
 
-main : 
+int main (){
+	FILE* fichier = NULL;  // ouverture du fichier c-wildwater_v0.dat en mode lecture et écriture
+	fichier = fopen("c-wildwater_v0.dat", "r+");
+	if (fichier == NULL){
+		printf("Ouverture du fichier impossible");
+		exit(1);
+	}
+
+	pAVL_sup a= NULL; 
+	constuire_arbre(fichier, &a);
+	
+	char id_usine[50];
+	printf("Entrer l'identifiant de l'usine :");
+	scanf("%49s", &id_usines);
+
+
+
+
+	int pertes=calculerPertes(,);
+	printf("Le volume d'eau perdue par l'usine, dont l'identifiant est %49s, est %d\n", id_usines, pertes);
+
+
+	libérer mémoire;
+	fclose(fichier);
+	return 0; 
+}
+
+	
 - ajouter enfant
 - si volume de pertes d'eau demandé par shell : 
 - la fonction doit prendre en paramètre l'identifiant de l'usine 
