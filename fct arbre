@@ -75,7 +75,9 @@ pListe creerenfant(pNoeud aval, float fuite){
 
 
 // fonction qui ajoute les enfants ( aide AVL supllémentaire pour retrouver et retourner adresse du noeud ) = regarder partie avl et lecture du fichier déjà fait 
+
 - structrues avl 
+
 
 - recherche AVL(avl, id_usines){
 	- retourne adresse du neoud où se trouve le noeud
@@ -224,6 +226,7 @@ float calcul_pertes(adresse du noeud){
 	et donc comment parcourir l'arbre comme ça ( en largeur ? )
 	si pas enfant calculer les fuites du noeud ou enfants actuelle
 	return volume_pertes; ( en millions de m^3 = peut être à convertir )
+	appeler la fonction données fichiers 
 	affiche le résultat
 
 }
