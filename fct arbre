@@ -169,15 +169,27 @@ pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
 }
 		
 
-
+typedef struct {
+    char amont[50];
+    char source[50];
+    char aval[50];
+    float volume;
+    float coeff;
+} LigneCSV;
 
 // traiter une ligne
-void traiter_une_ligne(char* ligne, ){
-	char* id_amont = 
-	char* id_aval =
-	char* fuites = 
-	sscanf(fuite_str, "%f%%", &fuite); // pour enlever le pourcentage 
+void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
+// source -> usine 
+	
+	if(strcmp(l->amont, "-")==0&&
+
+
+// usine 
+
+
+
+// usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
 	pNoeud noeud_amont=obtneirnoeud(a, id_amont)
 	pNoeud noeud_amont=obtenirnoeud(a, id_aval)
 
@@ -191,12 +203,15 @@ void traiter_une_ligne(char* ligne, ){
 - faire attention lors de lecture car en fonction des distributeurs d'eau, ligne pas même syntaxe
 - garder aussi l'usine parce que répéter à chaque fois 
 
+int lireLigne(FILE* f, LigneCSV* l){
+	retrun fscanf(f, "%49[^;];%49[^;];%49[^;];%f;%f\n",l->amont, l->source, l->aval, &l->volume, &l->coeff)==5; 
+}
 
 
 // construire arbre 
-pNoeud construire_arbre(FILE* f, pAVL_sup* a){
-	char ligne[300];
-	while(fgets(ligne, sizeof(ligne), f)!=NULL)
+void construire_arbre(FILE* f, pAVL_sup* a, pNoeud* noeud){
+	LigneCSV l;
+	while(lireLigne(f, &l)){
 		traiter_une_ligne(ligne, a);
 	}
 }
