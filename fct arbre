@@ -9,7 +9,7 @@ typedef struct{
 	Liste* enfants;
 }Noeud;
 
-typedef struct Noeud* pArbre; 
+typedef struct Noeud* pNoeud; 
 
 typedef struct {
 	Noeud* enfant; // en aval
@@ -34,27 +34,30 @@ typedef struct Liste* pListe;
 
                                                    // fonction qui crée arbre classique //
 
-- regarder le truc de noeud du graphe = usine et autres lignes = arrêtes
-
-pArbre creerArbre(char e){
+pNoeud creerNoeud(char identifiant){
 	pArbre noeud=malloc(sizeof(Arbre));
 	if(noeud==NULL){
+		printf("Erreur allocation mémoire arbre");
 		exit(EXIT_FAILURE);
 	}
-	noeud->id=e;
-	noeud->enfant=NULL;
+	noeud->id=e ( ? ) ;
+	noeud->volume_initial;
+	noeud->enfant=NULL; (initialiser la liste d'enfant à NULL)
 	return noeud;
 }
 
 // fonction qui crée une liste d'enfant
 
-pListe creerenfant(pArbre e, float fuite){
-	pArbre e= mallocsizeof(Arbre);
+pListe creerenfant(pNoeud aval, float fuite){
+	pArbre a= mallocsizeof(Arbre);
 	if(e==NULL){
 		printf("Erreur allocation mémoire arbre");
 		exit(EXIT_FAILURE);
 	}
-	e->fuite_pourcentage=fuites; 
+	a->enfant=aval;
+	a->fuites_pourcentages=fuite;
+	a->suivant=NULL;
+	
 }
 
 
