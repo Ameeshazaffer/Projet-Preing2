@@ -118,20 +118,20 @@ pNoeud rechercheAVL(pAVL_sup a, char* id){
 
 // insérer noeud dans avl 
 
-a mettre en fonction de neoud 
-
-pAVL insertionAVL(pAVL a, pUsine u, int* h){
+pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
     if (a == NULL) {
         *h = 1;
-        return creerAVL(u);
+        return creerAVL_sup(id, n);
     }
     
-    if (strcmp(u->id,a->usine.id) < 0){
-        a->fg = insertionAVL(a->fg, u, h);
+    if (strcmp(id,a->id) < 0){
+        a->fg = insertionAVL_sup(a->fg, id, n, h);
         *h = -*h;
-    }else if(strcmp(u->id, a->usine.id) > 0){
-        a->fd = insertionAVL(a->fd, u, h);
-    }else{
+    }
+	else if(strcmp(u->id, a->usine.id) > 0){
+        a->fd = insertionAVL(a->fd, id, n, h);
+    }
+	else{
         *h = 0;
         return a; 
     }
@@ -145,24 +145,27 @@ pAVL insertionAVL(pAVL a, pUsine u, int* h){
         }
     }
 
-    return equilibrerAVL(a);
+    return equilibrerAVL_sup(a);
 }
 
 
 
 // regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
 
-int obtenirnoeud(){
-	a = rechercheAVL(pAVL a, char* id)
+pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
+	pAVL_sup a = rechercheAVL(pAVL_sup* a, const char* id)
 	if ( a!=NULL ){
-		return a; 
+		return a->noeud; 
 	}
 	else{
-		creerNoeud
-		insertionAVL(pAVL a, pUsine u, int* h)
-		a=rechercheAVL(pAVL a, char* id)
+		pNoeud n=creerNoeud(id);
+		if(n=NULL){
+			return NULL;
+		}
+		int h=0; 
+		*sup=insertionAVL_sup(a, id, n, h)
+		return n;
 	}
-	return a;
 }
 		
 
@@ -419,4 +422,4 @@ notes :
 
 
 
-
+i
