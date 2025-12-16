@@ -24,7 +24,16 @@ typedef struct Liste* pListe;
 
 
 
+
+
+
+
+
+
+
+
 // fonction qui crée arbre 
+
 - regarder le truc de noeud du graphe = usine et autres lignes = arrêtes
 
 pArbre creerArbre(char e){
