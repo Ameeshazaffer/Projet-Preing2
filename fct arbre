@@ -392,10 +392,10 @@ ainsi de suite jusqu'à que fichier est NULL
 Pnoeud vérification_ identifiant(){
 	a = rechercheAVL(pAVL_sup a, char* id); 
 	if (a==NULL){
-		return -1;
+		return NULL;
 	}
-	if(pas identifiant de l'usine){
-		return -1;
+	if(a->volume_initial<=0){
+		return NULL;
 	}
 	return a; 
 }
@@ -452,7 +452,7 @@ vérification_ identifiant(identifiant_usine);
 
 
 
-// fonctions libère arbre 
+// fonctions liberer arbre 
 - libérer liste, arbre, avl 
 
 
