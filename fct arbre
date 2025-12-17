@@ -304,6 +304,21 @@ void construire_arbre(FILE* f, pAVL_sup* a){
 
 présent dans le fichier : 
 
+int typeLigne(const char *usine,const char *amont,const char *aval, const char *volume, const char *fuites){
+    if (strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") == 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") == 0) { 
+        return 1;
+    }
+    if(strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") != 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") != 0) {
+        return 2;
+    }
+	if(strcmp(usine, "-") != 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") != 0 && strcmp(volume, "-") == 0 && strcmp(fuites, "-") != 0) {
+        return 3;
+    }
+    return 0;
+}
+
+
+
 source/usine : 
 1er colonne :
 2ème colonne : identifiant source 
