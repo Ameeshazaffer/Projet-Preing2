@@ -389,21 +389,26 @@ ainsi de suite jusqu'à que fichier est NULL
                             // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
 
 
-vérification_ identifiant(){
+int vérification_ identifiant(){
+	parcourir avl et trouver l'identfiant et vérifier que identifiant de l'usine sinon comme si pas trouvé
+	et retrouver l'identifiant 
 	si identifiant pas trouver - retourner -1
 	si identifiant pas d'une usine ?( on met retourner 0), ( ou on fait quand même depuis usine donc retourne adresse usine, ou on commence au noeud de l'identifiant donné donc retourne adresse du noeud) ( ou on met que les usines dans l'avl ? donc on retourne -1 vu que pas trouvé )
 	si identifiant trouver ok continuer 
 }
 
 
-int compter_enfants(){
-
-count ++
+int compter_enfants(Noeud* noeud){
+	while (noeud->enfants!=NULL){
+		count ++;
+		noeud->enfants=noeud->enfants->suivant; 
+	}
+	return count;
 }
 
 
 float calcul_pertes(adresse du noeud){
-	va parcourir l’ensemble des tronçons situés en aval,
+	va parcourir l’ensemble des tronçons situés en aval=parcours en profondeur
 	jusqu’aux usagers finaux, et faire la somme des pertes rencontrées dans chaque tronçon
 	int volume = noeud->volume_initial;
 	parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
@@ -423,27 +428,30 @@ float calcul_pertes(adresse du noeud){
 }
 
 void tranforme_données_fichiers(){
-
+	
 	mettre à chaque fois que un volume de perte totale d'une usine est calculé : 
-	si fichier existe, rajouter une nouvelle ligne
-	sinon créer un fichier et rajouter la ligne
-	fichier des historiques des volumes en .dat
+	dans la ligne à mettre : 
+	si fichier existe pas :  
+		créer un fichier .dat et rajouter la ligne
+		fichier des historiques des volumes en .dat
+	sinon : 
+		aller a la ligne du fichier
+		rajouter une nouvelle ligne
 }
 
 
-int calcul_final_pertes( identifiant de l'usine){
+int calcul_final_pertes( identifiant_usine){
 
-verifier si identifiant bon 
-faire les calculs 
-rentrer l'identifiant de l'usine et la valeur du volume totale perdue par l'usine dans un fichier.dat 
-retourner la valeur du volume totales perdues par l'usine 
-
+vérification_ identifiant(identifiant_usine);
+	a = calcul_pertes(adresse du noeud);
+	tranforme_données_fichiers(noeud, a); 
+	retourn a; 
 }
 
 
 
 // fonctions libère arbre 
-- librer liste, arbre, avl 
+- libérer liste, arbre, avl 
 
 
 
