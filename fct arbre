@@ -426,15 +426,34 @@ int compter_enfants(pNoeud noeud){
 }
 
 
-float calcul_pertes(pointeur sur arbre ?, adresse du noeud, volume){
+float calcul_pertes(adresse du noeud, volume){
 	float pertes_totales = 0.0;
+	float volume_par_enfants, fuites, volumes_après_fuites;
+	int nombre_enfants
+	if (noeud=estFeuille(noeud)){
+		retourn 0.0; 
+	}
+	nombre_enfants=compter_enfants(noeud);
+	volume_par_enfants=volume/nombre_enfants;
+	pListe actuel= noeud->enfants; 
+	while(actuel!=NULL){
+		fuites=actual->fuites_pourcentages/100.0;
+		volumes_après_fuites=volume_par_enfant*(1-fuites);
+		pertes_totales += volume_enfant - volume_après_fuites;
+
+		pertes_total += calcul_pertes(actuel->enfants, volume_après_fuites);
+		actuel=actuel->suivant; 
+
+	}
+	return pertes_totales; 
+}
+
 fonction parcours préfixe : 
 		if(a!=NULL){
 			traiter(elmt(a);
 			parcoursPrefixe(fg(a));
 			parcoursPrefixe(fd(a));
 		}
-		nombre_enfants=compter_enfants(noeud);
 		volume_réparti=volume/nombre_enfants; 
 		chaque enfant : 
 			volume_enfant=volume_réparts*(1-(noeud->enfants->fuites/100));
