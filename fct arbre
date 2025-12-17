@@ -318,89 +318,6 @@ int typeLigne(const char *usine,const char *amont,const char *aval, const char *
 }
 
 
-
-source/usine : 
-1er colonne :
-2ème colonne : identifiant source 
-3ème colonne : identifiant usine
-4ème colonne : quantité annuelle capté 
-5ème colonne : pourcentage de fuites
-
-usine : 
-1er colonne :  
-2ème colonne : identifiant usine
-3ème colonne : 
-4ème colonne : capacité maximale de traitement
-5ème colonne : 
-
-usine/stockage : 
-1er colonne : 
-2ème colonne : identifiant usine
-3ème colonne : identifiant espace de stockage
-4ème colonne : 
-5ème colonne : pourcentage de fuites
-
-stockage/jonction : 
-1er colonne : identifiant usine
-2ème colonne : identifiant espace de stockage
-3ème colonne : identifiant jonction
-4ème colonne : 
-5ème colonne : pourcentage de fuites
-
-jonction/raccordement :
-1er colonne : identifiant usine
-2ème colonne : identifiant jonction
-3ème colonne : identifiant raccordement
-4ème colonne : 
-5ème colonne : pourcentage de fuites
-
-raccordement/usager : 
-1er colonne : identifiant usine
-2ème colonne : identifiant raccordement
-3ème colonne : identifiant usager
-4ème colonne : 
-5ème colonne : pourcentage de fuites
-
-
-
-SCHEMA GLOBALE DU CODE POUR CONSTRUCTION DE L'ARBRE : 
-lire une ligne du fichier : 
-- traiter la ligne en fonction de la ligne si c'est pour source->usine, usine, usine->stockage ... 
-- retrouver l'adresse du noeud avec l'avl 
-- ajouter l'enfant dans l'arbre 
-ainsi de suite jusqu'à que fichier est NULL 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
 
 
@@ -427,7 +344,7 @@ int compter_enfants(pNoeud noeud){
 
 
 float calcul_pertes(adresse du noeud, volume){
-	float pertes_totales = 0.0;
+	float pertes = 0.0;
 	float volume_par_enfants, fuites, volumes_après_fuites;
 	int nombre_enfants
 	if (noeud=estFeuille(noeud)){
@@ -439,50 +356,15 @@ float calcul_pertes(adresse du noeud, volume){
 	while(actuel!=NULL){
 		fuites=actual->fuites_pourcentages/100.0;
 		volumes_après_fuites=volume_par_enfant*(1-fuites);
-		pertes_totales += volume_enfant - volume_après_fuites;
+		pertes += volume_enfant - volume_après_fuites;
 
-		pertes_total += calcul_pertes(actuel->enfants, volume_après_fuites);
+		pertes += calcul_pertes(actuel->enfants, volume_après_fuites);
 		actuel=actuel->suivant; 
 
 	}
+	float pertes_totales = pertes/1000.0; 
 	return pertes_totales; 
 }
-
-fonction parcours préfixe : 
-		if(a!=NULL){
-			traiter(elmt(a);
-			parcoursPrefixe(fg(a));
-			parcoursPrefixe(fd(a));
-		}
-		volume_réparti=volume/nombre_enfants; 
-		chaque enfant : 
-			volume_enfant=volume_réparts*(1-(noeud->enfants->fuites/100));
-			volume_réparti-volume_enfant+=pertes_totales;
-		}
-			
-
-
-
-
-
-
-
-
-}
-- va parcourir l’ensemble des tronçons situés en aval jusqu’aux usagers finaux = parcours en profondeur parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
-			- faire la somme des pertes rencontrées dans chaque tronçon = volumes_pertes calculer fuites noeud = volume_fin;
-			- int volume = noeud->volume_initial;int volume_début, volume fin ( volume début volume d'un des noeuds dans la boucle )
-			- à chaque fois : volume - volume_fin = +volume_pertes; ( pour le noeud de l'usine au début ? ) à chaque fois : volume_début - volume_fin = volume_pertes; ( pour le reste )   
-			- fonction count tout les enfants du noeud = nombre_enfants;repartir volume/nombre_enfants; attention a faire a chaque le calcul de tout les enfants, puis ensuite leurs enfants ainsin de suite et pas son enfant, ensuite l'enfant de l'enfant ...)
-			- si pas enfant calculer les fuites du noeud ou enfants actuelle
-fonction doit : 
-parcourir l'arbre classique :
-compter enfants, repartir volumes
-calculer fuites 
-calculer volumes restant
-sommer dans la variable 
-aller a la l'enfant de l'enfant ... 
-	return volume_pertes; ( en millions de m^3 = peut être à convertir )
 
 
 
@@ -506,25 +388,6 @@ int calcul_final_pertes(avl, identifiant_usine){
 	ajout_résulat_fichier(identifiant,volume_pertes); 
 	return volumes_pertes; 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                                                        // ce qu'il faut mettre dans le programme principal //
@@ -558,23 +421,3 @@ int main (){
 }
 
 	
-
-
-
-notes : 
-- 
--
--
--
--
--
--
-
-
-
-
-
-
-
-
-i
