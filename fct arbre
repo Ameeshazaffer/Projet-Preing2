@@ -426,9 +426,21 @@ int compter_enfants(pNoeud noeud){
 }
 
 
-float calcul_pertes(adresse du noeud, volume){
+float calcul_pertes(pointeur sur arbre ?, adresse du noeud, volume){
 	float pertes_totales = 0.0;
-	
+fonction parcours préfixe : 
+		if(a!=NULL){
+			traiter(elmt(a);
+			parcoursPrefixe(fg(a));
+			parcoursPrefixe(fd(a));
+		}
+		nombre_enfants=compter_enfants(noeud);
+		volume_réparti=volume/nombre_enfants; 
+		chaque enfant : 
+			volume_enfant=volume_réparts*(1-(noeud->enfants->fuites/100));
+			volume_réparti-volume_enfant+=pertes_totales;
+		}
+			
 
 
 
