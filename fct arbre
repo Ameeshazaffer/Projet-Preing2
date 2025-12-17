@@ -430,7 +430,7 @@ float calcul_pertes(adresse du noeud){
 void tranforme_données_fichiers(){
 	
 	mettre à chaque fois que un volume de perte totale d'une usine est calculé : 
-	dans la ligne à mettre : 
+	dans la ligne à mettre : l’identifiant de l’usine choisie ; son volume de pertes en millions.m^3 ; + pourcentage ? ; ( bonus : identifiant amont et aval du tronçon qui perd le plus d'eau )
 	si fichier existe pas :  
 		créer un fichier .dat et rajouter la ligne
 		fichier des historiques des volumes en .dat
