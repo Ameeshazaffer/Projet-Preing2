@@ -343,10 +343,11 @@ int compter_enfants(pNoeud noeud){
 }
 
 
-float calcul_pertes(adresse du noeud, volume){
+float calcul_pertes(pNoeud noeud){
 	float pertes = 0.0;
-	float volume_par_enfants, fuites, volumes_après_fuites;
-	int nombre_enfants
+	float volume_par_enfants, fuites, volumes_après_fuites, volume;
+	int nombre_enfants; 
+	volume=noeud->volume_initial;
 	if (noeud=estFeuille(noeud)){
 		retourn 0.0; 
 	}
