@@ -401,8 +401,8 @@ Pnoeud vérification_ identifiant(){
 }
 
 
-int compter_enfants(Noeud* noeud){
-	parcours liste chaînées :
+int compter_enfants(pNoeud noeud){
+	int count=0;
 	while (noeud->enfants!=NULL){
 		count ++;
 		noeud->enfants=noeud->enfants->suivant; 
@@ -451,11 +451,6 @@ int calcul_final_pertes(avl, identifiant_usine){
 
 
 
-// fonctions liberer arbre 
-- libérer liste, arbre, avl 
-
-
-
 
 
 
@@ -487,6 +482,7 @@ int main (){
 
 	pAVL_sup a= NULL; 
 	constuire_arbre(fichier, &a);
+	fclose(fichier);
 	
 	char id_usine[50];
 	printf("Entrer l'identifiant de l'usine :");
@@ -499,8 +495,7 @@ int main (){
 	printf("Le volume d'eau perdue par l'usine, dont l'identifiant est %49s, est %d\n", id_usines, pertes);
 
 
-	libérer mémoire;
-	fclose(fichier);
+	libérer tout;
 	return 0; 
 }
 
