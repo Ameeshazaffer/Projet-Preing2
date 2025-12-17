@@ -21,7 +21,7 @@ typedef AVL *pAVL;
 
 
 
-pUsine creerUsine(char* id, float c_max, float v_initial, float v_reel){
+pUsine creerUsine(char* id, float c_max, float v_capte, float v_traite){
     pUsine u = malloc(sizeof(Usine));
     if (u == NULL) {
         printf("Erreur d'allocation de la memoire.\n");
@@ -34,8 +34,8 @@ pUsine creerUsine(char* id, float c_max, float v_initial, float v_reel){
     }
     strcpy(u->id, id);
     u->capacite_max = c_max;
-    u->volume_total_capte = v_initial;
-    u->volume_total_traite = v_reel;
+    u->volume_total_capte = v_capte;
+    u->volume_total_traite = v_traite;
     return u;
 }
 
@@ -48,8 +48,8 @@ pAVL creerAVL(pUsine u){
     n->usine.id = malloc(strlen(u->id) + 1);
     strcpy(n->usine.id, u->id);
     n->usine.capacite_max = u->capacite_max;
-    n->usine.volume_total_capte = u->volume_initial;
-    n->usine.volume_total_traite = u->volume_reel;
+    n->usine.volume_total_capte = u->volume_total_capte;
+    n->usine.volume_total_traite = u->volume_total_traite;
     n->eq = 0;
     n->fg = NULL;
     n->fd = NULL;
@@ -278,11 +278,11 @@ void traiterFichierCSV(FILE* f, pAVL a, int choix){
             return;
     }
     if(choix == 1){
-        fprintf(fichier,"%s;%f\n", a->usine.id,a->usine.capacite_max);
-    }else if(choix = 2){
-         fprintf(fichier,"%s;%f\n", a->usine.id,a->usine.volume_total_capte);
+        fprintf(f,"%s;%f\n", a->usine.id,a->usine.capacite_max);
+    }else if(choix == 2){
+         fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_capte);
     }else{
-        fprintf(fichier,"%s;%f\n", a->usine.id,a->usine.volume_total_traite);
+        fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_traite);
     }
 }
 
@@ -290,9 +290,9 @@ void creationFichierCSV(FILE* f, pAVL a, int choix){
     if(a == NULL || f == NULL){
             return;
     }
-    creationFichierCSV(a->fd,a,choix);
+    creationFichierCSV(f,a->fd,choix);
     traiterFichierCSV(f, a, choix);
-    creationFichierCSV(a->fg,a,choix);
+    creationFichierCSV(f,a->fg,choix);
 }
 
 void creationHistogramme(pAVL a , int choix){
@@ -301,18 +301,20 @@ void creationHistogramme(pAVL a , int choix){
     }
     FILE *f = NULL;
     if(choix == 1){
-        f = fopen(
-
-
-
+        f = fopen("capacite_max.dat", "w");
+        
+    }else if(choix == 2){
+        f = fopen("vol_total_capte.dat", "w");
+    }else{
+        f = fopen("vol_total_traite.dat", "w");
+    }
+    fprintf(f, "ID;VOLUME\n");
+    creationFichierCSV(f,a,choix);
     fclose(f);
 }
 
 
-
-int main(){
-
-return 0;
+int main( int argc, char ** argv){
+FILE* fichier = NULL;
+fichier = fopen(argv[1], "a");
 }
-
-
