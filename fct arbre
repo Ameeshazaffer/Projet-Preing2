@@ -427,7 +427,18 @@ int compter_enfants(pNoeud noeud){
 
 
 float calcul_pertes(adresse du noeud, volume){
-	- va parcourir l’ensemble des tronçons situés en aval jusqu’aux usagers finaux = parcours en profondeur parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
+	float pertes_totales = 0.0;
+	
+
+
+
+
+
+
+
+
+}
+- va parcourir l’ensemble des tronçons situés en aval jusqu’aux usagers finaux = parcours en profondeur parcourir le noeud : si enfant, continuer à chaque fois et jusqu'à usager finaux 
 			- faire la somme des pertes rencontrées dans chaque tronçon = volumes_pertes calculer fuites noeud = volume_fin;
 			- int volume = noeud->volume_initial;int volume_début, volume fin ( volume début volume d'un des noeuds dans la boucle )
 			- à chaque fois : volume - volume_fin = +volume_pertes; ( pour le noeud de l'usine au début ? ) à chaque fois : volume_début - volume_fin = volume_pertes; ( pour le reste )   
@@ -442,7 +453,8 @@ sommer dans la variable
 aller a la l'enfant de l'enfant ... 
 	return volume_pertes; ( en millions de m^3 = peut être à convertir )
 
-}
+
+
 
 void ajout_résulat_fichier(char* identifiant, float volume_pertes){
 	FILE* fichier = fopen("leaks.dat", "a");
@@ -461,7 +473,7 @@ int calcul_final_pertes(avl, identifiant_usine){
 	}
 	float volume_pertes = calcul_pertes(adresse du noeud);
 	ajout_résulat_fichier(identifiant,volume_pertes); 
-	return vplumes_pertes; 
+	return volumes_pertes; 
 }
 
 
