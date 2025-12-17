@@ -24,12 +24,12 @@ typedef AVL *pAVL;
 pUsine creerUsine(char* id, float c_max, float v_capte, float v_traite){
     pUsine u = malloc(sizeof(Usine));
     if (u == NULL) {
-        printf("Erreur d'allocation de la memoire.\n");
+        printf("Erreur d'allocation de la memoire : usine .\n");
         exit(1);
     }
     u->id = malloc(strlen(id) + 1);
     if (u->id == NULL) {
-        printf("Erreur d'allocation de la memoire.\n");
+        printf("Erreur d'allocation de la memoire : identifiant usine.\n");
         exit(1);
     }
     strcpy(u->id, id);
@@ -42,7 +42,7 @@ pUsine creerUsine(char* id, float c_max, float v_capte, float v_traite){
 pAVL creerAVL(pUsine u){
     pAVL n = malloc(sizeof(AVL));
     if (n == NULL) {
-        printf("Erreur d'allocation de la memoire.\n");
+        printf("Erreur d'allocation de la memoire. : avl\n");
         exit(1);
     }
     n->usine.id = malloc(strlen(u->id) + 1);
@@ -278,11 +278,11 @@ void traiterFichierCSV(FILE* f, pAVL a, int choix){
             return;
     }
     if(choix == 1){
-        fprintf(f,"%s;%f\n", a->usine.id,a->usine.capacite_max);
+        fprintf(f,"%s;%f\n", a->usine.id,a->usine.capacite_max / 1000.0f);
     }else if(choix == 2){
-         fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_capte);
-    }else{
-        fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_traite);
+         fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_capte / 1000.0f);
+    }else if(choix == 3){
+        fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_traite / 1000.0f);
     }
 }
 
@@ -302,19 +302,14 @@ void creationHistogramme(pAVL a , int choix){
     FILE *f = NULL;
     if(choix == 1){
         f = fopen("capacite_max.dat", "w");
-        
+        fprintf(f, "identifier;max volume (M.m3.year-1)\n");
     }else if(choix == 2){
         f = fopen("vol_total_capte.dat", "w");
+        fprintf(f, "identifier;source volume (M.m3.year-1)\n");
     }else{
         f = fopen("vol_total_traite.dat", "w");
+        fprintf(f, "identifier;real volume (M.m3.year-1)\n");
     }
-    fprintf(f, "ID;VOLUME\n");
     creationFichierCSV(f,a,choix);
     fclose(f);
-}
-
-
-int main( int argc, char ** argv){
-FILE* fichier = NULL;
-fichier = fopen(argv[1], "a");
 }
