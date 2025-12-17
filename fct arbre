@@ -429,25 +429,24 @@ aller a la l'enfant de l'enfant ...
 
 }
 
-void tranforme_données_fichiers(){
-	
-	mettre à chaque fois que un volume de perte totale d'une usine est calculé : 
-	dans la ligne à mettre : l’identifiant de l’usine choisie ; son volume de pertes en millions.m^3 ; + pourcentage ? ; ( bonus : identifiant amont et aval du tronçon qui perd le plus d'eau )
-	si fichier existe pas :  
-		créer un fichier .dat et rajouter la ligne
-		fichier des historiques des volumes en .dat
-	sinon : 
-		aller a la ligne du fichier
-		rajouter une nouvelle ligne
+void ajout_résulat_fichier(char* identifiant, float volume_pertes){
+	FILE* fichier = fopen("leaks.dat", "a");
+	if(fichier == NULL){
+		exit(1);
+	}
+	fputs(fichier, "%s;%.3fk.m3\n, identifiant, volume_pertes);
+	fclose(fichier);
 }
 
+int calcul_final_pertes(avl, identifiant_usine){
 
-int calcul_final_pertes( identifiant_usine){
-
-vérification_ identifiant(identifiant_usine);
-	a = calcul_pertes(adresse du noeud);
-	tranforme_données_fichiers(noeud, a); 
-	retourn a; 
+	pNoeud usine = vérification_ identifiant(identifiant_usine);
+	if(usine==NULL){
+		return -1;
+	}
+	float volume_pertes = calcul_pertes(adresse du noeud);
+	ajout_résulat_fichier(identifiant,volume_pertes); 
+	return vplumes_pertes; 
 }
 
 
