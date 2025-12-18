@@ -73,3 +73,37 @@ case "$COMMAND" in
             exit 1
         fi
 
+        echo "Type d'histogramme: $HISTO_TYPE"
+        
+        # choisir le nom du fichier de sortie selon le choix de la personne
+        if [ "$HISTO_TYPE" = "max" ]; then
+            OUTPUT_FILE="capacite_max.dat"
+        elif [ "$HISTO_TYPE" = "src" ]; then
+            OUTPUT_FILE="vol_total_capte.dat"
+        elif [ "$HISTO_TYPE" = "real" ]; then
+            OUTPUT_FILE="vol_traitement.dat"
+        else
+            OUTPUT_FILE="vol_all.dat"
+        fi
+        
+        echo "Traitement en cours..." # on va executer 
+	    ./"$EXEC_NAME" "$DATA_FILE" histo "$HISTO_TYPE" "$OUTPUT_FILE"
+	
+	     # est-ce que le programme C s'est bien executé
+	    if [ $? -ne 0 ]; then
+            echo "Erreur: le programme C a échoué"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+
+	
+	    NB_LINES=$(($(wc -l < "$OUTPUT_FILE") - 1))
+        
+       
+        # Graphique des 10 plus grandes usines
+        if [ "$NB_LINES" -ge 10 ]; then
+            GRAPH_TOP10="${OUTPUT_FILE%.dat}_top10.png"
+
+
