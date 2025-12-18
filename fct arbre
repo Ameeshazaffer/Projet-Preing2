@@ -335,9 +335,10 @@ Pnoeud vérification_ identifiant(){
 
 int compter_enfants(pNoeud noeud){
 	int count=0;
-	while (noeud->enfants!=NULL){
+	pListe = actuel;
+	while (actuel != NULL){
 		count ++;
-		noeud->enfants=noeud->enfants->suivant; 
+		actuel=actuel->suivant; 
 	}
 	return count;
 }
