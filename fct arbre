@@ -2,6 +2,11 @@
 
 
                                                                                            // structures //
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Liste Liste; 
 
 typedef struct{
 	char* id; // identifiants du distributeurs d'eau
@@ -62,7 +67,7 @@ pNoeud creerNoeud(const char* identifiant){
 	}
 	strcpy(noeud->id, identifiant);
 	noeud->volume_initial=0;
-	noeud->enfants=NULL; (initialiser la liste d'enfant à NULL)
+	noeud->enfants=NULL; //(initialiser la liste d'enfant à NULL)
 	return noeud;
 }
 
@@ -95,7 +100,8 @@ void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
 
 // créer un AVL supplémentaire
 
-pAVL_sup creerAVL_sup(const char* id){
+pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){
+	n->noeud = noeud; 
     pAVL_sup n = malloc(sizeof(AVL_sup));
     if (n == NULL) {
         return NULL;
@@ -140,7 +146,7 @@ int max3(int a, int b, int c){
 }
 
 
-pAVL rotationDroite(pAVL a){
+pAVL rotationDroite(pAVL_sup a){
     pAVL pivot = a->fg;
     int eq_a = a->eq;
     int eq_p = pivot->eq;
@@ -151,7 +157,7 @@ pAVL rotationDroite(pAVL a){
     return pivot;
 }
 
-pAVL rotationGauche(pAVL a){
+pAVL rotationGauche(pAVL_sup a){
     pAVL pivot = a->fd;
     int eq_a = a->eq;
     int eq_p = pivot->eq;
@@ -162,18 +168,18 @@ pAVL rotationGauche(pAVL a){
     return pivot;
 }
 
-pAVL doubleRotationGauche(pAVL a){
+pAVL doubleRotationGauche(pAVL_sup a){
     a->fd = rotationDroite(a->fd);
     return rotationGauche(a);
 }
 
-pAVL doubleRotationDroite(pAVL a){
+pAVL doubleRotationDroite(pAVL_sup a){
     a->fg = rotationGauche(a->fg);
     return rotationDroite(a);
 }
 
 
-pAVL equilibrerAVL(pAVL a){
+pAVL equilibrerAVL(pAVL_sup a){
     if (a->eq >= 2){
         if (a->fd->eq >= 0){
             return rotationGauche(a);
@@ -190,7 +196,7 @@ pAVL equilibrerAVL(pAVL a){
     return a;
 }
 
-pNoeud rechercheAVL(pAVL_sup a, char* id){
+pNoeud rechercheAVL(pAVL_sup a,const char* id){
     if (a == NULL){
         return NULL;
     }
@@ -240,7 +246,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
 // regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
 
 pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
-	pNoeud noeud = rechercheAVL(pAVL_sup* avl, const char* id);
+	pNoeud noeud = rechercheAVL(*avl, id);
 	if ( noeud != NULL ){ // si existe, retourner le noeud 
 		return noeud; 
 	}
@@ -351,13 +357,13 @@ float calcul_pertes(pNoeud noeud, float volume){
 	int nombre_enfants= compter_enfants(noeud); 
 
 	if (noeud->enfants==NULL){
-		retourn 0.0; 
+		return 0.0; 
 	}
 	volume_par_enfants=volume/nombre_enfants;
 
 	pListe actuel= noeud->enfants; 
 	while(actuel!=NULL){
-		fuites=actual->fuites_pourcentages/100.0;
+		fuites=actuel->fuites_pourcentages/100.0;
 		volumes_après_fuites=volume_par_enfant*(1-fuites);
 		pertes += volume_par_enfant - volume_après_fuites;
 
@@ -371,12 +377,12 @@ float calcul_pertes(pNoeud noeud, float volume){
 
 
 
-void ajout_résulat_fichier(char* identifiant, float volume_pertes){
+void ajout_résulat_fichier(const char* identifiant, float volume_pertes){
 	FILE* fichier = fopen("leaks.dat", "a");
 	if(fichier == NULL){
 		exit(1);
 	}
-	fprintf(fichier, "%s;%.3fk.m3\n, identifiant, volume_pertes);
+	fprintf(fichier, "%s;%.3f k.m3\n, identifiant, volume_pertes);
 	fclose(fichier);
 }
 
