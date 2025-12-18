@@ -6,21 +6,22 @@
 #include <stdlib.h>
 #include <string.h>
 
+typedef struct Noeud Noeud;
 typedef struct Liste Liste; 
 
-typedef struct{
+typedef struct Noeud{
 	char* id; // identifiants du distributeurs d'eau
 	int volume_initial;
 	Liste* enfants;
-}Noeud;
+};
 
 typedef struct Noeud* pNoeud; 
 
-typedef struct {
+typedef struct Liste{
 	Noeud* enfant; // en aval
 	float fuites_pourcentage; // pourcentage de fuites 
 	struct Liste* suivant; //
-}Liste; 
+}; 
 
 typedef struct Liste* pListe; 
 
@@ -256,7 +257,7 @@ pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
 			return NULL;
 		}
 		int h=0; 
-		*avl=insertionAVL_sup(avl, id, noeud, h) // on met pointeur pour que ça modifie dans tout le programme 
+		*avl=insertionAVL_sup(avl, id, noeud, h); // on met pointeur pour que ça modifie dans tout le programme 
 		return n; // retourne adresse du noeud créé
 	}
 }
@@ -285,10 +286,10 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 // usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
 
 	if((strcmp(l->amont, "-")!=0 && ( l->aval!=0 )&& (volume==0){
-		pNoeud noeud_amont=obtenirnoeud(a, l->amont)
-		pNoeud noeud_aval=obtenirnoeud(a, l->aval)
+		pNoeud noeud_amont=obtenirnoeud(a, l->amont);
+		pNoeud noeud_aval=obtenirnoeud(a, l->aval);
 
-		ajouterenfant(noeud_amont, noeud_aval, l->coeff)
+		ajouterenfant(noeud_amont, noeud_aval, l->coeff);
 }
 
 
@@ -382,7 +383,7 @@ void ajout_résulat_fichier(const char* identifiant, float volume_pertes){
 	if(fichier == NULL){
 		exit(1);
 	}
-	fprintf(fichier, "%s;%.3f k.m3\n, identifiant, volume_pertes);
+	fprintf(fichier, "%s;%.3fk.m3\n", identifiant, volume_pertes);
 	fclose(fichier);
 }
 
@@ -422,7 +423,7 @@ int main (){
 	fclose(fichier);
 	
 	char id_usine[50];
-	printf("Entrer l'identifiant de l'usine :");
+	printf("Entrer l'identifiant de l'usine :`n");
 	scanf("%49s", &id_usines);
 
 	pNoeud usine = vérification_ identifiant(identifiant_usine); // vérifie si identifiant bon
