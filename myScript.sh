@@ -36,3 +36,40 @@ EXEC_NAME="cwildwater"  # nom de l'exécutable C
 if [ ! -f "$EXEC_NAME" ]; then
     make
 fi
+
+case "$COMMAND" in
+
+    histo)
+        echo "Commande: histogramme"
+        
+        # vérifier qu'il y a un 3ème argument
+        if [ $# -lt 3 ]; then
+            echo "Erreur, il faut préciser le type d'histogramme"
+            echo "Comment faire : $0 $DATA_FILE histo <max|src|real>"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+        
+        HISTO_TYPE="$3"  # max, src, real ou all
+        
+        # vérifier que le type est valide
+        if [ "$HISTO_TYPE" != "max" ] && [ "$HISTO_TYPE" != "src" ] && [ "$HISTO_TYPE" != "real" ] && [ "$HISTO_TYPE" != "all" ]; then
+            echo "Erreur: type invalide '$HISTO_TYPE'"
+            echo "Types acceptés: max, src, real, all"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+        
+        # Vérifier qu'il n'y a pas d'arguments en trop
+        if [ $# -gt 3 ]; then
+            echo "Erreur: trop d'arguments"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+
