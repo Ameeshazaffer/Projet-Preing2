@@ -52,12 +52,12 @@ case "$COMMAND" in
             exit 1
         fi
         
-        HISTO_TYPE="$3"  # max, src, real ou all
+        HISTO_TYPE="$3"  # max, src, real 
         
         # vérifier que le type est valide
-        if [ "$HISTO_TYPE" != "max" ] && [ "$HISTO_TYPE" != "src" ] && [ "$HISTO_TYPE" != "real" ] && [ "$HISTO_TYPE" != "all" ]; then
+        if [ "$HISTO_TYPE" != "max" ] && [ "$HISTO_TYPE" != "src" ] && [ "$HISTO_TYPE" != "real" ]; then
             echo "Erreur: type invalide '$HISTO_TYPE'"
-            echo "Types acceptés: max, src, real, all"
+            echo "Types acceptés: max, src, real"
             END_TIME=$(date +%s%3N)
             DURATION=$((END_TIME - START_TIME))
             echo "Durée: $DURATION ms"
@@ -80,10 +80,8 @@ case "$COMMAND" in
             OUTPUT_FILE="capacite_max.dat"
         elif [ "$HISTO_TYPE" = "src" ]; then
             OUTPUT_FILE="vol_total_capte.dat"
-        elif [ "$HISTO_TYPE" = "real" ]; then
-            OUTPUT_FILE="vol_traitement.dat"
-        else
-            OUTPUT_FILE="vol_all.dat"
+        else 
+            OUTPUT_FILE="vol_total_traite.dat"
         fi
         
         echo "Traitement en cours..." # on va executer 
