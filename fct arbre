@@ -11,7 +11,7 @@ typedef struct Liste Liste;
 
 typedef struct Noeud{
 	char* id; // identifiants du distributeurs d'eau
-	int volume_initial;
+	float volume_initial;
 	Liste* enfants;
 }Noeud;
 
@@ -293,9 +293,18 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 }
 
+
 int lireLigne(FILE* f, LigneCSV* l){
-	return fscanf(f, "%49[^;];%49[^;];%49[^;];%f;%f\n",l->usine, l->amont, l->aval, &l->volume, &l->coeff)==5; 
-}
+    char vol[50], coef[50];
+
+    int ok = fscanf(f, " %49[^;];%49[^;];%49[^;];%49[^;];%49[^\n]\n",
+                    l->usine, l->amont, l->aval, vol, coef);
+    if(ok != 5) return 0;
+
+    l->volume = (strcmp(vol, "-") == 0) ? -1.0f : strtof(vol, NULL);
+    l->coeff  = (strcmp(coef,"-") == 0) ? -1.0f : strtof(coef,NULL);
+    return 1;
+} 
 
 
 // construire arbre 
@@ -328,14 +337,7 @@ int typeLigne(const char *usine,const char *amont,const char *aval, const char *
 
 
 pNoeud vérification_identifiant(pAVL_sup avl, const char* id){
-	pNoeud a = rechercheAVL(avl, id); 
-	if (a==NULL){
-		return NULL;
-	}
-	if(a->volume_initial<=0){ // vérifier si bien usine
-		return NULL;
-	}
-	return a; 
+	return rechercheAVL(avl, id);
 }
 
 
