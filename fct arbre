@@ -284,7 +284,7 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 	}
 // usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
 
-	if(strcmp(l->amont, "-")!=0 && ( l->aval!=0 )&& (l->volume==0)){
+	if(strcmp(l->amont,"-")!=0 && strcmp(l->aval,"-")!=0 && l->volume < 0 && l->coeff >= 0){
 		pNoeud noeud_amont=obtenirnoeud(a, l->amont);
 		pNoeud noeud_aval=obtenirnoeud(a, l->aval);
 
