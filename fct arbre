@@ -101,8 +101,7 @@ void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
 
 // créer un AVL supplémentaire
 
-pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){
-	n->noeud = noeud; 
+pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){ 
     pAVL_sup n = malloc(sizeof(AVL_sup));
     if (n == NULL) {
         return NULL;
@@ -110,7 +109,7 @@ pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){
     n->id = malloc(strlen(id) + 1);
 	if (n->id==NULL){
 		free(n);
-		return NULL);
+		return NULL;
 	}
     strcpy(n->id, id);
 	n->noeud= noeud;
@@ -148,7 +147,7 @@ int max3(int a, int b, int c){
 
 
 pAVL_sup rotationDroite(pAVL_sup a){
-    pAVL pivot = a->fg;
+    pAVL_sup pivot = a->fg;
     int eq_a = a->eq;
     int eq_p = pivot->eq;
     a->fg = pivot->fd;
@@ -159,7 +158,7 @@ pAVL_sup rotationDroite(pAVL_sup a){
 }
 
 pAVL_sup rotationGauche(pAVL_sup a){
-    pAVL pivot = a->fd;
+    pAVL_sup pivot = a->fd;
     int eq_a = a->eq;
     int eq_p = pivot->eq;
     a->fd = pivot->fg;
@@ -219,11 +218,11 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
     }
     
     if (strcmp(id,a->id) < 0){
-        a->fg = insertionAVL_sup(a->fg, id, n, h);
+        a->fg = insertionAVL(a->fg, id, n, h);
         *h = -*h;
     }
 	else if(strcmp(u->id, a->usine.id) > 0){
-        a->fd = insertionAVL_sup(a->fd, id, n, h);
+        a->fd = insertionAVL(a->fd, id, n, h);
     }
 	else{
         *h = 0;
@@ -239,7 +238,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
         }
     }
 
-    return equilibrerAVL_sup(a);
+    return equilibrerAVL(a);
 }
 
 
@@ -257,8 +256,8 @@ pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
 			return NULL;
 		}
 		int h=0; 
-		*avl=insertionAVL_sup(avl, id, noeud, h); // on met pointeur pour que ça modifie dans tout le programme 
-		return n; // retourne adresse du noeud créé
+		*avl=insertionAVL(avl, id, noeud, h); // on met pointeur pour que ça modifie dans tout le programme 
+		return noeud; // retourne adresse du noeud créé
 	}
 }
 		
@@ -275,23 +274,24 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
 		usine->volume_initial += volume_après_fuites; // car plusieurs sources peuvent rentrer dans une usine 
 
-
+	}
 // usine 
 
 	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")==0 && ( l->volume>0 )){
-		pNoeud usine=obtenirnoeud(a, l->amont){
+		pNoeud usine=obtenirnoeud(a, l->amont);
 
 
-
+	}
 // usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
 
-	if((strcmp(l->amont, "-")!=0 && ( l->aval!=0 )&& (volume==0){
+	if(strcmp(l->amont, "-")!=0 && ( l->aval!=0 )&& (volume==0)){
 		pNoeud noeud_amont=obtenirnoeud(a, l->amont);
 		pNoeud noeud_aval=obtenirnoeud(a, l->aval);
 
 		ajouterenfant(noeud_amont, noeud_aval, l->coeff);
-}
+	}
 
+}
 
 int lireLigne(FILE* f, LigneCSV* l){
 	return fscanf(f, "%49[^;];%49[^;];%49[^;];%f;%f\n",l->usine, l->amont, l->aval, &l->volume, &l->coeff)==5; 
