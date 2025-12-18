@@ -438,7 +438,8 @@ int main (){
 	
 	char id_usine[50];
 	printf("Entrer l'identifiant de l'usine :\n");
-	scanf("%49s", id_usine);
+	fgets(id_usine, 50, stdin);
+    id_usine[strcspn(id_usine, "\n")] = 0;
 
 	pNoeud usine = vérification_identifiant(avl, id_usine); // vérifie si identifiant bon
 	if(usine==NULL){
