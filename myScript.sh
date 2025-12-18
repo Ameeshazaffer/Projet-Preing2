@@ -204,3 +204,25 @@ case "$COMMAND" in
         tail -n 1 "$OUTPUT_FILE"
         ;;
 
+    # commande inconnue
+    *)
+        echo "Erreur: commande inconnue '$COMMAND'"
+        echo "Commandes disponibles: histo, leaks"
+        END_TIME=$(date +%s%3N)
+        DURATION=$((END_TIME - START_TIME))
+        echo "Durée: $DURATION ms"
+        exit 1
+        ;;
+esac
+
+
+# fin, mtnt on va donner le temps 
+
+END_TIME=$(date +%s%3N)
+DURATION=$((END_TIME - START_TIME))
+
+echo ""
+echo "Traitement terminé avec succès"
+echo "Durée totale: $DURATION ms"
+
+exit 0
