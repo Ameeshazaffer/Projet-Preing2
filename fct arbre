@@ -380,16 +380,15 @@ void ajout_résulat_fichier(char* identifiant, float volume_pertes){
 	fclose(fichier);
 }
 
-int calcul_final_pertes(avl, identifiant_usine){
+float calcul_final_pertes(pAVL_sup avl, identifiant_usine){
 
-	pNoeud usine = vérification_ identifiant(identifiant_usine);
+	pNoeud usine = vérification_ identifiant(identifiant_usine); // vérifie si identifiant bon
 	if(usine==NULL){
-		return -1;
+		return -1.0f;
 	}
-	float usine->volume_initial=volume;
-	float pertes = calcul_pertes(noeud, volume);
-	float volume_pertes = pertes/1000.0;
-	ajout_résulat_fichier(identifiant,volume_pertes); 
+	float pertes = calcul_pertes(usine, usine->volume_initial); // calcul pertes de l'usine
+	float volume_pertes = pertes/1000.0f; // conversion de la perte en milllions.m^3
+	ajout_résulat_fichier(identifiant_usine,volume_pertes); // informations du calcul mis dans le fichier leaks.dat
 	return volumes_pertes; 
 }
 
