@@ -256,7 +256,7 @@ pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
 			return NULL;
 		}
 		int h=0; 
-		*avl=insertionAVL(avl, id, noeud, h); // on met pointeur pour que ça modifie dans tout le programme 
+		*avl=insertionAVL(*avl, id, noeud, &h); // on met pointeur pour que ça modifie dans tout le programme 
 		return noeud; // retourne adresse du noeud créé
 	}
 }
