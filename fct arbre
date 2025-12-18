@@ -388,20 +388,20 @@ void ajout_résulat_fichier(const char* identifiant, float volume_pertes){
 
 float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine){
 
-	//pNoeud usine = vérification_ identifiant(identifiant_usine); // vérifie si identifiant bon
-	//if(usine==NULL){
-	//	return -1.0f;
-	//}
+	pNoeud usine = vérification_identifiant(avl, identifiant_usine); // vérifie si identifiant bon
+	if(usine==NULL){
+		return -1.0f;
+	}
 	float pertes = calcul_pertes(usine, usine->volume_initial); // calcul pertes de l'usine
 	float volume_pertes = pertes/1000.0f; // conversion de la perte en milllions.m^3
-	return volumes_pertes; 
+	return volume_pertes; 
 }
 
 void liberer_mémoire(pAVL_sup a){
 	if (a == NULL){
 	return; 
-	libererAVL(a->fg);
-	libererAVL(a->fd);
+	liberer_mémoire(a->fg);
+	liberer_mémoire(a->fd);
 	free(a->id);
 	free(a);
 }
@@ -440,7 +440,7 @@ int main (){
 	if(a!=NULL){
 		liberer_arbre(n);
 	}
-	liberer_AVL(a); // libérer avl
+	liberer_mémoire(a); // libérer avl
 	return 0; 
 }
 
