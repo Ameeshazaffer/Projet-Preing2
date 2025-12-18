@@ -341,7 +341,7 @@ pNoeud vérification_identifiant(pAVL_sup avl, const char* id){
 
 int compter_enfants(pNoeud noeud){
 	int count=0;
-	pListe = actuel;
+	pListe actuel;
 	while (actuel != NULL){
 		count ++;
 		actuel=actuel->suivant; 
