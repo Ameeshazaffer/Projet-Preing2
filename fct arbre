@@ -13,7 +13,7 @@ typedef struct Noeud{
 	char* id; // identifiants du distributeurs d'eau
 	int volume_initial;
 	Liste* enfants;
-};
+}Noeud;
 
 typedef struct Noeud* pNoeud; 
 
@@ -21,7 +21,7 @@ typedef struct Liste{
 	Noeud* enfant; // en aval
 	float fuites_pourcentage; // pourcentage de fuites 
 	struct Liste* suivant; //
-}; 
+}Liste; 
 
 typedef struct Liste* pListe; 
 
@@ -81,7 +81,7 @@ pListe creerenfant(pNoeud aval, float fuite){
 		return NULL;
 	}
 	a->enfant=aval;
-	a->fuites_pourcentages=fuite;
+	a->fuites_pourcentage=fuite;
 	a->suivant=NULL;
 	return a;
 }
