@@ -376,7 +376,7 @@ void ajout_résulat_fichier(char* identifiant, float volume_pertes){
 	if(fichier == NULL){
 		exit(1);
 	}
-	fputs(fichier, "%s;%.3fk.m3\n, identifiant, volume_pertes);
+	fprintf(fichier, "%s;%.3fk.m3\n, identifiant, volume_pertes);
 	fclose(fichier);
 }
 
