@@ -418,14 +418,14 @@ int main (){
 	}
 
 	pAVL_sup avl= NULL; 
-	constuire_arbre(fichier, &avl);
+	construire_arbre(fichier, &avl);
 	fclose(fichier);
 	
 	char id_usine[50];
 	printf("Entrer l'identifiant de l'usine :`n");
-	scanf("%49s", &id_usines);
+	scanf("%49s", &id_usine);
 
-	pNoeud usine = vérification_ identifiant(identifiant_usine); // vérifie si identifiant bon
+	pNoeud usine = vérification_identifiant(identifiant_usine); // vérifie si identifiant bon
 	if(usine==NULL){
 		printf("-1\n");
 	}
