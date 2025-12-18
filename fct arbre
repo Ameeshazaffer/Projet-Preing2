@@ -327,8 +327,8 @@ int typeLigne(const char *usine,const char *amont,const char *aval, const char *
                             // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
 
 
-pNoeud vérification_identifiant(){
-	pNoeud a = rechercheAVL(pAVL_sup a, char* id); 
+pNoeud vérification_identifiant(pAVL_sup avl, const char* id){
+	pNoeud a = rechercheAVL(avl, id); 
 	if (a==NULL){
 		return NULL;
 	}
