@@ -205,25 +205,33 @@ typedef struct{
 
 
 void ligneUsine(const LigneCSV* ligne, pAVL* a){
-    if(rechercheAVL(*a, ligne->amont) == NULL){
+    pAVL n = rechercheAVL(*a, ligne->amont);
+    if (n == NULL) {
         pUsine u = creerUsine(ligne->amont, ligne->volume, 0.0, 0.0);
         int h = 0;
         *a = insertionAVL(*a, u, &h);
+        free(u->id);
+        free(u);
+    } else {
+        n->usine.capacite_max = ligne->volume;
     }
 }
 
+void ligneSourceUsine(const LigneCSV* ligne, pAVL* a){
+    pAVL n = rechercheAVL(*a, ligne->aval);
 
-void ligneSourceUsine(const LigneCSV* ligne, pAVL a){
-    pAVL n = rechercheAVL(a, ligne->aval);
-    if(n == NULL){
-        return; 
+    if (n == NULL) {
+        pUsine u = creerUsine(ligne->aval, 0.0, 0.0, 0.0);
+        int h = 0;
+        *a = insertionAVL(*a, u, &h);
+        free(u->id);
+        free(u);
+        n = rechercheAVL(*a, ligne->aval);
     }
     n->usine.volume_total_capte += ligne->volume;
     float p = 1.0f - (ligne->fuites / 100.0f);
     n->usine.volume_total_traite += ligne->volume * p;
 }
-
-
 
 int typeLigne(const char *usine,const char *amont,const char *aval, const char *volume, const char *fuites){
     if (strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") == 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") == 0) { 
@@ -247,6 +255,10 @@ float conversion(const char *chaine){
 
 
 void decouperLigne(FILE* fichierCSV, pAVL* a){
+    if(fichierCSV == NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
+    }
     char usine[64];
     char amont[64];
     char aval[64];
@@ -265,17 +277,22 @@ void decouperLigne(FILE* fichierCSV, pAVL* a){
         strcpy(l.aval, aval);
         l.volume = conversion(volume);
         l.fuites = conversion(fuites);
-        if (type == 1){
+        if(type == 1){
             ligneUsine(&l, a);
-        }else if (type == 2){
-            ligneSourceUsine(&l, *a);
+        }else if(type == 2){
+            ligneSourceUsine(&l, a);
+
         }
     }
 }
 
 void traiterFichierCSV(FILE* f, pAVL a, int choix){
-    if(a == NULL || f == NULL){
-            return;
+    if(a == NULL){
+        return;
+    }
+    if(f == NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
     }
     if(choix == 1){
         fprintf(f,"%s;%f\n", a->usine.id,a->usine.capacite_max / 1000.0f);
@@ -283,12 +300,19 @@ void traiterFichierCSV(FILE* f, pAVL a, int choix){
          fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_capte / 1000.0f);
     }else if(choix == 3){
         fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_traite / 1000.0f);
+    }else{
+        printf("Mauvais choix de mode.\n");
+        exit(1);
     }
 }
 
 void creationFichierCSV(FILE* f, pAVL a, int choix){
-    if(a == NULL || f == NULL){
-            return;
+    if(a == NULL){
+        return;
+    }
+    if(f == NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
     }
     creationFichierCSV(f,a->fd,choix);
     traiterFichierCSV(f, a, choix);
@@ -302,13 +326,28 @@ void creationHistogramme(pAVL a , int choix){
     FILE *f = NULL;
     if(choix == 1){
         f = fopen("capacite_max.dat", "w");
+        if(f == NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
         fprintf(f, "identifier;max volume (M.m3.year-1)\n");
     }else if(choix == 2){
         f = fopen("vol_total_capte.dat", "w");
+        if(f == NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
         fprintf(f, "identifier;source volume (M.m3.year-1)\n");
-    }else{
+    }else if(choix == 3 ){
         f = fopen("vol_total_traite.dat", "w");
+        if(f == NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
         fprintf(f, "identifier;real volume (M.m3.year-1)\n");
+    }else{
+        printf("Mauvais choix de mode.\n");
+        exit(1);
     }
     creationFichierCSV(f,a,choix);
     fclose(f);
