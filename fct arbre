@@ -34,7 +34,7 @@ typedef struct avl{
     struct avl *fd;
 }AVL_sup;
 
-typedef AVL_sup *pAVL_sup;
+typedef AVL_sup* pAVL_sup;
 
 
 typedef struct {
@@ -147,7 +147,7 @@ int max3(int a, int b, int c){
 }
 
 
-pAVL rotationDroite(pAVL_sup a){
+pAVL_sup rotationDroite(pAVL_sup a){
     pAVL pivot = a->fg;
     int eq_a = a->eq;
     int eq_p = pivot->eq;
@@ -158,7 +158,7 @@ pAVL rotationDroite(pAVL_sup a){
     return pivot;
 }
 
-pAVL rotationGauche(pAVL_sup a){
+pAVL_sup rotationGauche(pAVL_sup a){
     pAVL pivot = a->fd;
     int eq_a = a->eq;
     int eq_p = pivot->eq;
@@ -169,18 +169,18 @@ pAVL rotationGauche(pAVL_sup a){
     return pivot;
 }
 
-pAVL doubleRotationGauche(pAVL_sup a){
+pAVL_sup doubleRotationGauche(pAVL_sup a){
     a->fd = rotationDroite(a->fd);
     return rotationGauche(a);
 }
 
-pAVL doubleRotationDroite(pAVL_sup a){
+pAVL_sup doubleRotationDroite(pAVL_sup a){
     a->fg = rotationGauche(a->fg);
     return rotationDroite(a);
 }
 
 
-pAVL equilibrerAVL(pAVL_sup a){
+pAVL_sup equilibrerAVL(pAVL_sup a){
     if (a->eq >= 2){
         if (a->fd->eq >= 0){
             return rotationGauche(a);
