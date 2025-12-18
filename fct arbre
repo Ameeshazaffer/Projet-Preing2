@@ -391,6 +391,14 @@ float calcul_final_pertes(pAVL_sup avl, identifiant_usine){
 	return volumes_pertes; 
 }
 
+void liberer_mémoire(pAVL_sup a){
+	if (a == NULL){
+	return; 
+	libererAVL(a->fg);
+	libererAVL(a->fd);
+	free(a->id);
+	free(a);
+}
 
                                                        // ce qu'il faut mettre dans le programme principal //
 
@@ -422,7 +430,11 @@ int main (){
 	}
 
 
-	libérer tout;
+	pNoeud n= rechercheAVL(a, identifiant_usine); // libérer arbre classique
+	if(a!=NULL){
+		liberer_arbre(n);
+	}
+	liberer_AVL(a); // libérer avl
 	return 0; 
 }
 
