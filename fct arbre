@@ -297,9 +297,9 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 int lireLigne(FILE* f, LigneCSV* l){
     char vol[50], coef[50];
 
-    int ok = fscanf(f, " %49[^;];%49[^;];%49[^;];%49[^;];%49[^\n]\n",
+    int lecture = fscanf(f, " %49[^;];%49[^;];%49[^;];%49[^;];%49[^\n]\n",
                     l->usine, l->amont, l->aval, vol, coef);
-    if(ok != 5) return 0;
+    if(lecture != 5) return 0;
 
     l->volume = (strcmp(vol, "-") == 0) ? -1.0f : strtof(vol, NULL);
     l->coeff  = (strcmp(coef,"-") == 0) ? -1.0f : strtof(coef,NULL);
@@ -315,22 +315,6 @@ void construire_arbre(FILE* f, pAVL_sup* a){
 	}
 }
 
-
-// les lignes du fichier
-
-
-int typeLigne(const char *usine,const char *amont,const char *aval, const char *volume, const char *fuites){
-    if (strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") == 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") == 0) { 
-        return 1;
-    }
-    if(strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") != 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") != 0) {
-        return 2;
-    }
-	if(strcmp(usine, "-") != 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") != 0 && strcmp(volume, "-") == 0 && strcmp(fuites, "-") != 0) {
-        return 3;
-    }
-    return 0;
-}
 
 
                             // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
