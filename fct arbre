@@ -428,7 +428,7 @@ int main (){
 	FILE* fichier = NULL;  // ouverture du fichier c-wildwater_v0.dat en mode lecture et écriture
 	fichier = fopen("c-wildwater_v0.dat", "r+");
 	if (fichier == NULL){
-		printf("Ouverture du fichier impossible");
+		printf("Ouverture du fichier impossible\n");
 		exit(1);
 	}
 
@@ -437,7 +437,7 @@ int main (){
 	fclose(fichier);
 	
 	char id_usine[50];
-	printf("Entrer l'identifiant de l'usine :`n");
+	printf("Entrer l'identifiant de l'usine :\n");
 	scanf("%49s", id_usine);
 
 	pNoeud usine = vérification_identifiant(avl, id_usine); // vérifie si identifiant bon
