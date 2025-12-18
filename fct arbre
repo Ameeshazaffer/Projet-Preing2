@@ -352,7 +352,7 @@ int compter_enfants(pNoeud noeud){
 
 float calcul_pertes(pNoeud noeud, float volume){
 	float pertes = 0.0;
-	float volume_par_enfants, fuites, volumes_après_fuites, volume;
+	float volume_par_enfants, fuites, volumes_après_fuites;
 
 	int nombre_enfants= compter_enfants(noeud); 
 
