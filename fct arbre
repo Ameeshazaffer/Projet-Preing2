@@ -239,19 +239,19 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
 
 // regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
 
-pNoeud obtenirnoeud(pAVL_sup* a, const char* id){
-	pAVL_sup a = rechercheAVL(pAVL_sup* a, const char* id)
-	if ( a!=NULL ){
-		return a->noeud; 
+pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
+	pNoeud noeud = rechercheAVL(pAVL_sup* avl, const char* id);
+	if ( noeud != NULL ){ // si existe, retourner le noeud 
+		return noeud; 
 	}
 	else{
-		pNoeud n=creerNoeud(id);
-		if(n=NULL){
+		pNoeud noeud = creerNoeud(id);
+		if(noeud==NULL){
 			return NULL;
 		}
 		int h=0; 
-		*a=insertionAVL_sup(a, id, n, h) // on met pointeur pour que ça modifie dans tout le programme 
-		return n;
+		*avl=insertionAVL_sup(avl, id, noeud, h) // on met pointeur pour que ça modifie dans tout le programme 
+		return n; // retourne adresse du noeud créé
 	}
 }
 		
