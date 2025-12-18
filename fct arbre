@@ -405,7 +405,9 @@ void liberer_mémoire(pAVL_sup a){
 	free(a->id);
 	free(a);
 }
-
+void liberer_mémoire_arbre(pNoeud noeud){
+	free(noeud);
+}
                                                        // ce qu'il faut mettre dans le programme principal //
 
 
@@ -423,22 +425,22 @@ int main (){
 	
 	char id_usine[50];
 	printf("Entrer l'identifiant de l'usine :`n");
-	scanf("%49s", &id_usine);
+	scanf("%49s", id_usine);
 
-	pNoeud usine = vérification_identifiant(identifiant_usine); // vérifie si identifiant bon
+	pNoeud usine = vérification_identifiant(avl, id_usine); // vérifie si identifiant bon
 	if(usine==NULL){
 		printf("-1\n");
 	}
 	else{
-		float pertes=calcul_final_pertes(pAVL_sup avl, identifiant_usine);
-		printf("Le volume d'eau perdue par l'usine, dont l'identifiant est %49s, est de %d millions de m^3\n", identifiant_usines, pertes);
-		ajout_résulat_fichier(identifiant_usine,volume_pertes); // informations du calcul mis dans le fichier leaks.dat
+		float pertes=calcul_final_pertes(avl, id_usine);
+		printf("Le volume d'eau perdue par l'usine, dont l'identifiant est %49s, est de %3f millions de m^3\n", id_usine, pertes);
+		ajout_résulat_fichier(id_usine,pertes); // informations du calcul mis dans le fichier leaks.dat
 	}
 
 
-	pNoeud n= rechercheAVL(a, identifiant_usine); // libérer arbre classique
+	pNoeud n= rechercheAVL(a, id_usine); // libérer arbre classique
 	if(a!=NULL){
-		liberer_arbre(n);
+		liberer_mémoire_arbre(n);
 	}
 	liberer_mémoire(a); // libérer avl
 	return 0; 
