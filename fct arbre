@@ -352,22 +352,22 @@ int compter_enfants(pNoeud noeud){
 
 float calcul_pertes(pNoeud noeud, float volume){
 	float pertes = 0.0;
-	float volume_par_enfants, fuites, volumes_après_fuites;
+	float volume_par_enfant, fuites, volume_apres_fuites;
 
 	int nombre_enfants= compter_enfants(noeud); 
 
 	if (noeud->enfants==NULL){
 		return 0.0; 
 	}
-	volume_par_enfants=volume/nombre_enfants;
+	volume_par_enfant=volume/nombre_enfants;
 
 	pListe actuel= noeud->enfants; 
 	while(actuel!=NULL){
-		fuites=actuel->fuites_pourcentages/100.0;
+		fuites=actuel->fuites_pourcentage/100.0;
 		volumes_après_fuites=volume_par_enfant*(1-fuites);
-		pertes += volume_par_enfant - volume_après_fuites;
+		pertes += volume_par_enfant - volume_apres_fuites;
 
-		pertes += calcul_pertes(actuel->enfant, volume_après_fuites);
+		pertes += calcul_pertes(actuel->enfant, volume_apres_fuites);
 		actuel=actuel->suivant; 
 
 	}
@@ -386,7 +386,7 @@ void ajout_résulat_fichier(const char* identifiant, float volume_pertes){
 	fclose(fichier);
 }
 
-float calcul_final_pertes(pAVL_sup avl, identifiant_usine){
+float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine){
 
 	//pNoeud usine = vérification_ identifiant(identifiant_usine); // vérifie si identifiant bon
 	//if(usine==NULL){
