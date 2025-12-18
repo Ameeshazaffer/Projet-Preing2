@@ -421,7 +421,7 @@ int main (){
 
 	pNoeud usine = vérification_ identifiant(identifiant_usine); // vérifie si identifiant bon
 	if(usine==NULL){
-		printf("-1\n);
+		printf("-1\n");
 	}
 	else{
 		float pertes=calcul_final_pertes(pAVL_sup avl, identifiant_usine);
