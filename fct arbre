@@ -364,7 +364,7 @@ float calcul_pertes(pNoeud noeud, float volume){
 	pListe actuel= noeud->enfants; 
 	while(actuel!=NULL){
 		fuites=actuel->fuites_pourcentage/100.0;
-		volumes_après_fuites=volume_par_enfant*(1-fuites);
+		volume_apres_fuites=volume_par_enfant*(1-fuites);
 		pertes += volume_par_enfant - volume_apres_fuites;
 
 		pertes += calcul_pertes(actuel->enfant, volume_apres_fuites);
