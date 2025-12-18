@@ -221,7 +221,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
         a->fg = insertionAVL(a->fg, id, n, h);
         *h = -*h;
     }
-	else if(strcmp(u->id, a->usine.id) > 0){
+	else if(strcmp(id, a->id) > 0){
         a->fd = insertionAVL(a->fd, id, n, h);
     }
 	else{
@@ -284,7 +284,7 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 	}
 // usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
 
-	if(strcmp(l->amont, "-")!=0 && ( l->aval!=0 )&& (volume==0)){
+	if(strcmp(l->amont, "-")!=0 && ( l->aval!=0 )&& (l->volume==0)){
 		pNoeud noeud_amont=obtenirnoeud(a, l->amont);
 		pNoeud noeud_aval=obtenirnoeud(a, l->aval);
 
@@ -309,7 +309,6 @@ void construire_arbre(FILE* f, pAVL_sup* a){
 
 // les lignes du fichier
 
-présent dans le fichier : 
 
 int typeLigne(const char *usine,const char *amont,const char *aval, const char *volume, const char *fuites){
     if (strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") == 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") == 0) { 
@@ -328,7 +327,7 @@ int typeLigne(const char *usine,const char *amont,const char *aval, const char *
                             // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
 
 
-Pnoeud vérification_ identifiant(){
+pNoeud vérification_identifiant(){
 	pNoeud a = rechercheAVL(pAVL_sup a, char* id); 
 	if (a==NULL){
 		return NULL;
