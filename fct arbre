@@ -397,16 +397,29 @@ float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine){
 	return volume_pertes; 
 }
 
-void liberer_mémoire(pAVL_sup a){
-	if (a == NULL){
-	return; 
-	liberer_mémoire(a->fg);
-	liberer_mémoire(a->fd);
-	free(a->id);
-	free(a);
-}
-void liberer_mémoire_arbre(pNoeud noeud){
-	free(noeud);
+void liberer_noeud(pNoeud n){
+    if (n == NULL) return;
+
+    pListe l = n->enfants;
+    while (l != NULL){
+        pListe tmp = l;
+        l = l->suivant;
+        free(tmp);
+    }
+
+    free(n->id);
+    free(n);
+} 
+void liberer_memoire(pAVL_sup a){
+    if (a == NULL) return;
+
+    liberer_memoire(a->fg);
+    liberer_memoire(a->fd);
+
+    liberer_noeud(a->noeud);
+
+    free(a->id);
+    free(a);
 }
                                                        // ce qu'il faut mettre dans le programme principal //
 
@@ -438,11 +451,7 @@ int main (){
 	}
 
 
-	pNoeud n= rechercheAVL(a, id_usine); // libérer arbre classique
-	if(a!=NULL){
-		liberer_mémoire_arbre(n);
-	}
-	liberer_mémoire(a); // libérer avl
+	liberer_memoire(avl); // libérer avl et arbre
 	return 0; 
 }
 
