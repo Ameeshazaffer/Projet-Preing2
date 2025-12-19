@@ -163,17 +163,6 @@ void libererAVL(pAVL a){
     free(a);
 }
 
-
-
-typedef struct{
-    char usine[64];
-    char amont[64];
-    char aval[64];
-    float volume;
-    float fuites;
-}LigneCSV;
-
-
 void ligneUsine(const LigneCSV* ligne,pAVL* a){
     pAVL n = rechercheAVL(*a,ligne->amont);
     if (n==NULL) {
@@ -315,7 +304,7 @@ void creationHistogramme(pAVL a,int choix){
             exit(1);
         }
         fprintf(f, "identifier;real volume(M.m3.year-1)\n");
-    }else{
+    }else{Enhance LigneCSV structure with additional fields
         printf("Mauvais choix de mode.\n");
         exit(1);
     }
