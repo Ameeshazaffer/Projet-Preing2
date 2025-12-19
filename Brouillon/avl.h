@@ -1,3 +1,6 @@
+#include <stdio.h>
+#include <stdlib.h>
+
 int min(int a,int b);
 int max(int a,int b);
 int min3(int a,int b,int c);
