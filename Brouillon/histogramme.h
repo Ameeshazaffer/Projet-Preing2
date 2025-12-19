@@ -35,3 +35,4 @@ void decouperLigne(FILE* fichierCSV,pAVL* a);
 void traiterFichierCSV(FILE* f,pAVL a,int choix);
 void creationFichierCSV(FILE* f,pAVL a,int choix);
 void creationHistogramme(pAVL a ,int choix);
+void libererAVL(pAVL a);
