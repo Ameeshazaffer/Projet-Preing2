@@ -286,7 +286,7 @@ void construire_arbre(FILE* f, pAVL_sup* a){
 
 // fonction qui vérifie l'identifiant donnée
 
-pNoeud vérification_identifiant(pAVL_sup avl, const char* id){
+pNoeud verification_identifiant(pAVL_sup avl, const char* id){
 	return rechercheAVL(avl, id);
 }
 
