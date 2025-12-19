@@ -60,11 +60,11 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h);
 pNoeud obtenirnoeud(pAVL_sup* avl, const char* id);
 void traiter_une_ligne(LigneCSV* l, pAVL_sup* a);
 int lireLigne(FILE* f, LigneCSV* l);
-void construire_arbre(FILE* f, pAVL_sup* a)
-pNoeud vérification_identifiant(pAVL_sup avl, const char* id);
+void construire_arbre(FILE* f, pAVL_sup* a);
+pNoeud verification_identifiant(pAVL_sup avl, const char* id);
 int compter_enfants(pNoeud noeud);
 float calcul_pertes(pNoeud noeud, float volume);
-void ajout_résulat_fichier(const char* identifiant, float volume_pertes);
+void ajout_resultat_fichier(const char* identifiant, float volume_pertes);
 float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine);
 void liberer_noeud(pNoeud n);
 void liberer_memoire(pAVL_sup a);
