@@ -39,7 +39,7 @@ typedef struct {
     char aval[64];
     float volume;
     float coeff;
-} LigneCSV;
+} LigneCSV_sup;
 
 pNoeud creerNoeud(const char* identifiant);
 pListe creerenfant(pNoeud aval, float fuite);
@@ -57,8 +57,8 @@ pAVL_sup equilibrerAVL(pAVL_sup a);
 pNoeud rechercheAVL(pAVL_sup a,const char* id);
 pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h);
 pNoeud obtenirnoeud(pAVL_sup* avl, const char* id);
-void traiter_une_ligne(LigneCSV* l, pAVL_sup* a);
-int lireLigne(FILE* f, LigneCSV* l);
+void traiter_une_ligne(LigneCSV_sup* l, pAVL_sup* a);
+int lireLigne(FILE* f, LigneCSV_sup* l);
 void construire_arbre(FILE* f, pAVL_sup* a);
 pNoeud verification_identifiant(pAVL_sup avl, const char* id);
 int compter_enfants(pNoeud noeud);
