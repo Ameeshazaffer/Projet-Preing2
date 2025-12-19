@@ -1,18 +1,29 @@
 CC = gcc
+CFLAGS = -Wall -Wextra -g
 
 EXEC = cwildwater
 
-SRC = $(wildcard *.c)
-OBJ = $(SRC:.c=.o)
+OBJETS = main.o histogramme.o leaks.o
 
 all: $(EXEC)
 
-%.o: %.c
-	$(CC) -c $< -o $@
+$(EXEC): $(OBJETS)
+	$(CC) $(OBJETS) -o $(EXEC)
 
-$(EXEC): $(OBJ)
-	$(CC) $^ -o $@
+main.o: main.c histogramme.h leaks.h
+	$(CC) $(CFLAGS) -c main.c
+
+histogramme.o: histogramme.c histogramme.h
+	$(CC) $(CFLAGS) -c histogramme.c
+
+leaks.o: leaks.c leaks.h
+	$(CC) $(CFLAGS) -c leaks.c
 
 clean:
-	rm -f $(OBJ) $(EXEC)
+	rm -f $(OBJETS)
+
+fclean: clean
+	rm -f $(EXEC)
+
+re: fclean all
 
