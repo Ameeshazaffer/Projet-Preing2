@@ -197,7 +197,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
 
 // fonction qui reagrde si le noeud existe sinon crée un noeud et insère dans l'avl - retourner neoud 
 
-pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
+pNoeud obtenirnoeud(pAVL_sup avl, const char* id){
 	pNoeud noeud = rechercheAVL(*avl, id);
 	if ( noeud != NULL ){ // si existe, retourner le noeud 
 		return noeud; 
@@ -216,11 +216,11 @@ pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
 
 // fonction qui traite une ligne du fichier en fonction du type de distributions faites 
 
-void traiter_une_ligne(LigneCSV_sup* l, pAVL_sup* a){
+void traiter_une_ligne(LigneCSV_sup* l, pAVL_sup a){
 
 // source -> usine 
 	
-	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")!=0 && ( l->volume>0 ) && (l->coeff>=0){
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")!=0 && ( l->volume>0 )){
 		pNoeud usine=obtenirnoeud(a, l->aval);
 
 		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
@@ -229,7 +229,7 @@ void traiter_une_ligne(LigneCSV_sup* l, pAVL_sup* a){
 	}
 // usine 
 
-	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")==0 && ( l->volume>0 )){
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")==0 && l->volume>0 ){
 		pNoeud usine=obtenirnoeud(a, l->amont);
 
 
@@ -273,7 +273,7 @@ int lireLigne(FILE* f, LigneCSV_sup* l){
 
 
 // fonction qui construit l'arbre 
-void construire_arbre(FILE* f, pAVL_sup* a){
+void construire_arbre(FILE* f, pAVL_sup a){
 	LigneCSV_sup l;
 	while(lireLigne(f, &l)){
 		traiter_une_ligne(&l, a);
