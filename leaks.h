@@ -41,7 +41,7 @@ typedef struct {
     float coeff;
 } LigneCSV;
 
-creerNoeud(const char* identifiant);
+pNoeud creerNoeud(const char* identifiant);
 pListe creerenfant(pNoeud aval, float fuite);
 pListe creerenfant(pNoeud aval, float fuite);
 void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites);
