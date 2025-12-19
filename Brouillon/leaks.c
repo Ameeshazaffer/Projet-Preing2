@@ -107,12 +107,12 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
 // fonction qui reagrde si le noeud existe sinon crée un noeud et insère dans l'avl - retourner neoud 
 
 pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
-	pNoeud noeud = rechercheAVL(avl, id);
+	pNoeud noeud = rechercheAVL(*avl, id);
 	if ( noeud != NULL ){ // si existe, retourner le noeud 
 		return noeud; 
 	}
 	else{
-		pNoeud noeud = creerNoeud(id);
+		noeud = creerNoeud(id);
 		if(noeud==NULL){
 			return NULL;
 		}
@@ -139,7 +139,7 @@ void traiter_une_ligne(LigneCSV_sup* l, pAVL_sup* a){
 // usine 
 
 	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")==0 && l->volume>0 ){
-		pNoeud usine=obtenirnoeud(a, l->amont);
+		obtenirnoeud(a, l->amont);
 
 
 	}
