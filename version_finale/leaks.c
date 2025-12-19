@@ -1,0 +1,386 @@
+                                                                      // toutes les fonctions pour afficher la perte d'eau d'une usine //
+
+#include "leaks.h"
+                                                                                           // structures //
+
+
+                                                                                        // partie 1 : fonctions qui crées un arbre classique //
+
+// fonction qui crée unn noeud
+
+pNoeud creerNoeud(const char* identifiant){ 
+	pNoeud noeud=malloc(sizeof(Noeud));
+	if(noeud==NULL){
+		return NULL;
+	}
+	noeud->id=malloc(strlen(identifiant)+1); // faire de la mémoire pour la chaîne de carcatère de l'identifiant
+	if(noeud->id==NULL){
+		free(noeud); // libérer mémoire allouée du noeud 
+		return NULL;
+	}
+	strcpy(noeud->id, identifiant);
+	noeud->volume_initial=0;
+	noeud->enfants=NULL; //(initialiser la liste d'enfant à NULL)
+	return noeud;
+}
+
+
+// fonction qui crée un enfant de la liste 
+
+pListe creerenfant(pNoeud aval, float fuite){
+	pListe a= malloc(sizeof(Liste));
+	if(a==NULL){
+		return NULL;
+	}
+	a->enfant=aval;
+	a->fuites_pourcentage=fuite;
+	a->suivant=NULL;
+	return a;
+}
+
+
+
+// fonction qui ajoute l'enfant
+
+void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
+	pListe a=creerenfant(enfant, fuites);
+	if (a == NULL){
+		return;
+	}
+	a->suivant=parent->enfants; 
+	parent->enfants=a;
+}
+
+// fonction qui crée un AVL supplémentaire
+
+pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){ 
+    pAVL_sup n = malloc(sizeof(AVL_sup));
+    if (n == NULL) {
+        return NULL;
+    }
+    n->id = malloc(strlen(id) + 1);
+	if (n->id==NULL){
+		free(n);
+		return NULL;
+	}
+    strcpy(n->id, id);
+	n->noeud= noeud;
+    n->eq = 0;
+    n->fg = NULL;
+    n->fd = NULL;
+    return n;
+}
+
+int min_sup(int a,int b){
+    if(a < b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int max_sup(int a,int b){
+    if(a > b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int min3_sup(int a,int b,int c){
+  return min_sup(min_sup(a,b),c);
+}
+
+int max3_sup(int a,int b,int c){
+  return max_sup(max_sup(a,b),c);
+}
+
+
+pAVL_sup rotationDroite_sup(pAVL_sup a){
+    pAVL_sup pivot = a->fg;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fg = pivot->fd;
+    pivot->fd = a;
+    a->eq = eq_a - min_sup(eq_p, 0) + 1;
+    pivot->eq = max3_sup(eq_a + 2, eq_a + eq_p + 2, eq_p + 1);
+    return pivot;
+}
+
+pAVL_sup rotationGauche_sup(pAVL_sup a){
+    pAVL_sup pivot = a->fd;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fd = pivot->fg;
+    pivot->fg = a;
+    a->eq = eq_a - max_sup(eq_p, 0) - 1;
+    pivot->eq = min3_sup(eq_a - 2, eq_a + eq_p - 2, eq_p - 1);
+    return pivot;
+}
+
+pAVL_sup doubleRotationGauche_sup(pAVL_sup a){
+    a->fd = rotationDroite_sup(a->fd);
+    return rotationGauche_sup(a);
+}
+
+pAVL_sup doubleRotationDroite_sup(pAVL_sup a){
+    a->fg = rotationGauche_sup(a->fg);
+    return rotationDroite_sup(a);
+}
+
+
+pAVL_sup equilibrerAVL_sup(pAVL_sup a){
+    if (a->eq >= 2){
+        if (a->fd->eq >= 0){
+            return rotationGauche_sup(a);
+        }else{
+            return doubleRotationGauche_sup(a);
+        }
+    }else if (a->eq <=-2){
+        if(a->fg->eq <= 0){
+            return rotationDroite_sup(a);
+        }else{
+            return doubleRotationDroite_sup(a);
+        }
+    }
+    return a;
+}
+
+
+pNoeud rechercheAVL_sup(pAVL_sup a,const char* id){
+    if (a == NULL){
+        return NULL;
+    }
+    if(strcmp(id, a->id) == 0){
+        return a->noeud;
+    }else if(strcmp(id, a->id) < 0){
+        return rechercheAVL_sup(a->fg, id);
+    }else{
+        return rechercheAVL_sup(a->fd, id);
+    }
+}
+
+// fonction qui insère noeud dans l'avl 
+
+pAVL_sup insertionAVL_sup(pAVL_sup a, const char* id, pNoeud n, int* h){
+    if (a == NULL) {
+        *h = 1;
+        return creerAVL_sup(id, n);
+    }
+
+    if (strcmp(id,a->id) < 0){
+        a->fg = insertionAVL_sup(a->fg, id, n, h);
+        *h = -*h;
+    }
+	else if(strcmp(id, a->id) > 0){
+        a->fd = insertionAVL_sup(a->fd, id, n, h);
+    }
+	else{
+        *h = 0;
+        return a; 
+    }
+
+    if(*h != 0){
+        a->eq += *h;
+        if(a->eq == 0){
+            *h = 0;
+        }else{
+            *h = 1;
+        }
+    }
+
+    return equilibrerAVL_sup(a);
+}
+
+
+
+// fonction qui reagrde si le noeud existe sinon crée un noeud et insère dans l'avl - retourner neoud 
+
+pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
+	pNoeud noeud = rechercheAVL_sup(*avl, id);
+	if ( noeud != NULL ){ // si existe, retourner le noeud 
+		return noeud; 
+	}
+	else{
+		noeud = creerNoeud(id);
+		if(noeud==NULL){
+			return NULL;
+		}
+		int h=0; 
+		*avl=insertionAVL_sup(*avl, id, noeud, &h); // on met pointeur pour que ça modifie dans tout le programme 
+		return noeud; // retourne adresse du noeud créé
+	}
+}
+		
+
+// fonction qui traite une ligne du fichier en fonction du type de distributions faites 
+
+void traiter_une_ligne(LigneCSV_sup* l, pAVL_sup* a){
+
+// source -> usine 
+	
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")!=0 && ( l->volume>0 )){
+		pNoeud usine=obtenirnoeud(a, l->aval);
+
+		float volume_apres_fuites = l->volume*(1-(l->coeff/100.0));
+		usine->volume_initial += volume_apres_fuites; // car plusieurs sources peuvent rentrer dans une usine 
+
+	}
+// usine 
+
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")==0 && l->volume>0 ){
+		obtenirnoeud(a, l->amont);
+
+
+	}
+// usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
+
+	if(strcmp(l->amont,"-")!=0 && strcmp(l->aval,"-")!=0 && l->volume < 0 && l->coeff >= 0){
+		pNoeud noeud_amont=obtenirnoeud(a, l->amont);
+		pNoeud noeud_aval=obtenirnoeud(a, l->aval);
+
+		ajouterenfant(noeud_amont, noeud_aval, l->coeff);
+	}
+
+}
+
+// fonction qui lit la ligne et vérifie que c'est bien valide
+
+int lireLigne(FILE* f, LigneCSV_sup* l){
+    char vol[64], coef[64];
+
+    int lecture = fscanf(f, " %63[^;];%63[^;];%63[^;];%63[^;];%63[^\n]\n",l->usine, l->amont, l->aval, vol, coef);
+    if(lecture != 5){
+		return 0;
+	}
+	
+    if(strcmp(vol, "-")==0){
+		l->volume=-1.0f;
+	}
+	else{
+		l->volume=atof(vol);
+	}
+
+	if(strcmp(coef,"-")==0){
+		l->coeff=-1.0f;
+	}
+	else{
+		l->coeff=atof(coef);
+	}
+    return 1;
+} 
+
+
+// fonction qui construit l'arbre 
+void construire_arbre(FILE* f, pAVL_sup* a){
+	LigneCSV_sup l;
+	while(lireLigne(f, &l)){
+		traiter_une_ligne(&l, a);
+	}
+}
+
+
+
+                            // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
+
+// fonction qui vérifie l'identifiant donnée
+pNoeud verification_identifiant(pAVL_sup avl, const char* id){
+    pNoeud n = rechercheAVL_sup(avl, id);
+    if (n == NULL) {
+        return NULL;
+    }
+    return n;
+}
+
+// fonction qui compte les enfants du noeud 
+int compter_enfants(pNoeud noeud){
+	int count=0;
+	pListe actuel= noeud->enfants;
+	while (actuel != NULL){
+		count ++;
+		actuel=actuel->suivant; 
+	}
+	return count;
+}
+
+// fcontion qui calcule la perte d'eau 
+float calcul_pertes(pNoeud noeud, float volume){
+	float pertes = 0.0;
+	float volume_par_enfant, fuites, volume_apres_fuites;
+
+
+	if (noeud==NULL||noeud->enfants==NULL){
+		return 0.0f; 
+	}
+	int nombre_enfants= compter_enfants(noeud); 
+	if(nombre_enfants ==0){
+		return 0.0f;
+	}
+	volume_par_enfant=volume/nombre_enfants;
+
+	pListe actuel= noeud->enfants; 
+	while(actuel!=NULL){
+		fuites=actuel->fuites_pourcentage/100.0;
+		volume_apres_fuites=volume_par_enfant*(1-fuites);
+		pertes += volume_par_enfant - volume_apres_fuites;
+
+		pertes += calcul_pertes(actuel->enfant, volume_apres_fuites);
+		actuel=actuel->suivant; 
+
+	}
+	return pertes; 
+}
+
+
+
+// fonction qui crée et rajoute le calcul dans un fichier
+
+void ajout_resultat_fichier(const char* identifiant, float volume_pertes){
+	FILE* fichier = fopen("leaks.dat", "a");
+	if(fichier == NULL){
+		exit(1);
+	}
+	fprintf(fichier, "%s;%.3fk.m3\n", identifiant, volume_pertes);
+	fclose(fichier);
+}
+
+// fonction qui convertit en millions de m³
+
+float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine){
+
+	pNoeud usine = verification_identifiant(avl, identifiant_usine); // vérifie si identifiant bon
+	if(usine==NULL){
+		return -1.0f;
+	}
+	float pertes = calcul_pertes(usine, usine->volume_initial); // calcul pertes de l'usine
+	float volume_pertes = pertes/1000.0f; // conversion de la perte en milllions.m^3
+	return volume_pertes; 
+}
+
+// fonctions qui libère la mémoire
+
+void liberer_noeud(pNoeud n){
+    if (n == NULL) return;
+
+    pListe l = n->enfants;
+    while (l != NULL){
+        pListe tmp = l;
+        l = l->suivant;
+        free(tmp);
+    }
+
+    free(n->id);
+    free(n);
+} 
+void liberer_memoire(pAVL_sup a){
+    if (a == NULL) return;
+
+    liberer_memoire(a->fg);
+    liberer_memoire(a->fd);
+
+    liberer_noeud(a->noeud);
+
+    free(a->id);
+    free(a);
+}
+         
