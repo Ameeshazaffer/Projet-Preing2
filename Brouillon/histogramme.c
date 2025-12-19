@@ -304,7 +304,7 @@ void creationHistogramme(pAVL a,int choix){
             exit(1);
         }
         fprintf(f, "identifier;real volume(M.m3.year-1)\n");
-    }else{Enhance LigneCSV structure with additional fields
+    }else{
         printf("Mauvais choix de mode.\n");
         exit(1);
     }
