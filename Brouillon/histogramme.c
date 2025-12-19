@@ -1,4 +1,4 @@
-#include "histograme.h"
+#include "histogramme.h"
 
 pUsine creerUsine(char* id,float c_max,float v_capte,float v_traite){
     pUsine u = malloc(sizeof(Usine));
