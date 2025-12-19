@@ -220,7 +220,7 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 // source -> usine 
 	
-	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")!=0 && ( l->volume>0 )){
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")!=0 && ( l->volume>0 ) && (l->coeff>=0){
 		pNoeud usine=obtenirnoeud(a, l->aval);
 
 		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
@@ -287,7 +287,11 @@ void construire_arbre(FILE* f, pAVL_sup* a){
 // fonction qui vérifie l'identifiant donnée
 
 pNoeud verification_identifiant(pAVL_sup avl, const char* id){
-	return rechercheAVL(avl, id);
+	pNoeud n = verification_identifiant(avl,id);
+	if(n==NULL){
+		return NULL;
+	}
+	return n;
 }
 
 // fonction qui compte les enfants du noeud 
