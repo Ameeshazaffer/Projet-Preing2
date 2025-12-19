@@ -301,6 +301,7 @@ int lireLigne(FILE* f, LigneCSV* l){
     if(lecture != 5){
 		return 0;
 	}
+	
     if(strcmp(vol, "-")==0){
 		l->volume=-1.0f;
 	}
@@ -308,7 +309,12 @@ int lireLigne(FILE* f, LigneCSV* l){
 		l->volume=atof(vol);
 	}
 
-	if(strcmp
+	if(strcmp(coef,"-")==0){
+		l->coeff=-1.0f;
+	}
+	else{
+		l->coeff=atof(coef);
+	}
     return 1;
 } 
 
