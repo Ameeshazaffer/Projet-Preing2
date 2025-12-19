@@ -54,9 +54,11 @@ typedef struct {
 
 
 
-                                                                                        // partie 1 : fonctions qui crées arbre classique //
+                                                                                        // partie 1 : fonctions qui crées un arbre classique //
 
-pNoeud creerNoeud(const char* identifiant){
+// fonction qui crée unn noeud
+
+pNoeud creerNoeud(const char* identifiant){ 
 	pNoeud noeud=malloc(sizeof(Noeud));
 	if(noeud==NULL){
 		return NULL;
@@ -88,7 +90,7 @@ pListe creerenfant(pNoeud aval, float fuite){
 
 
 
-// ajouter l'enfant
+// fonction qui ajoute l'enfant
 
 void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
 	pListe a=creerenfant(enfant, fuites);
@@ -99,7 +101,7 @@ void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
 	parent->enfants=a;
 }
 
-// créer un AVL supplémentaire
+// fonction qui crée un AVL supplémentaire
 
 pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){ 
     pAVL_sup n = malloc(sizeof(AVL_sup));
@@ -120,7 +122,7 @@ pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){
 }
 
 
-// rechercher noeud avec avl - retourne null ou adresse neoud 
+// fonction qui recherche un noeud avec l'avl - retourne null ou neoud 
 int min(int a, int b){
     if(a < b){
         return a;
@@ -209,7 +211,7 @@ pNoeud rechercheAVL(pAVL_sup a,const char* id){
     }
 }
 
-// insérer noeud dans avl 
+// fonction qui insère noeud dans l'avl 
 
 pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
     if (a == NULL) {
@@ -243,7 +245,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
 
 
 
-// regarder si noeud existe sinon créer noeud et inserer dans avl - retourner adresse neoud 
+// fonction qui reagrde si le noeud existe sinon crée un noeud et insère dans l'avl - retourner neoud 
 
 pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
 	pNoeud noeud = rechercheAVL(*avl, id);
@@ -262,7 +264,7 @@ pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
 }
 		
 
-// fonction qui traite une ligne
+// fonction qui traite une ligne du fichier en fonction du type de distributions faites 
 
 void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
@@ -293,6 +295,7 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 }
 
+// fonction qui lit la ligne et vérifie que c'est bien valide
 
 int lireLigne(FILE* f, LigneCSV* l){
     char vol[50], coef[50];
@@ -319,7 +322,7 @@ int lireLigne(FILE* f, LigneCSV* l){
 } 
 
 
-// construire arbre 
+// fonction qui construit l'arbre 
 void construire_arbre(FILE* f, pAVL_sup* a){
 	LigneCSV l;
 	while(lireLigne(f, &l)){
@@ -331,12 +334,13 @@ void construire_arbre(FILE* f, pAVL_sup* a){
 
                             // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
 
+// fonction qui vérifie l'identifiant donnée
 
 pNoeud vérification_identifiant(pAVL_sup avl, const char* id){
 	return rechercheAVL(avl, id);
 }
 
-
+// fonction qui compte les enfants du noeud 
 int compter_enfants(pNoeud noeud){
 	int count=0;
 	pListe actuel= noeud->enfants;
@@ -347,7 +351,7 @@ int compter_enfants(pNoeud noeud){
 	return count;
 }
 
-
+// fcontion qui calcule la perte d'eau 
 float calcul_pertes(pNoeud noeud, float volume){
 	float pertes = 0.0;
 	float volume_par_enfant, fuites, volume_apres_fuites;
@@ -374,6 +378,7 @@ float calcul_pertes(pNoeud noeud, float volume){
 
 
 
+// fonction qui crée et rajoute le calcul dans un fichier
 
 void ajout_résulat_fichier(const char* identifiant, float volume_pertes){
 	FILE* fichier = fopen("leaks.dat", "a");
@@ -383,6 +388,8 @@ void ajout_résulat_fichier(const char* identifiant, float volume_pertes){
 	fprintf(fichier, "%s;%.3fk.m3\n", identifiant, volume_pertes);
 	fclose(fichier);
 }
+
+// fonction qui convertit en millions de m³
 
 float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine){
 
@@ -394,6 +401,8 @@ float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine){
 	float volume_pertes = pertes/1000.0f; // conversion de la perte en milllions.m^3
 	return volume_pertes; 
 }
+
+// fonctions qui libère la mémoire
 
 void liberer_noeud(pNoeud n){
     if (n == NULL) return;
