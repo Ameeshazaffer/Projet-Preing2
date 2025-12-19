@@ -1,0 +1,1073 @@
+
+# myScrypt.sh
+#!/bin/bash
+
+
+START_TIME=$(date +%s%3N) # chrono
+
+if [ $# -lt 2 ]; then
+    echo "Erreur, pas assez d'arguments"
+    echo "Voici comment faire : $0 <fichier> <commande> [options]"
+    
+
+    # Afficher la durée même en cas d'erreur
+    END_TIME=$(date +%s%3N)
+    DURATION=$((END_TIME - START_TIME))
+    echo "Durée: $DURATION ms"
+    exit 1
+fi 
+
+
+DATA_FILE="$1"
+COMMAND="$2"
+
+
+# est-ce que le fichier existe
+if [ ! -f "$DATA_FILE" ]; then
+    echo "Erreur, le fichier '$DATA_FILE' n'existe pas"
+    END_TIME=$(date +%s%3N)
+    DURATION=$((END_TIME - START_TIME))
+    echo "Durée: $DURATION ms"
+    exit 1
+fi
+
+EXEC_NAME="cwildwater"  # nom de l'exécutable C
+
+
+# est-ce que l'exécutable existe, si non on compile
+if [ ! -f "$EXEC_NAME" ]; then
+    make
+fi
+
+case "$COMMAND" in
+
+    histo)
+        echo "Commande: histogramme"
+        
+        # vérifier qu'il y a un 3ème argument
+        if [ $# -lt 3 ]; then
+            echo "Erreur, il faut préciser le type d'histogramme"
+            echo "Comment faire : $0 $DATA_FILE histo <max|src|real>"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+        
+        HISTO_TYPE="$3"  # max, src, real 
+        
+        # vérifier que le type est valide
+        if [ "$HISTO_TYPE" != "max" ] && [ "$HISTO_TYPE" != "src" ] && [ "$HISTO_TYPE" != "real" ]; then
+            echo "Erreur: type invalide '$HISTO_TYPE'"
+            echo "Types acceptés: max, src, real"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+        
+        # Vérifier qu'il n'y a pas d'arguments en trop
+        if [ $# -gt 3 ]; then
+            echo "Erreur: trop d'arguments"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+
+        echo "Type d'histogramme: $HISTO_TYPE"
+        
+        # choisir le nom du fichier de sortie selon le choix de la personne
+        if [ "$HISTO_TYPE" = "max" ]; then
+            OUTPUT_FILE="capacite_max.dat"
+        elif [ "$HISTO_TYPE" = "src" ]; then
+            OUTPUT_FILE="vol_total_capte.dat"
+        else 
+            OUTPUT_FILE="vol_total_traite.dat"
+        fi
+        
+        echo "Traitement en cours..." # on va executer 
+	    ./"$EXEC_NAME" "$DATA_FILE" histo "$HISTO_TYPE" "$OUTPUT_FILE"
+	
+	     # est-ce que le programme C s'est bien executé
+	    if [ $? -ne 0 ]; then
+            echo "Erreur: le programme C a échoué"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+
+	
+	    NB_LINES=$(($(wc -l < "$OUTPUT_FILE") - 1))
+        
+       
+        # Graphique des 10 plus grandes usines
+        if [ "$NB_LINES" -ge 10 ]; then
+            GRAPH_TOP10="${OUTPUT_FILE%.dat}_top10.png"
+
+	          # Créer un fichier de script pour les 10 plus grandes usines 
+            echo "set terminal png size 1200,800" > gnuplot_top10.tmp
+            echo "set output \"$GRAPH_TOP10\"" >> gnuplot_top10.tmp
+            echo "set datafile separator \";\"" >> gnuplot_top10.tmp
+            echo "set style data histograms" >> gnuplot_top10.tmp
+            echo "set style fill solid" >> gnuplot_top10.tmp
+            echo "set xtics rotate by -45" >> gnuplot_top10.tmp
+            echo "set ylabel \"Volume (M.m3/an)\"" >> gnuplot_top10.tmp
+            echo "set title \"Top 10 des plus grandes usines\"" >> gnuplot_top10.tmp
+            echo "plot '$OUTPUT_FILE' every ::1::10 using 2:xtic(1) notitle" >> gnuplot_top10.tmp
+
+	         # Lancer gnuplot avec le script
+            gnuplot gnuplot_top10.tmp
+            
+            if [ -f "$GRAPH_TOP10" ]; then
+                echo "Graphique créé: $GRAPH_TOP10"
+            fi
+	    fi
+
+
+ 	      # Graphique des 50 plus petites usines
+        if [ "$NB_LINES" -ge 50 ]; then
+            GRAPH_BOTTOM50="${OUTPUT_FILE%.dat}_bottom50.png"
+            
+            # calculer à partir de quelle ligne commencer
+            START_LINE=$((NB_LINES - 49))
+            
+            echo "set terminal png size 1600,800" > gnuplot_bottom50.tmp
+            echo "set output \"$GRAPH_BOTTOM50\"" >> gnuplot_bottom50.tmp
+            echo "set datafile separator \";\"" >> gnuplot_bottom50.tmp
+            echo "set style data histograms" >> gnuplot_bottom50.tmp
+            echo "set style fill solid" >> gnuplot_bottom50.tmp
+            echo "set xtics rotate by -90 font \",8\"" >> gnuplot_bottom50.tmp
+            echo "set ylabel \"Volume (M.m3/an)\"" >> gnuplot_bottom50.tmp
+            echo "set title \"50 plus petites usines\"" >> gnuplot_bottom50.tmp
+            echo "plot '$OUTPUT_FILE' every ::$START_LINE::$NB_LINES using 2:xtic(1) notitle" >> gnuplot_bottom50.tmp
+            
+            gnuplot gnuplot_bottom50.tmp
+            
+            if [ -f "$GRAPH_BOTTOM50" ]; then
+                echo "Graphique créé: $GRAPH_BOTTOM50"
+            fi
+	     fi
+	;;
+
+
+    leaks)
+	      echo "Commande: calcul des pertes"
+	      if [ $# -lt 3 ]; then
+            echo "Erreur: il faut préciser l'identifiant de l'usine"
+            echo "Usage: $0 $DATA_FILE leaks \"<identifiant>\""
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+        
+        FACILITY_ID="$3"  # L'identifiant de l'usine
+        
+        # Vérifier qu'il n'y a pas d'arguments en trop
+        if [ $# -gt 3 ]; then
+            echo "Erreur: trop d'arguments"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+
+	    echo "Usine: $FACILITY_ID"
+        
+        OUTPUT_FILE="leaks.dat"
+        
+        # Appeler le programme C
+        ./"$EXEC_NAME" "$DATA_FILE" leaks "$FACILITY_ID" "$OUTPUT_FILE"
+        
+        # Vérifier que ça a fonctionné
+        if [ $? -ne 0 ]; then
+            echo "Erreur: le programme C a échoué"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+        
+        if [ ! -f "$OUTPUT_FILE" ]; then
+            echo "Erreur: le fichier de sortie n'a pas été créé"
+            END_TIME=$(date +%s%3N)
+            DURATION=$((END_TIME - START_TIME))
+            echo "Durée: $DURATION ms"
+            exit 1
+        fi
+        
+        echo "Résultats enregistrés dans: $OUTPUT_FILE"
+        
+        # Afficher le dernier résultat
+        # tail -n 1 = dernière ligne du fichier
+        echo "Dernier résultat:"
+        tail -n 1 "$OUTPUT_FILE"
+        ;;
+
+    # commande inconnue
+    *)
+        echo "Erreur: commande inconnue '$COMMAND'"
+        echo "Commandes disponibles: histo, leaks"
+        END_TIME=$(date +%s%3N)
+        DURATION=$((END_TIME - START_TIME))
+        echo "Durée: $DURATION ms"
+        exit 1
+        ;;
+esac
+
+
+# fin, mtnt on va donner le temps 
+
+END_TIME=$(date +%s%3N)
+DURATION=$((END_TIME - START_TIME))
+
+echo ""
+echo "Traitement terminé avec succès"
+echo "Durée totale: $DURATION ms"
+
+exit 0
+
+//histogramme.c
+
+#include "histograme.h"
+
+pUsine creerUsine(char* id,float c_max,float v_capte,float v_traite){
+    pUsine u = malloc(sizeof(Usine));
+    if(u==NULL){
+        printf("Erreur d'allocation de la memoire : usine .\n");
+        exit(1);
+    }
+    u->id = malloc(strlen(id)+1);
+    if(u->id == NULL){
+        printf("Erreur d'allocation de la memoire : identifiant usine.\n");
+        exit(1);
+    }
+    strcpy(u->id,id);
+    u->capacite_max = c_max;
+    u->volume_total_capte = v_capte;
+    u->volume_total_traite = v_traite;
+    return u;
+}
+
+pAVL creerAVL(pUsine u){
+    pAVL n = malloc(sizeof(AVL));
+    if (n==NULL) {
+        printf("Erreur d'allocation de la memoire. : avl\n");
+        exit(1);
+    }
+    n->usine.id = malloc(strlen(u->id) + 1);
+    strcpy(n->usine.id,u->id);
+    n->usine.capacite_max = u->capacite_max;
+    n->usine.volume_total_capte = u->volume_total_capte;
+    n->usine.volume_total_traite = u->volume_total_traite;
+    n->eq = 0;
+    n->fg = NULL;
+    n->fd = NULL;
+    return n;
+}
+
+int min(int a,int b){
+    if(a < b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int max(int a,int b){
+    if(a > b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int min3(int a,int b,int c){
+  return min(min(a,b),c);
+}
+
+int max3(int a,int b,int c){
+  return max(max(a,b),c);
+}
+
+
+pAVL rotationDroite(pAVL a){
+    pAVL pivot = a->fg;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fg = pivot->fd;
+    pivot->fd = a;
+    a->eq = eq_a - min(eq_p, 0) + 1;
+    pivot->eq = max3(eq_a + 2, eq_a + eq_p + 2, eq_p + 1);
+    return pivot;
+}
+
+pAVL rotationGauche(pAVL a){
+    pAVL pivot = a->fd;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fd = pivot->fg;
+    pivot->fg = a;
+    a->eq = eq_a - max(eq_p, 0) - 1;
+    pivot->eq = min3(eq_a - 2, eq_a + eq_p - 2, eq_p - 1);
+    return pivot;
+}
+
+pAVL doubleRotationGauche(pAVL a){
+    a->fd = rotationDroite(a->fd);
+    return rotationGauche(a);
+}
+
+pAVL doubleRotationDroite(pAVL a){
+    a->fg = rotationGauche(a->fg);
+    return rotationDroite(a);
+}
+
+
+pAVL equilibrerAVL(pAVL a){
+    if (a->eq >= 2){
+        if (a->fd->eq >= 0){
+            return rotationGauche(a);
+        }else{
+            return doubleRotationGauche(a);
+        }
+    }else if (a->eq <=-2){
+        if(a->fg->eq <= 0){
+            return rotationDroite(a);
+        }else{
+            return doubleRotationDroite(a);
+        }
+    }
+    return a;
+}
+
+
+pAVL insertionAVL(pAVL a,pUsine u,int* h){
+    if (a==NULL) {
+        *h = 1;
+        return creerAVL(u);
+    }
+    
+    if (strcmp(u->id,a->usine.id) < 0){
+        a->fg = insertionAVL(a->fg,u,h);
+        *h = -*h;
+    }else if(strcmp(u->id,a->usine.id) > 0){
+        a->fd = insertionAVL(a->fd,u,h);
+    }else{
+        *h = 0;
+        return a; 
+    }
+
+    if(*h != 0){
+        a->eq += *h;
+        if(a->eq==0){
+            *h = 0;
+        }else{
+            *h = 1;
+        }
+    }
+
+    return equilibrerAVL(a);
+}
+
+
+pAVL rechercheAVL(pAVL a,char* id){
+    if (a==NULL){
+        return NULL;
+    }
+    if(strcmp(id, a->usine.id)==0){
+        return a;
+    }else if(strcmp(id, a->usine.id) < 0){
+        return rechercheAVL(a->fg,id);
+    }else{
+        return rechercheAVL(a->fd,id);
+    }
+}
+
+void libererAVL(pAVL a){
+    if(a==NULL){
+        return;
+    }
+    libererAVL(a->fg);
+    libererAVL(a->fd);
+    free(a->usine.id);
+    free(a);
+}
+
+void ligneUsine(const LigneCSV* ligne,pAVL* a){
+    pAVL n = rechercheAVL(*a,ligne->amont);
+    if (n==NULL) {
+        pUsine u = creerUsine(ligne->amont,ligne->volume,0.0,0.0);
+        int h = 0;
+        *a = insertionAVL(*a,u,&h);
+        free(u->id);
+        free(u);
+    } else {
+        n->usine.capacite_max = ligne->volume;
+    }
+}
+
+void ligneSourceUsine(const LigneCSV* ligne,pAVL* a){
+    pAVL n = rechercheAVL(*a, ligne->aval);
+
+    if (n==NULL) {
+        pUsine u = creerUsine(ligne->aval,0.0,0.0,0.0);
+        int h = 0;
+        *a = insertionAVL(*a,u,&h);
+        free(u->id);
+        free(u);
+        n = rechercheAVL(*a,ligne->aval);
+    }
+    n->usine.volume_total_capte += ligne->volume;
+    float p = 1.0f - (ligne->fuites / 100.0f);
+    n->usine.volume_total_traite += ligne->volume * p;
+}
+
+int typeLigne(const char *usine,const char *amont,const char *aval,const char *volume,const char *fuites){
+    if (strcmp(usine, "-")==0 && strcmp(amont, "-")!=0 && strcmp(aval, "-")==0 && strcmp(volume, "-")!=0 && strcmp(fuites, "-")==0) { 
+        return 1;
+    }
+    if(strcmp(usine, "-")==0 && strcmp(amont, "-")!=0 && strcmp(aval, "-")!=0 && strcmp(volume, "-")!=0 && strcmp(fuites, "-")!=0) {
+        return 2;
+    }
+
+    return 0;
+}
+
+
+float conversion(const char *chaine){
+    if (strcmp(chaine, "-")==0){
+        return 0.0f;
+    }else {
+        return atof(chaine);
+    }
+}
+
+
+void decouperLigne(FILE* fichierCSV,pAVL* a){
+    if(fichierCSV==NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
+    }
+    char usine[64];
+    char amont[64];
+    char aval[64];
+    char volume[64];
+    char fuites[64];
+    char ligne[512];
+
+    while(fgets(ligne,sizeof(ligne),fichierCSV)!=NULL){
+        if(sscanf(ligne,"%63[^;];%63[^;];%63[^;];%63[^;];%63[^\n]", usine, amont, aval, volume, fuites) != 5){
+            continue; 
+        }
+        int type = typeLigne(usine, amont, aval, volume, fuites);
+        LigneCSV l;
+        strcpy(l.usine, usine);
+        strcpy(l.amont, amont);
+        strcpy(l.aval, aval);
+        l.volume = conversion(volume);
+        l.fuites = conversion(fuites);
+        if(type==1){
+            ligneUsine(&l,a);
+        }else if(type==2){
+            ligneSourceUsine(&l,a);
+
+        }
+    }
+}
+
+void traiterFichierCSV(FILE* f,pAVL a,int choix){
+    if(a==NULL){
+        return;
+    }
+    if(f==NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
+    }
+    if(choix==1){
+        fprintf(f,"%s;%f\n", a->usine.id,a->usine.capacite_max / 1000.0f);
+    }else if(choix==2){
+         fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_capte / 1000.0f);
+    }else if(choix==3){
+        fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_traite / 1000.0f);
+    }else{
+        printf("Mauvais choix de mode.\n");
+        exit(1);
+    }
+}
+
+void creationFichierCSV(FILE* f, pAVL a, int choix){
+    if(a==NULL){
+        return;
+    }
+    if(f==NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
+    }
+    creationFichierCSV(f,a->fd,choix);
+    traiterFichierCSV(f,a,choix);
+    creationFichierCSV(f,a->fg,choix);
+}
+
+void creationHistogramme(pAVL a,int choix){
+    if(a==NULL){
+        return;
+    }
+    FILE *f = NULL;
+    if(choix==1){
+        f = fopen("capacite_max.dat", "w");
+        if(f==NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
+        fprintf(f, "identifier;max volume (M.m3.year-1)\n");
+    }else if(choix==2){
+        f = fopen("vol_total_capte.dat", "w");
+        if(f==NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
+        fprintf(f,"identifier;source volume(M.m3.year-1)\n");
+    }else if(choix==3 ){
+        f = fopen("vol_total_traite.dat", "w");
+        if(f==NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
+        fprintf(f, "identifier;real volume(M.m3.year-1)\n");
+    }else{Enhance LigneCSV structure with additional fields
+        printf("Mauvais choix de mode.\n");
+        exit(1);
+    }
+    creationFichierCSV(f,a,choix);
+    fclose(f);
+}
+
+//leaks.h
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Noeud Noeud;
+typedef struct Liste Liste; 
+
+typedef struct Noeud{
+	char* id; // identifiants du distributeurs d'eau
+	float volume_initial;
+	Liste* enfants;
+}Noeud;
+
+typedef struct Noeud* pNoeud; 
+
+typedef struct Liste{
+	Noeud* enfant; // en aval
+	float fuites_pourcentage; // pourcentage de fuites 
+	struct Liste* suivant; //
+}Liste; 
+
+typedef struct Liste* pListe; 
+
+
+typedef struct avl{
+	char* id;
+    pNoeud noeud;
+    int eq;                   
+    struct avl *fg;
+    struct avl *fd;
+}AVL_sup;
+
+typedef AVL_sup* pAVL_sup;
+
+
+typedef struct {
+    char usine[50];
+    char amont[50];
+    char aval[50];
+    float volume;
+    float coeff;
+} LigneCSV;
+
+pNoeud creerNoeud(const char* identifiant);
+pListe creerenfant(pNoeud aval, float fuite);
+pListe creerenfant(pNoeud aval, float fuite);
+void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites);
+pAVL_sup creerAVL_sup(const char* id, pNoeud noeud);
+int min(int a, int b);
+int max(int a, int b);
+int min3(int a, int b, int c);
+int max3(int a, int b, int c);
+pAVL_sup rotationDroite(pAVL_sup a);
+pAVL_sup rotationGauche(pAVL_sup a);
+pAVL_sup doubleRotationGauche(pAVL_sup a);
+pAVL_sup doubleRotationDroite(pAVL_sup a);
+pAVL_sup equilibrerAVL(pAVL_sup a);
+pNoeud rechercheAVL(pAVL_sup a,const char* id);
+pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h);
+pNoeud obtenirnoeud(pAVL_sup* avl, const char* id);
+void traiter_une_ligne(LigneCSV* l, pAVL_sup* a);
+int lireLigne(FILE* f, LigneCSV* l);
+void construire_arbre(FILE* f, pAVL_sup* a);
+pNoeud verification_identifiant(pAVL_sup avl, const char* id);
+int compter_enfants(pNoeud noeud);
+float calcul_pertes(pNoeud noeud, float volume);
+void ajout_resultat_fichier(const char* identifiant, float volume_pertes);
+float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine);
+void liberer_noeud(pNoeud n);
+void liberer_memoire(pAVL_sup a);
+
+
+
+//leaks.c
+                                                                      // toutes les fonctions pour afficher la perte d'eau d'une usine //
+
+#include<leaks.h>
+                                                                                           // structures //
+
+
+                                                                                        // partie 1 : fonctions qui crées un arbre classique //
+
+// fonction qui crée unn noeud
+
+pNoeud creerNoeud(const char* identifiant){ 
+	pNoeud noeud=malloc(sizeof(Noeud));
+	if(noeud==NULL){
+		return NULL;
+	}
+	noeud->id=malloc(strlen(identifiant)+1); // faire de la mémoire pour la chaîne de carcatère de l'identifiant
+	if(noeud->id==NULL){
+		free(noeud); // libérer mémoire allouée du noeud 
+		return NULL;
+	}
+	strcpy(noeud->id, identifiant);
+	noeud->volume_initial=0;
+	noeud->enfants=NULL; //(initialiser la liste d'enfant à NULL)
+	return noeud;
+}
+
+
+// fonction qui crée un enfant de la liste 
+
+pListe creerenfant(pNoeud aval, float fuite){
+	pListe a= malloc(sizeof(Liste));
+	if(a==NULL){
+		return NULL;
+	}
+	a->enfant=aval;
+	a->fuites_pourcentage=fuite;
+	a->suivant=NULL;
+	return a;
+}
+
+
+
+// fonction qui ajoute l'enfant
+
+void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites){
+	pListe a=creerenfant(enfant, fuites);
+	if (a == NULL){
+		return;
+	}
+	a->suivant=parent->enfants; 
+	parent->enfants=a;
+}
+
+// fonction qui crée un AVL supplémentaire
+
+pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){ 
+    pAVL_sup n = malloc(sizeof(AVL_sup));
+    if (n == NULL) {
+        return NULL;
+    }
+    n->id = malloc(strlen(id) + 1);
+	if (n->id==NULL){
+		free(n);
+		return NULL;
+	}
+    strcpy(n->id, id);
+	n->noeud= noeud;
+    n->eq = 0;
+    n->fg = NULL;
+    n->fd = NULL;
+    return n;
+}
+
+
+// fonction qui recherche un noeud avec l'avl - retourne null ou neoud 
+int min(int a, int b){
+    if(a < b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int max(int a, int b){
+    if(a > b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int min3(int a, int b, int c){
+  return min(min(a,b),c);
+}
+
+int max3(int a, int b, int c){
+  return max(max(a,b),c);
+}
+
+
+pAVL_sup rotationDroite(pAVL_sup a){
+    pAVL_sup pivot = a->fg;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fg = pivot->fd;
+    pivot->fd = a;
+    a->eq = eq_a - min(eq_p, 0) + 1;
+    pivot->eq = max3(eq_a + 2, eq_a + eq_p + 2, eq_p + 1);
+    return pivot;
+}
+
+pAVL_sup rotationGauche(pAVL_sup a){
+    pAVL_sup pivot = a->fd;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fd = pivot->fg;
+    pivot->fg = a;
+    a->eq = eq_a - max(eq_p, 0) - 1;
+    pivot->eq = min3(eq_a - 2, eq_a + eq_p - 2, eq_p - 1);
+    return pivot;
+}
+
+pAVL_sup doubleRotationGauche(pAVL_sup a){
+    a->fd = rotationDroite(a->fd);
+    return rotationGauche(a);
+}
+
+pAVL_sup doubleRotationDroite(pAVL_sup a){
+    a->fg = rotationGauche(a->fg);
+    return rotationDroite(a);
+}
+
+
+pAVL_sup equilibrerAVL(pAVL_sup a){
+    if (a->eq >= 2){
+        if (a->fd->eq >= 0){
+            return rotationGauche(a);
+        }else{
+            return doubleRotationGauche(a);
+        }
+    }else if (a->eq <= -2){
+        if(a->fg->eq <= 0){
+            return rotationDroite(a);
+        }else{
+            return doubleRotationDroite(a);
+        }
+    }
+    return a;
+}
+
+pNoeud rechercheAVL(pAVL_sup a,const char* id){
+    if (a == NULL){
+        return NULL;
+    }
+    if(strcmp(id, a->id) == 0){
+        return a->noeud;
+    }else if(strcmp(id, a->id) < 0){
+        return rechercheAVL(a->fg, id);
+    }else{
+        return rechercheAVL(a->fd, id);
+    }
+}
+
+// fonction qui insère noeud dans l'avl 
+
+pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
+    if (a == NULL) {
+        *h = 1;
+        return creerAVL_sup(id, n);
+    }
+    
+    if (strcmp(id,a->id) < 0){
+        a->fg = insertionAVL(a->fg, id, n, h);
+        *h = -*h;
+    }
+	else if(strcmp(id, a->id) > 0){
+        a->fd = insertionAVL(a->fd, id, n, h);
+    }
+	else{
+        *h = 0;
+        return a; 
+    }
+
+    if(*h != 0){
+        a->eq += *h;
+        if(a->eq == 0){
+            *h = 0;
+        }else{
+            *h = 1;
+        }
+    }
+
+    return equilibrerAVL(a);
+}
+
+
+
+// fonction qui reagrde si le noeud existe sinon crée un noeud et insère dans l'avl - retourner neoud 
+
+pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
+	pNoeud noeud = rechercheAVL(*avl, id);
+	if ( noeud != NULL ){ // si existe, retourner le noeud 
+		return noeud; 
+	}
+	else{
+		pNoeud noeud = creerNoeud(id);
+		if(noeud==NULL){
+			return NULL;
+		}
+		int h=0; 
+		*avl=insertionAVL(*avl, id, noeud, &h); // on met pointeur pour que ça modifie dans tout le programme 
+		return noeud; // retourne adresse du noeud créé
+	}
+}
+		
+
+// fonction qui traite une ligne du fichier en fonction du type de distributions faites 
+
+void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
+
+// source -> usine 
+	
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")!=0 && ( l->volume>0 )){
+		pNoeud usine=obtenirnoeud(a, l->aval);
+
+		float volume_après_fuites = l->volume*(1-(l->coeff/100.0));
+		usine->volume_initial += volume_après_fuites; // car plusieurs sources peuvent rentrer dans une usine 
+
+	}
+// usine 
+
+	if(strcmp(l->usine, "-")==0 && strcmp(l->amont,"-")!=0 && strcmp(l->aval, "-")==0 && ( l->volume>0 )){
+		pNoeud usine=obtenirnoeud(a, l->amont);
+
+
+	}
+// usine->stockage & stockage->jonction & jonction->raccordement & raccordement->usager
+
+	if(strcmp(l->amont,"-")!=0 && strcmp(l->aval,"-")!=0 && l->volume < 0 && l->coeff >= 0){
+		pNoeud noeud_amont=obtenirnoeud(a, l->amont);
+		pNoeud noeud_aval=obtenirnoeud(a, l->aval);
+
+		ajouterenfant(noeud_amont, noeud_aval, l->coeff);
+	}
+
+}
+
+// fonction qui lit la ligne et vérifie que c'est bien valide
+
+int lireLigne(FILE* f, LigneCSV* l){
+    char vol[50], coef[50];
+
+    int lecture = fscanf(f, " %49[^;];%49[^;];%49[^;];%49[^;];%49[^\n]\n",l->usine, l->amont, l->aval, vol, coef);
+    if(lecture != 5){
+		return 0;
+	}
+	
+    if(strcmp(vol, "-")==0){
+		l->volume=-1.0f;
+	}
+	else{
+		l->volume=atof(vol);
+	}
+
+	if(strcmp(coef,"-")==0){
+		l->coeff=-1.0f;
+	}
+	else{
+		l->coeff=atof(coef);
+	}
+    return 1;
+} 
+
+
+// fonction qui construit l'arbre 
+void construire_arbre(FILE* f, pAVL_sup* a){
+	LigneCSV l;
+	while(lireLigne(f, &l)){
+		traiter_une_ligne(&l, a);
+	}
+}
+
+
+
+                            // partie 2 : fonctions qui calculent la perte d'eau d'une seule usine ( compte le nombre d'enfants + répartition volumes + addition pertes + créer le fichier et ajoute ligne dedans ) //
+
+// fonction qui vérifie l'identifiant donnée
+
+pNoeud vérification_identifiant(pAVL_sup avl, const char* id){
+	return rechercheAVL(avl, id);
+}
+
+// fonction qui compte les enfants du noeud 
+int compter_enfants(pNoeud noeud){
+	int count=0;
+	pListe actuel= noeud->enfants;
+	while (actuel != NULL){
+		count ++;
+		actuel=actuel->suivant; 
+	}
+	return count;
+}
+
+// fcontion qui calcule la perte d'eau 
+float calcul_pertes(pNoeud noeud, float volume){
+	float pertes = 0.0;
+	float volume_par_enfant, fuites, volume_apres_fuites;
+
+	int nombre_enfants= compter_enfants(noeud); 
+
+	if (noeud->enfants==NULL){
+		return 0.0; 
+	}
+	volume_par_enfant=volume/nombre_enfants;
+
+	pListe actuel= noeud->enfants; 
+	while(actuel!=NULL){
+		fuites=actuel->fuites_pourcentage/100.0;
+		volume_apres_fuites=volume_par_enfant*(1-fuites);
+		pertes += volume_par_enfant - volume_apres_fuites;
+
+		pertes += calcul_pertes(actuel->enfant, volume_apres_fuites);
+		actuel=actuel->suivant; 
+
+	}
+	return pertes; 
+}
+
+
+
+// fonction qui crée et rajoute le calcul dans un fichier
+
+void ajout_resultat_fichier(const char* identifiant, float volume_pertes){
+	FILE* fichier = fopen("leaks.dat", "a");
+	if(fichier == NULL){
+		exit(1);
+	}
+	fprintf(fichier, "%s;%.3fk.m3\n", identifiant, volume_pertes);
+	fclose(fichier);
+}
+
+// fonction qui convertit en millions de m³
+
+float calcul_final_pertes(pAVL_sup avl, const char* identifiant_usine){
+
+	pNoeud usine = verification_identifiant(avl, identifiant_usine); // vérifie si identifiant bon
+	if(usine==NULL){
+		return -1.0f;
+	}
+	float pertes = calcul_pertes(usine, usine->volume_initial); // calcul pertes de l'usine
+	float volume_pertes = pertes/1000.0f; // conversion de la perte en milllions.m^3
+	return volume_pertes; 
+}
+
+// fonctions qui libère la mémoire
+
+void liberer_noeud(pNoeud n){
+    if (n == NULL) return;
+
+    pListe l = n->enfants;
+    while (l != NULL){
+        pListe tmp = l;
+        l = l->suivant;
+        free(tmp);
+    }
+
+    free(n->id);
+    free(n);
+} 
+void liberer_memoire(pAVL_sup a){
+    if (a == NULL) return;
+
+    liberer_memoire(a->fg);
+    liberer_memoire(a->fd);
+
+    liberer_noeud(a->noeud);
+
+    free(a->id);
+    free(a);
+}
+
+
+//main.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#include "histogramme.h"
+#include "leaks.h"
+
+int main(int argc, char **argv) {
+    if (argc < 3) {
+        fprintf(stderr, "Erreur : arguments insuffisants\n");
+        fprintf(stderr, "Usage : %s <fichier> <histo|leaks> [option]\n", argv[0]);
+        return EXIT_FAILURE;
+    }
+    char *nom_fichier = argv[1];
+    char *commande = argv[2];
+    FILE *f = fopen(nom_fichier, "r");
+    if (f == NULL) {
+        perror("Erreur ouverture fichier");
+        return EXIT_FAILURE;
+    }
+    if (strcmp(commande, "histo") == 0) {
+        if (argc != 4) {
+            fprintf(stderr, "Usage : %s <fichier> histo <max|src|real>\n", argv[0]);
+            fclose(f);
+            return EXIT_FAILURE;
+        }
+        int choix;
+        if (strcmp(argv[3], "max") == 0)
+            choix = 1;
+        else if (strcmp(argv[3], "src") == 0)
+            choix = 2;
+        else if (strcmp(argv[3], "real") == 0)
+            choix = 3;
+        else {
+            fprintf(stderr, "Erreur : type d’histogramme invalide\n");
+            fclose(f);
+            return EXIT_FAILURE;
+        }
+        pAVL avl = NULL;
+        decouperLigne(f, &avl);
+        creationHistogramme(avl, choix);
+        libererAVL(avl);
+    }else if (strcmp(commande, "leaks") == 0) {
+        if (argc != 4) {
+            fprintf(stderr, "Usage : %s <fichier> leaks <identifiant>\n", argv[0]);
+            fclose(f);
+            return EXIT_FAILURE;
+        }
+        char *id_usine = argv[3];
+        pAVL_sup avl = NULL;
+        construire_arbre(f, &avl);
+        float pertes = calcul_final_pertes(avl, id_usine);
+        if (pertes < 0) {
+            printf("-1\n");
+        } else {
+            printf("Pertes pour l'usine %s : %.3f M.m3\n", id_usine, pertes);
+            ajout_resultat_fichier(id_usine, pertes);
+        }
+        liberer_memoire(avl);
+    }else {
+        fprintf(stderr, "Erreur : commande inconnue '%s'\n", commande);
+        fclose(f);
+        return EXIT_FAILURE;
+    }
+    fclose(f);
+    return EXIT_SUCCESS;
+}
