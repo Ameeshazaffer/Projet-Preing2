@@ -1,4 +1,5 @@
 #include "histogramme.h"
+#include "avl.h"
 
 pUsine creerUsine(char* id,float c_max,float v_capte,float v_traite){
     pUsine u = malloc(sizeof(Usine));
