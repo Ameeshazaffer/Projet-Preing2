@@ -3,6 +3,14 @@
 #include <string.h>
 
 typedef struct{
+    char usine[64];
+    char amont[64];
+    char aval[64];
+    float volume;
+    float fuites;
+}LigneCSV;
+
+typedef struct{
     char* id;                 
     float capacite_max;       
     float volume_total_capte;    
