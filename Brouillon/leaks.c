@@ -72,18 +72,109 @@ pAVL_sup creerAVL_sup(const char* id, pNoeud noeud){
     return n;
 }
 
-pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
+int min_sup(int a,int b){
+    if(a < b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int max_sup(int a,int b){
+    if(a > b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int min3_sup(int a,int b,int c){
+  return min_sup(min_sup(a,b),c);
+}
+
+int max3_sup(int a,int b,int c){
+  return max_sup(max_sup(a,b),c);
+}
+
+
+pAVL_sup rotationDroite_sup(pAVL_sup a){
+    pAVL_sup pivot = a->fg;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fg = pivot->fd;
+    pivot->fd = a;
+    a->eq = eq_a - min_sup(eq_p, 0) + 1;
+    pivot->eq = max3_sup(eq_a + 2, eq_a + eq_p + 2, eq_p + 1);
+    return pivot;
+}
+
+pAVL_sup rotationGauche_sup(pAVL_sup a){
+    pAVL_sup pivot = a->fd;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fd = pivot->fg;
+    pivot->fg = a;
+    a->eq = eq_a - max_sup(eq_p, 0) - 1;
+    pivot->eq = min3_sup(eq_a - 2, eq_a + eq_p - 2, eq_p - 1);
+    return pivot;
+}
+
+pAVL_sup doubleRotationGauche_sup(pAVL_sup a){
+    a->fd = rotationDroite_sup(a->fd);
+    return rotationGauche_sup(a);
+}
+
+pAVL_sup doubleRotationDroite_sup(pAVL_sup a){
+    a->fg = rotationGauche_sup(a->fg);
+    return rotationDroite_sup(a);
+}
+
+
+pAVL_sup equilibrerAVL_sup(pAVL_sup a){
+    if (a->eq >= 2){
+        if (a->fd->eq >= 0){
+            return rotationGauche_sup(a);
+        }else{
+            return doubleRotationGauche_sup(a);
+        }
+    }else if (a->eq <=-2){
+        if(a->fg->eq <= 0){
+            return rotationDroite_sup(a);
+        }else{
+            return doubleRotationDroite_sup(a);
+        }
+    }
+    return a;
+}
+
+
+pNoeud rechercheAVL_sup(pAVL_sup a,const char* id){
+    if (a == NULL){
+        return NULL;
+    }
+    if(strcmp(id, a->id) == 0){
+        return a->noeud;
+    }else if(strcmp(id, a->id) < 0){
+        return rechercheAVL_sup(a->fg, id);
+    }else{
+        return rechercheAVL_sup(a->fd, id);
+    }
+}
+
+// fonction qui insère noeud dans l'avl 
+
+pAVL_sup insertionAVL_sup(pAVL_sup a, const char* id, pNoeud n, int* h){
     if (a == NULL) {
         *h = 1;
         return creerAVL_sup(id, n);
     }
-    
+
     if (strcmp(id,a->id) < 0){
-        a->fg = insertionAVL(a->fg, id, n, h);
+        a->fg = insertionAVL_sup(a->fg, id, n, h);
         *h = -*h;
     }
 	else if(strcmp(id, a->id) > 0){
-        a->fd = insertionAVL(a->fd, id, n, h);
+        a->fd = insertionAVL_sup(a->fd, id, n, h);
     }
 	else{
         *h = 0;
@@ -99,7 +190,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
         }
     }
 
-    return equilibrerAVL(a);
+    return equilibrerAVL_sup(a);
 }
 
 
@@ -107,7 +198,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
 // fonction qui reagrde si le noeud existe sinon crée un noeud et insère dans l'avl - retourner neoud 
 
 pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
-	pNoeud noeud = rechercheAVL(*avl, id);
+	pNoeud noeud = rechercheAVL_sup(*avl, id);
 	if ( noeud != NULL ){ // si existe, retourner le noeud 
 		return noeud; 
 	}
@@ -117,7 +208,7 @@ pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
 			return NULL;
 		}
 		int h=0; 
-		*avl=insertionAVL(*avl, id, noeud, &h); // on met pointeur pour que ça modifie dans tout le programme 
+		*avl=insertionAVL_sup(*avl, id, noeud, &h); // on met pointeur pour que ça modifie dans tout le programme 
 		return noeud; // retourne adresse du noeud créé
 	}
 }
