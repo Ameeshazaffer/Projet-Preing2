@@ -85,7 +85,7 @@ case "$COMMAND" in
         fi
         
         echo "Traitement en cours..." # on va executer 
-	    ./"$EXEC_NAME" "$DATA_FILE" histo "$HISTO_TYPE"
+	    ./"$EXEC_NAME" "$DATA_FILE" histo "$HISTO_TYPE" "$OUTPUT_FILE"
 	
 	     # est-ce que le programme C s'est bien executé
 	    if [ $? -ne 0 ]; then
@@ -177,7 +177,7 @@ case "$COMMAND" in
         OUTPUT_FILE="leaks.dat"
         
         # Appeler le programme C
-        ./"$EXEC_NAME" "$DATA_FILE" leaks "$FACILITY_ID" 
+        ./"$EXEC_NAME" "$DATA_FILE" leaks "$FACILITY_ID" "$OUTPUT_FILE"
         
         # Vérifier que ça a fonctionné
         if [ $? -ne 0 ]; then
