@@ -378,39 +378,4 @@ void liberer_memoire(pAVL_sup a){
     free(a->id);
     free(a);
 }
-                                                       // ce qu'il faut mettre dans le programme principal //
-
-
-int main (){
-	FILE* fichier = NULL;  // ouverture du fichier c-wildwater_v0.dat en mode lecture et écriture
-	fichier = fopen("c-wildwater_v0.dat", "r+");
-	if (fichier == NULL){
-		printf("Ouverture du fichier impossible\n");
-		exit(1);
-	}
-
-	pAVL_sup avl= NULL; 
-	construire_arbre(fichier, &avl);
-	fclose(fichier);
-	
-	char id_usine[50];
-	printf("Entrer l'identifiant de l'usine :\n");
-	fgets(id_usine, 50, stdin);
-    id_usine[strcspn(id_usine, "\n")] = 0;
-
-	pNoeud usine = verification_identifiant(avl, id_usine); // vérifie si identifiant bon
-	if(usine==NULL){
-		printf("-1\n");
-	}
-	else{
-		float pertes=calcul_final_pertes(avl, id_usine);
-		printf("Le volume d'eau perdue par l'usine, dont l'identifiant est %49s, est de %3f millions de m^3\n", id_usine, pertes);
-		ajout_resultat_fichier(id_usine,pertes); // informations du calcul mis dans le fichier leaks.dat
-	}
-
-
-	liberer_memoire(avl); // libérer avl et arbre
-	return 0; 
-}
-
-	
+                                                       
