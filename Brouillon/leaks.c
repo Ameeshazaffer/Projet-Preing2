@@ -198,7 +198,7 @@ pAVL_sup insertionAVL(pAVL_sup a, const char* id, pNoeud n, int* h){
 // fonction qui reagrde si le noeud existe sinon crée un noeud et insère dans l'avl - retourner neoud 
 
 pNoeud obtenirnoeud(pAVL_sup avl, const char* id){
-	pNoeud noeud = rechercheAVL(*avl, id);
+	pNoeud noeud = rechercheAVL(avl, id);
 	if ( noeud != NULL ){ // si existe, retourner le noeud 
 		return noeud; 
 	}
