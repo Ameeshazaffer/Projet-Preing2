@@ -248,9 +248,9 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 // fonction qui lit la ligne et vérifie que c'est bien valide
 
 int lireLigne(FILE* f, LigneCSV* l){
-    char vol[50], coef[50];
+    char vol[64], coef[64];
 
-    int lecture = fscanf(f, " %49[^;];%49[^;];%49[^;];%49[^;];%49[^\n]\n",l->usine, l->amont, l->aval, vol, coef);
+    int lecture = fscanf(f, " %63[^;];%63[^;];%63[^;];%63[^;];%63[^\n]\n",l->usine, l->amont, l->aval, vol, coef);
     if(lecture != 5){
 		return 0;
 	}
