@@ -22,12 +22,12 @@ typedef struct Liste{
 typedef struct Liste* pListe; 
 
 
-typedef struct avl{
+typedef struct avl_sup{
 	char* id;
     pNoeud noeud;
     int eq;                   
-    struct avl *fg;
-    struct avl *fd;
+    struct avl_sup *fg;
+    struct avl_sup *fd;
 }AVL_sup;
 
 typedef AVL_sup* pAVL_sup;
