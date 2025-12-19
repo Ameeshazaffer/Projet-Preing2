@@ -1,0 +1,337 @@
+#include "histogramme.h"
+
+
+//fonction qui crée et remplit les données d'une usine
+pUsine creerUsine(char* id,float c_max,float v_capte,float v_traite){
+    pUsine u = malloc(sizeof(Usine));
+    if(u==NULL){
+        printf("Erreur d'allocation de la memoire : usine .\n");
+        exit(1);
+    }
+    u->id = malloc(strlen(id)+1);
+    if(u->id == NULL){
+        printf("Erreur d'allocation de la memoire : identifiant usine.\n");
+        exit(1);
+    }
+    strcpy(u->id,id);
+    u->capacite_max = c_max;
+    u->volume_total_capte = v_capte;
+    u->volume_total_traite = v_traite;
+    return u;
+
+}
+
+
+//fonction qui crée et remplit les données d'un noeud d'un AVL
+pAVL creerAVL(pUsine u){
+    pAVL n = malloc(sizeof(AVL));
+    if (n==NULL) {
+        printf("Erreur d'allocation de la memoire. : avl\n");
+        exit(1);
+    }
+    n->usine.id = malloc(strlen(u->id) + 1);
+    strcpy(n->usine.id,u->id);
+    n->usine.capacite_max = u->capacite_max;
+    n->usine.volume_total_capte = u->volume_total_capte;
+    n->usine.volume_total_traite = u->volume_total_traite;
+    n->eq = 0;
+    n->fg = NULL;
+    n->fd = NULL;
+    return n;
+}
+
+
+//fonctions pour l'équilibrage d'un arbre AVL
+int min(int a,int b){
+    if(a < b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int max(int a,int b){
+    if(a > b){
+        return a;
+    }else{
+        return b;
+    }    
+}
+
+int min3(int a,int b,int c){
+  return min(min(a,b),c);
+}
+
+int max3(int a,int b,int c){
+  return max(max(a,b),c);
+}
+
+//fonctions de rotation pour équilibrer l'AVL
+pAVL rotationDroite(pAVL a){
+    pAVL pivot = a->fg;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fg = pivot->fd;
+    pivot->fd = a;
+    a->eq = eq_a - min(eq_p, 0) + 1;
+    pivot->eq = max3(eq_a + 2, eq_a + eq_p + 2, eq_p + 1);
+    return pivot;
+
+}
+
+pAVL rotationGauche(pAVL a){
+    pAVL pivot = a->fd;
+    int eq_a = a->eq;
+    int eq_p = pivot->eq;
+    a->fd = pivot->fg;
+    pivot->fg = a;
+    a->eq = eq_a - max(eq_p, 0) - 1;
+    pivot->eq = min3(eq_a - 2, eq_a + eq_p - 2, eq_p - 1);
+    return pivot;
+}
+
+pAVL doubleRotationGauche(pAVL a){
+    a->fd = rotationDroite(a->fd);
+    return rotationGauche(a);
+}
+
+pAVL doubleRotationDroite(pAVL a){
+    a->fg = rotationGauche(a->fg);
+    return rotationDroite(a);
+}
+
+
+//fonction d'équilibrage de l'AVL
+pAVL equilibrerAVL(pAVL a){
+    if(a->eq >= 2){
+        if(a->fd->eq >= 0){
+            return rotationGauche(a);
+        }else{
+            return doubleRotationGauche(a);
+        }
+    }else if (a->eq <=-2){
+        if(a->fg->eq <= 0){
+            return rotationDroite(a);
+        }else{
+            return doubleRotationDroite(a);
+        }
+    }
+    return a;
+}
+
+//fonction qui insère une usine dans l'AVL et rééquilibre l'arbre
+pAVL insertionAVL(pAVL a,pUsine u,int* h){
+    if(a==NULL){
+        *h = 1;
+        return creerAVL(u);
+    }
+    if(strcmp(u->id,a->usine.id) < 0){
+        a->fg = insertionAVL(a->fg,u,h);
+        *h = -*h;
+    }else if(strcmp(u->id,a->usine.id) > 0){
+        a->fd = insertionAVL(a->fd,u,h);
+    }else{
+        *h = 0;
+        return a; 
+    }
+    if(*h != 0){
+        a->eq += *h;
+        if(a->eq==0){
+            *h = 0;
+        }else{
+            *h = 1;
+        }
+    }
+    return equilibrerAVL(a);
+}
+
+
+//fonction qui recherche une usine dans l'AVL par son identifiant
+pAVL rechercheAVL(pAVL a,char* id){
+    if(a==NULL){
+        return NULL;
+    }
+    if(strcmp(id, a->usine.id)==0){
+        return a;
+    }else if(strcmp(id, a->usine.id) < 0){
+        return rechercheAVL(a->fg,id);
+    }else{
+        return rechercheAVL(a->fd,id);
+    }
+}
+
+//fonction qui libère correctement l'AVL
+void libererAVL(pAVL a){
+    if(a==NULL){
+        return;
+    }
+    libererAVL(a->fg);
+    libererAVL(a->fd);
+    free(a->usine.id);
+    free(a);
+}
+
+//fonction qui traite une ligne CSV pour l'usine : si l'usine existe, on met à jour sa capacité, sinon on la crée
+void ligneUsine(LigneCSV* ligne,pAVL* a){
+    pAVL n = rechercheAVL(*a,ligne->amont);
+    if (n==NULL) {
+        pUsine u = creerUsine(ligne->amont,ligne->volume,0.0,0.0);
+        int h = 0;
+        *a = insertionAVL(*a,u,&h);
+        free(u->id);
+        free(u);
+    } else {
+        n->usine.capacite_max = ligne->volume;
+    }
+}
+
+//fonction qui traite une ligne de type source-usine et si l'usine existe on met à jour les volumes captés et traités sinon on crée l'usine puis met à jour ces volumes
+
+void ligneSourceUsine(LigneCSV* ligne,pAVL* a){
+    pAVL n = rechercheAVL(*a, ligne->aval);
+    if (n==NULL) {
+        pUsine u = creerUsine(ligne->aval,0.0,0.0,0.0);
+        int h = 0;
+        *a = insertionAVL(*a,u,&h);
+        free(u->id);
+        free(u);
+        n = rechercheAVL(*a,ligne->aval);
+    }
+    n->usine.volume_total_capte += ligne->volume;
+    float p = 1.0f - (ligne->fuites / 100.0f);
+    n->usine.volume_total_traite += ligne->volume * p;
+}
+
+
+//fonction qui vérifie le type de ligne dans le fichier CSV
+int typeLigne(char *usine,char *amont,char *aval,char *volume,char *fuites){
+    if (strcmp(usine, "-")==0 && strcmp(amont, "-")!=0 && strcmp(aval, "-")==0 && strcmp(volume, "-")!=0 && strcmp(fuites, "-")==0) { 
+       return 1;
+    }
+    if(strcmp(usine, "-")==0 && strcmp(amont, "-")!=0 && strcmp(aval, "-")!=0 && strcmp(volume, "-")!=0 && strcmp(fuites, "-")!=0) {
+        return 2;
+    }
+    return 0;
+
+}
+
+
+
+
+//fonction qui convertit une chaîne de caractères en nombre (si possible)
+float conversion(char *chaine){
+    if (strcmp(chaine, "-")==0){
+        return 0.0f;
+    }else {
+        return atof(chaine);
+    }
+}
+
+
+
+
+//fonction qui découpe les lignes du fichier CSV pour remplir les champs correspondants
+void decouperLigne(FILE* fichierCSV,pAVL* a){
+    if(fichierCSV==NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
+    }
+    char usine[64];
+    char amont[64];
+    char aval[64];
+    char volume[64];
+    char fuites[64];
+    char ligne[512];
+
+    while(fgets(ligne,sizeof(ligne),fichierCSV)!=NULL){
+        if(sscanf(ligne,"%63[^;];%63[^;];%63[^;];%63[^;];%63[^\n]", usine, amont, aval, volume, fuites) != 5){
+            continue; 
+        }
+        int type = typeLigne(usine, amont, aval, volume, fuites);
+        LigneCSV l;
+        strcpy(l.usine, usine);
+        strcpy(l.amont, amont);
+        strcpy(l.aval, aval);
+        l.volume = conversion(volume);
+        l.fuites = conversion(fuites);
+        if(type==1){
+            ligneUsine(&l,a);
+        }else if(type==2){
+            ligneSourceUsine(&l,a);
+        }
+    }
+}
+
+
+//fonction qui associe le choix d'affichage au mode de traitement et écrit les résultats dans le fichier
+void traiterFichierCSV(FILE* f,pAVL a,int choix){
+    if(a==NULL){
+        return;
+    }
+    if(f==NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
+    }
+    if(choix==1){
+        fprintf(f,"%s;%f\n", a->usine.id,a->usine.capacite_max / 1000.0f);
+    }else if(choix==2){
+         fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_capte / 1000.0f);
+    }else if(choix==3){
+        fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_traite / 1000.0f);
+    }else{
+        printf("Mauvais choix de mode.\n");
+        exit(1);
+    }
+}
+
+//fonction qui parcourt l'AVL et écrit les données dans le fichier CSV par ordre alphabétique inverse
+void creationFichierCSV(FILE* f, pAVL a, int choix){
+    if(a==NULL){
+        return;
+    }
+
+    if(f==NULL){
+        printf("Fichier inexistant.\n");
+        exit(1);
+    }
+    creationFichierCSV(f,a->fd,choix);
+    traiterFichierCSV(f,a,choix);
+    creationFichierCSV(f,a->fg,choix);
+}
+
+
+//fonction qui crée un histogramme à partir des données de l'AVL, en fonction du choix de mode
+void creationHistogramme(pAVL a,int choix){
+    if(a==NULL){
+        return;
+    }
+    FILE *f = NULL;
+    if(choix==1){
+        f = fopen("capacite_max.dat", "w");
+        if(f==NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
+        fprintf(f, "identifier;max volume (M.m3.year-1)\n");
+    }else if(choix==2){
+        f = fopen("vol_total_capte.dat", "w");
+        if(f==NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
+        fprintf(f,"identifier;source volume(M.m3.year-1)\n");
+    }else if(choix==3 ){
+        f = fopen("vol_total_traite.dat", "w");
+        if(f==NULL){
+            printf("Ouverture du fichier impossible.\n");
+            exit(1);
+        }
+        fprintf(f, "identifier;real volume(M.m3.year-1)\n");
+    }else{
+        printf("Mauvais choix de mode.\n");
+        exit(1);
+    }
+    creationFichierCSV(f,a,choix);
+    fclose(f);
+
+}
