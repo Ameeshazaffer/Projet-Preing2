@@ -1,6 +1,6 @@
                                                                       // toutes les fonctions pour afficher la perte d'eau d'une usine //
 
-#include<leaks.h>
+#include "leaks.h"
                                                                                            // structures //
 
 
