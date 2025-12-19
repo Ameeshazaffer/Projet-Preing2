@@ -14,3 +14,4 @@ Voici quelques exemples de commandes valides :
 
 Si le script n’est pas exécutable, il faut d’abord exécuter : chmod +x myScript.sh
 
+
