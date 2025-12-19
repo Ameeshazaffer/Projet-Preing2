@@ -1,4 +1,4 @@
-#Projet C-WildWater – préING2
+# Projet C-WildWater – préING2
 
 Pour compiler le projet, exécutez la commande suivante dans le terminal :
 make
