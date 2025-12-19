@@ -25,6 +25,10 @@ pAVL creerAVL(pUsine u){
         exit(1);
     }
     n->usine.id = malloc(strlen(u->id) + 1);
+    if(n->usine.id == NULL){
+        printf("Erreur d'allocation de la memoire : identifiant usine avl.\n");
+        exit(1);
+    }
     strcpy(n->usine.id,u->id);
     n->usine.capacite_max = u->capacite_max;
     n->usine.volume_total_capte = u->volume_total_capte;
