@@ -1,0 +1,10 @@
+int min(int a,int b);
+int max(int a,int b);
+int min3(int a,int b,int c);
+pAVL rotationDroite(pAVL a);
+pAVL rotationGauche(pAVL a);
+pAVL doubleRotationGauche(pAVL a);
+pAVL equilibrerAVL(pAVL a);
+pAVL insertionAVL(pAVL a,pUsine u,int* h);
+pAVL rechercheAVL(pAVL a,char* id);
+void libererAVL(pAVL a);
