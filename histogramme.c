@@ -1,38 +1,17 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "histograme.h"
 
-typedef struct{
-    char* id;                 
-    float capacite_max;       
-    float volume_total_capte;    
-    float volume_total_traite;       
-}Usine;
-
-typedef struct avl{
-    Usine usine;
-    int eq;                   
-    struct avl *fg;
-    struct avl *fd;
-}AVL;
-
-typedef Usine *pUsine;
-typedef AVL *pAVL;
-
-
-
-pUsine creerUsine(char* id, float c_max, float v_capte, float v_traite){
+pUsine creerUsine(char* id,float c_max,float v_capte,float v_traite){
     pUsine u = malloc(sizeof(Usine));
-    if (u == NULL) {
+    if(u==NULL){
         printf("Erreur d'allocation de la memoire : usine .\n");
         exit(1);
     }
-    u->id = malloc(strlen(id) + 1);
-    if (u->id == NULL) {
+    u->id = malloc(strlen(id)+1);
+    if(u->id == NULL){
         printf("Erreur d'allocation de la memoire : identifiant usine.\n");
         exit(1);
     }
-    strcpy(u->id, id);
+    strcpy(u->id,id);
     u->capacite_max = c_max;
     u->volume_total_capte = v_capte;
     u->volume_total_traite = v_traite;
@@ -41,12 +20,12 @@ pUsine creerUsine(char* id, float c_max, float v_capte, float v_traite){
 
 pAVL creerAVL(pUsine u){
     pAVL n = malloc(sizeof(AVL));
-    if (n == NULL) {
+    if (n==NULL) {
         printf("Erreur d'allocation de la memoire. : avl\n");
         exit(1);
     }
     n->usine.id = malloc(strlen(u->id) + 1);
-    strcpy(n->usine.id, u->id);
+    strcpy(n->usine.id,u->id);
     n->usine.capacite_max = u->capacite_max;
     n->usine.volume_total_capte = u->volume_total_capte;
     n->usine.volume_total_traite = u->volume_total_traite;
@@ -56,16 +35,7 @@ pAVL creerAVL(pUsine u){
     return n;
 }
 
-
-
-int estVide(pAVL a){
-    if (a == NULL)
-        return 1;
-    else
-        return 0;
-}
-
-int min(int a, int b){
+int min(int a,int b){
     if(a < b){
         return a;
     }else{
@@ -73,7 +43,7 @@ int min(int a, int b){
     }    
 }
 
-int max(int a, int b){
+int max(int a,int b){
     if(a > b){
         return a;
     }else{
@@ -81,11 +51,11 @@ int max(int a, int b){
     }    
 }
 
-int min3(int a, int b, int c){
+int min3(int a,int b,int c){
   return min(min(a,b),c);
 }
 
-int max3(int a, int b, int c){
+int max3(int a,int b,int c){
   return max(max(a,b),c);
 }
 
@@ -130,7 +100,7 @@ pAVL equilibrerAVL(pAVL a){
         }else{
             return doubleRotationGauche(a);
         }
-    }else if (a->eq <= -2){
+    }else if (a->eq <=-2){
         if(a->fg->eq <= 0){
             return rotationDroite(a);
         }else{
@@ -141,17 +111,17 @@ pAVL equilibrerAVL(pAVL a){
 }
 
 
-pAVL insertionAVL(pAVL a, pUsine u, int* h){
-    if (a == NULL) {
+pAVL insertionAVL(pAVL a,pUsine u,int* h){
+    if (a==NULL) {
         *h = 1;
         return creerAVL(u);
     }
     
     if (strcmp(u->id,a->usine.id) < 0){
-        a->fg = insertionAVL(a->fg, u, h);
+        a->fg = insertionAVL(a->fg,u,h);
         *h = -*h;
-    }else if(strcmp(u->id, a->usine.id) > 0){
-        a->fd = insertionAVL(a->fd, u, h);
+    }else if(strcmp(u->id,a->usine.id) > 0){
+        a->fd = insertionAVL(a->fd,u,h);
     }else{
         *h = 0;
         return a; 
@@ -159,7 +129,7 @@ pAVL insertionAVL(pAVL a, pUsine u, int* h){
 
     if(*h != 0){
         a->eq += *h;
-        if(a->eq == 0){
+        if(a->eq==0){
             *h = 0;
         }else{
             *h = 1;
@@ -170,21 +140,21 @@ pAVL insertionAVL(pAVL a, pUsine u, int* h){
 }
 
 
-pAVL rechercheAVL(pAVL a, char* id){
-    if (a == NULL){
+pAVL rechercheAVL(pAVL a,char* id){
+    if (a==NULL){
         return NULL;
     }
-    if(strcmp(id, a->usine.id) == 0){
+    if(strcmp(id, a->usine.id)==0){
         return a;
     }else if(strcmp(id, a->usine.id) < 0){
-        return rechercheAVL(a->fg, id);
+        return rechercheAVL(a->fg,id);
     }else{
-        return rechercheAVL(a->fd, id);
+        return rechercheAVL(a->fd,id);
     }
 }
 
 void libererAVL(pAVL a){
-    if(a == NULL){
+    if(a =NULL){
         return;
     }
     libererAVL(a->fg);
@@ -204,12 +174,12 @@ typedef struct{
 }LigneCSV;
 
 
-void ligneUsine(const LigneCSV* ligne, pAVL* a){
-    pAVL n = rechercheAVL(*a, ligne->amont);
-    if (n == NULL) {
-        pUsine u = creerUsine(ligne->amont, ligne->volume, 0.0, 0.0);
+void ligneUsine(const LigneCSV* ligne,pAVL* a){
+    pAVL n = rechercheAVL(*a,ligne->amont);
+    if (n==NULL) {
+        pUsine u = creerUsine(ligne->amont,ligne->volume,0.0,0.0);
         int h = 0;
-        *a = insertionAVL(*a, u, &h);
+        *a = insertionAVL(*a,u,&h);
         free(u->id);
         free(u);
     } else {
@@ -217,27 +187,27 @@ void ligneUsine(const LigneCSV* ligne, pAVL* a){
     }
 }
 
-void ligneSourceUsine(const LigneCSV* ligne, pAVL* a){
+void ligneSourceUsine(const LigneCSV* ligne,pAVL* a){
     pAVL n = rechercheAVL(*a, ligne->aval);
 
-    if (n == NULL) {
-        pUsine u = creerUsine(ligne->aval, 0.0, 0.0, 0.0);
+    if (n==NULL) {
+        pUsine u = creerUsine(ligne->aval,0.0,0.0,0.0);
         int h = 0;
-        *a = insertionAVL(*a, u, &h);
+        *a = insertionAVL(*a,u,&h);
         free(u->id);
         free(u);
-        n = rechercheAVL(*a, ligne->aval);
+        n = rechercheAVL(*a,ligne->aval);
     }
     n->usine.volume_total_capte += ligne->volume;
     float p = 1.0f - (ligne->fuites / 100.0f);
     n->usine.volume_total_traite += ligne->volume * p;
 }
 
-int typeLigne(const char *usine,const char *amont,const char *aval, const char *volume, const char *fuites){
-    if (strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") == 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") == 0) { 
+int typeLigne(const char *usine,const char *amont,const char *aval,const char *volume,const char *fuites){
+    if (strcmp(usine, "-")==0 && strcmp(amont, "-")!=0 && strcmp(aval, "-")==0 && strcmp(volume, "-")!=0 && strcmp(fuites, "-")==0) { 
         return 1;
     }
-    if(strcmp(usine, "-") == 0 && strcmp(amont, "-") != 0 && strcmp(aval, "-") != 0 && strcmp(volume, "-") != 0 && strcmp(fuites, "-") != 0) {
+    if(strcmp(usine, "-")==0 && strcmp(amont, "-")!=0 && strcmp(aval, "-")!=0 && strcmp(volume, "-")!=0 && strcmp(fuites, "-")!=0) {
         return 2;
     }
 
@@ -246,7 +216,7 @@ int typeLigne(const char *usine,const char *amont,const char *aval, const char *
 
 
 float conversion(const char *chaine){
-    if (strcmp(chaine, "-") == 0){
+    if (strcmp(chaine, "-")==0){
         return 0.0f;
     }else {
         return atof(chaine);
@@ -254,8 +224,8 @@ float conversion(const char *chaine){
 }
 
 
-void decouperLigne(FILE* fichierCSV, pAVL* a){
-    if(fichierCSV == NULL){
+void decouperLigne(FILE* fichierCSV,pAVL* a){
+    if(fichierCSV==NULL){
         printf("Fichier inexistant.\n");
         exit(1);
     }
@@ -266,8 +236,8 @@ void decouperLigne(FILE* fichierCSV, pAVL* a){
     char fuites[64];
     char ligne[512];
 
-    while (fgets(ligne, sizeof(ligne), fichierCSV) != NULL){
-        if (sscanf(ligne,"%63[^;];%63[^;];%63[^;];%63[^;];%63[^\n]", usine, amont, aval, volume, fuites) != 5){
+    while(fgets(ligne,sizeof(ligne),fichierCSV)!=NULL){
+        if(sscanf(ligne,"%63[^;];%63[^;];%63[^;];%63[^;];%63[^\n]", usine, amont, aval, volume, fuites) != 5){
             continue; 
         }
         int type = typeLigne(usine, amont, aval, volume, fuites);
@@ -277,28 +247,28 @@ void decouperLigne(FILE* fichierCSV, pAVL* a){
         strcpy(l.aval, aval);
         l.volume = conversion(volume);
         l.fuites = conversion(fuites);
-        if(type == 1){
-            ligneUsine(&l, a);
-        }else if(type == 2){
-            ligneSourceUsine(&l, a);
+        if(type==1){
+            ligneUsine(&l,a);
+        }else if(type==2){
+            ligneSourceUsine(&l,a);
 
         }
     }
 }
 
-void traiterFichierCSV(FILE* f, pAVL a, int choix){
-    if(a == NULL){
+void traiterFichierCSV(FILE* f,pAVL a,int choix){
+    if(a==NULL){
         return;
     }
-    if(f == NULL){
+    if(f==NULL){
         printf("Fichier inexistant.\n");
         exit(1);
     }
-    if(choix == 1){
+    if(choix==1){
         fprintf(f,"%s;%f\n", a->usine.id,a->usine.capacite_max / 1000.0f);
-    }else if(choix == 2){
+    }else if(choix==2){
          fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_capte / 1000.0f);
-    }else if(choix == 3){
+    }else if(choix==3){
         fprintf(f,"%s;%f\n", a->usine.id,a->usine.volume_total_traite / 1000.0f);
     }else{
         printf("Mauvais choix de mode.\n");
@@ -307,44 +277,44 @@ void traiterFichierCSV(FILE* f, pAVL a, int choix){
 }
 
 void creationFichierCSV(FILE* f, pAVL a, int choix){
-    if(a == NULL){
+    if(a==NULL){
         return;
     }
-    if(f == NULL){
+    if(f==NULL){
         printf("Fichier inexistant.\n");
         exit(1);
     }
     creationFichierCSV(f,a->fd,choix);
-    traiterFichierCSV(f, a, choix);
+    traiterFichierCSV(f,a,choix);
     creationFichierCSV(f,a->fg,choix);
 }
 
-void creationHistogramme(pAVL a , int choix){
-    if(a == NULL){
+void creationHistogramme(pAVL a,int choix){
+    if(a==NULL){
         return;
     }
     FILE *f = NULL;
-    if(choix == 1){
+    if(choix==1){
         f = fopen("capacite_max.dat", "w");
-        if(f == NULL){
+        if(f==NULL){
             printf("Ouverture du fichier impossible.\n");
             exit(1);
         }
         fprintf(f, "identifier;max volume (M.m3.year-1)\n");
-    }else if(choix == 2){
+    }else if(choix==2){
         f = fopen("vol_total_capte.dat", "w");
-        if(f == NULL){
+        if(f==NULL){
             printf("Ouverture du fichier impossible.\n");
             exit(1);
         }
-        fprintf(f, "identifier;source volume (M.m3.year-1)\n");
-    }else if(choix == 3 ){
+        fprintf(f,"identifier;source volume(M.m3.year-1)\n");
+    }else if(choix==3 ){
         f = fopen("vol_total_traite.dat", "w");
-        if(f == NULL){
+        if(f==NULL){
             printf("Ouverture du fichier impossible.\n");
             exit(1);
         }
-        fprintf(f, "identifier;real volume (M.m3.year-1)\n");
+        fprintf(f, "identifier;real volume(M.m3.year-1)\n");
     }else{
         printf("Mauvais choix de mode.\n");
         exit(1);
