@@ -158,7 +158,7 @@ pAVL rechercheAVL(pAVL a,char* id){
 }
 
 void libererAVL(pAVL a){
-    if(a =NULL){
+    if(a ==NULL){
         return;
     }
     libererAVL(a->fg);
