@@ -2,56 +2,6 @@
 
 
                                                                                            // structures //
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-typedef struct Noeud Noeud;
-typedef struct Liste Liste; 
-
-typedef struct Noeud{
-	char* id; // identifiants du distributeurs d'eau
-	float volume_initial;
-	Liste* enfants;
-}Noeud;
-
-typedef struct Noeud* pNoeud; 
-
-typedef struct Liste{
-	Noeud* enfant; // en aval
-	float fuites_pourcentage; // pourcentage de fuites 
-	struct Liste* suivant; //
-}Liste; 
-
-typedef struct Liste* pListe; 
-
-
-typedef struct avl{
-	char* id;
-    pNoeud noeud;
-    int eq;                   
-    struct avl *fg;
-    struct avl *fd;
-}AVL_sup;
-
-typedef AVL_sup* pAVL_sup;
-
-
-typedef struct {
-    char usine[50];
-    char amont[50];
-    char aval[50];
-    float volume;
-    float coeff;
-} LigneCSV;
-
-
-
-
-
-
-
-
 
 
                                                                                         // partie 1 : fonctions qui crées un arbre classique //
