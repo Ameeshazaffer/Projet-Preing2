@@ -34,15 +34,14 @@ typedef AVL_sup* pAVL_sup;
 
 
 typedef struct {
-    char usine[50];
-    char amont[50];
-    char aval[50];
+    char usine[64];
+    char amont[64];
+    char aval[64];
     float volume;
     float coeff;
 } LigneCSV;
 
 pNoeud creerNoeud(const char* identifiant);
-pListe creerenfant(pNoeud aval, float fuite);
 pListe creerenfant(pNoeud aval, float fuite);
 void ajouterenfant(pNoeud parent, pNoeud enfant, float fuites);
 pAVL_sup creerAVL_sup(const char* id, pNoeud noeud);
