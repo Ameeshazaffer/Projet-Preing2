@@ -297,12 +297,18 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 int lireLigne(FILE* f, LigneCSV* l){
     char vol[50], coef[50];
 
-    int lecture = fscanf(f, " %49[^;];%49[^;];%49[^;];%49[^;];%49[^\n]\n",
-                    l->usine, l->amont, l->aval, vol, coef);
-    if(lecture != 5) return 0;
+    int lecture = fscanf(f, " %49[^;];%49[^;];%49[^;];%49[^;];%49[^\n]\n",l->usine, l->amont, l->aval, vol, coef);
+    if(lecture != 5){
+		return 0;
+	}
+    if(strcmp(vol, "-")==0){
+		l->volume=-1.0f;
+	}
+	else{
+		l->volume=atof(vol);
+	}
 
-    l->volume = (strcmp(vol, "-") == 0) ? -1.0f : strtof(vol, NULL);
-    l->coeff  = (strcmp(coef,"-") == 0) ? -1.0f : strtof(coef,NULL);
+	if(strcmp
     return 1;
 } 
 
