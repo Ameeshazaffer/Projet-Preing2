@@ -216,7 +216,7 @@ pNoeud obtenirnoeud(pAVL_sup* avl, const char* id){
 
 // fonction qui traite une ligne du fichier en fonction du type de distributions faites 
 
-void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
+void traiter_une_ligne(LigneCSV_sup* l, pAVL_sup* a){
 
 // source -> usine 
 	
@@ -247,7 +247,7 @@ void traiter_une_ligne(LigneCSV* l, pAVL_sup* a){
 
 // fonction qui lit la ligne et vérifie que c'est bien valide
 
-int lireLigne(FILE* f, LigneCSV* l){
+int lireLigne(FILE* f, LigneCSV_sup* l){
     char vol[64], coef[64];
 
     int lecture = fscanf(f, " %63[^;];%63[^;];%63[^;];%63[^;];%63[^\n]\n",l->usine, l->amont, l->aval, vol, coef);
@@ -274,7 +274,7 @@ int lireLigne(FILE* f, LigneCSV* l){
 
 // fonction qui construit l'arbre 
 void construire_arbre(FILE* f, pAVL_sup* a){
-	LigneCSV l;
+	LigneCSV_sup l;
 	while(lireLigne(f, &l)){
 		traiter_une_ligne(&l, a);
 	}
